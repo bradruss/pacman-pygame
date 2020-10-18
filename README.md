@@ -1,1 +1,1 @@
-# pacman-pygame
+# Pac-man pygame implementation
