@@ -2,34 +2,41 @@ import pacman
 import ghost
 import pygame as pg
 
-# TODO: to load sprite animation, use a for loop to load frames (different images)
-window_height = 600
-window_width = 1200
+# Set game size
+WINDOW_HEIGHT = 600
+WINDOW_WIDTH = 1200
+
 def main():
     # Initialize window
     pg.init()
-    disp = pg.display.set_mode((window_width,window_height))
+    disp = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
+
+    # Set window title
     pg.display.set_caption("Pac-man")
 
+    # Create timer for frames
     clock = pg.time.Clock()
+
+    # Pacman sprite array
     pacman_sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
 
     # Load background
     background = pg.image.load('background.jpg')
 
-    # Load pacman
-    #sprite_image_original = pg.image.load("pacman.png").convert_alpha()
-    # Set rotation and zoom scale
-    #sprite_image = pg.transform.rotozoom(sprite_image_original,0,.1)
-
-    # Display background
+    # Display the background image
     disp.blit(background, (0, 0))
 
     # Set initial Pacman point
     x = 100
     y = 100
+
+    # Pacman sprite array index
     pacman_image = 0
+
+    # Rotation in degrees
     rotation = 0
+
+    # Used for pac man display
     isLeft = False
     while True:
         # Display pacman and background
@@ -82,6 +89,7 @@ def main():
                     pacman_image = 0
 
                 isLeft = True
+
                 # Flip params = (image, X axis flip bool, Y axis flip bool)
                 temp = pg.transform.flip(pg.transform.rotate(pacman_sprite[pacman_image],0),True,False)
                 disp.blit(temp,(x,y))
@@ -105,6 +113,7 @@ def main():
             if isLeft:
                 temp = pg.transform.flip(pg.transform.rotate(pacman_sprite[pacman_image], 0), True, False)
                 disp.blit(temp, (x, y))
+
             # Set rotation - occurs when key up, down, and right
             else:
                 disp.blit(pg.transform.rotate(pacman_sprite[pacman_image],rotation),(x,y))
@@ -112,7 +121,6 @@ def main():
         # 30 fps
         clock.tick(30)
         pg.display.update()
-
 
 
 if __name__ == '__main__':
