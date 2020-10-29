@@ -24,7 +24,7 @@ def join(cor_h,cor_v,join_type):
         copy_v.y_endl = copy_v.y_endl - WIDTH
         copy_h.x_endt = copy_h.x_endt - WIDTH
     elif (join_type == 'tr'):
-        copy_v.y_endl = copy_v.y_startl + WIDTH
+        copy_v.y_startl = copy_v.y_startl + WIDTH
         copy_h.x_endb = copy_h.x_endb - WIDTH
     else:
         print("wrong type of join")
@@ -33,6 +33,22 @@ def join(cor_h,cor_v,join_type):
     c_map[cor_h] = copy_h
     c_map[cor_v] = copy_v
     print(c_map)
+
+
+def write_out(file_name):
+    outF = open(file_name, "w")
+    for key in c_map:
+        if type(c_map[key]) is cv.CorridorV:
+            string_out = 'V,' + key + ',' + str(c_map[key].x_start) + ',' + str(c_map[key].y_startl) + ',' + str(c_map[key].y_startr) + ',' + str(c_map[key].x_end) + ',' + str(c_map[key].y_endl) + ',' + str(c_map[key].y_endr) + '\n'
+            outF.write(string_out)
+        if type(c_map[key]) is ch.CorridorH:
+            string_out = 'H,' + key + ',' + str(c_map[key].x_startt) + ',' + str(c_map[key].x_startb) + ',' + str(c_map[key].y_start) + ',' + str(c_map[key].x_endt) + ',' + str(c_map[key].x_endb) + ',' + str(c_map[key].y_end) + '\n'
+            outF.write(string_out)
+    outF.close()
+    print("DONE WRITING OUT")
+
+
+
 
 def main():
     # Initialize window
@@ -63,7 +79,7 @@ def main():
         pg.display.flip()
         clock.tick(20)
 
-        print("Input (name,H or V,start x,end x,start y,end y), or (join,horizontal corridor,vertical corridor,type), or (del,corridor)")
+        print("Input (name,H or V,start x,end x,start y,end y), or (join,horizontal corridor,vertical corridor,type), (del,corridor), or (done,file_name)")
         val = input(": ")
         val = val.replace('(', '')
         val = val.replace(')', '')
@@ -79,6 +95,9 @@ def main():
                 join(a[1], a[2], a[3])
             elif a[0] == 'delete':
                 del c_map[a[1]]
+            elif a[0] == 'done':
+                write_out(a[1])
+                finished = True
             else:
                 print("incorrect input")
         except:
