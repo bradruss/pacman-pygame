@@ -4,6 +4,8 @@ import pygame as pg
 import corridorH as ch
 import corridorV as cv
 
+
+#width of the corridors
 WIDTH = 50
 
 class Level:
@@ -12,10 +14,12 @@ class Level:
         self.points = 0
         self.win = False
         self.c_map = {}
+        # loads in file to dictionary c_map
         self.file_reader()
 
     def file_reader(self):
         f = open(self.filename, "r")
+        # loops through file to load in coordinates for either a horizontal or vertical corridor
         for x in f:
             curr_line = x
             array = curr_line.split(',')
@@ -42,10 +46,17 @@ class Level:
         print("Level File Loaded In")
         f.close()
 
+
+    # draws the level to display
     def draw_level(self, disp):
         for key in self.c_map:
             self.c_map[key].draw(disp)
         pg.display.flip()
+
+    # checks to see if the inputted x and y coordinates of pacman are a "valid" move so that pacman
+    # doesn't go through the walls of the map. Checks this by seeing if pacman will run into any of the
+    # lines drawn to the display. Loops through every corridor and checks if pacman will run into the lines
+    # of that particular corridor
 
     def check_valid(self, x, y):
         midx = x + WIDTH/2

@@ -50,7 +50,7 @@ def join(cor_h,cor_v,join_type):
     print(curr_map)
 
 
-# writes out the level coordinates to a csv file
+# writes out the level coordinates to a file
 def write_out(file_name):
     outF = open(file_name, "w")
     for key in curr_map:
@@ -86,15 +86,20 @@ def main():
     finished = False
 
     while not finished:
+        # makes it so user can exit out of window and end session
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 finished = True
+        # creates a black background
         disp.fill((0, 0, 0))
+        # draws all currently created corridors
         for key in curr_map:
             curr_map[key].draw(disp)
         pg.display.flip()
+        # 20 frames per second
         clock.tick(20)
 
+        #prompts user for input
         print("Input (name,H or V,start x,end x,start y,end y), or (join,horizontal corridor,vertical corridor,type), (del,corridor), (done,file_name), or (revert, now)")
         val = input(": ")
         val = val.replace('(', '')
