@@ -13,6 +13,7 @@ class CorridorV:
         self.y_endl = y_end
         self.y_endr = y_end
 
+
     def draw(self, window):
         # Draw Left Line
         pygame.draw.line(window, WHITE, (self.x_start, self.y_startl), (self.x_start, self.y_endl))

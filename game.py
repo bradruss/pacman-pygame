@@ -1,12 +1,15 @@
 import pacman
 import ghost
 import pygame as pg
+import level
 
 # Set game size
 WINDOW_HEIGHT = 600
 WINDOW_WIDTH = 1200
 
 def main():
+    # Initialize Level 1
+    level_one = level.Level('level1')
     # Initialize window
     pg.init()
     disp = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
@@ -27,8 +30,8 @@ def main():
     disp.blit(background, (0, 0))
 
     # Set initial Pacman point
-    x = 100
-    y = 100
+    x = 0
+    y = 0
 
     # Pacman sprite array index
     pacman_image = 0
@@ -54,7 +57,7 @@ def main():
         # Use the following code for keyboard operations
         keys_pressed = pg.key.get_pressed()
         if keys_pressed[pg.K_UP]:
-            if y >= 5:
+            if y >= 5 and level_one.check_valid(x,y-5):
                 y -= 5
                 if pacman_image < 2:
                     pacman_image += 1
@@ -68,7 +71,7 @@ def main():
 
         elif keys_pressed[pg.K_DOWN]:
 
-            if y <= 460:
+            if y <= 460 and level_one.check_valid(x,y+5):
                 y += 5
                 if pacman_image < 2:
                     pacman_image += 1
@@ -81,7 +84,7 @@ def main():
                 disp.blit(pg.transform.rotate(pacman_sprite[pacman_image],rotation),(x,y))
 
         elif keys_pressed[pg.K_LEFT]:
-            if x >= 5:
+            if x >= 5 and level_one.check_valid(x-5,y):
                 x -= 5
                 if pacman_image < 2:
                     pacman_image += 1
@@ -95,7 +98,7 @@ def main():
                 disp.blit(temp,(x,y))
 
         elif keys_pressed[pg.K_RIGHT]:
-            if x <= 1075:
+            if x <= 1075 and level_one.check_valid(x+5,y):
                 x += 5
                 if pacman_image < 2:
                     pacman_image += 1
@@ -118,9 +121,11 @@ def main():
             else:
                 disp.blit(pg.transform.rotate(pacman_sprite[pacman_image],rotation),(x,y))
 
+        level_one.draw_level(disp)
         # 30 fps
         clock.tick(30)
         pg.display.update()
+        print("x is " + str(x) + "and y is " + str(y))
 
 
 if __name__ == '__main__':
