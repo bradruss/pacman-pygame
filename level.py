@@ -1,5 +1,5 @@
 import pacman
-import ghost
+# import ghost
 import pygame as pg
 import corridorH as ch
 import corridorV as cv
