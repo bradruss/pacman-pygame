@@ -18,5 +18,10 @@ class Pacman:
     def collectCoin(self):
         self.numCoins += 1
 
-    
+    #add array of string of picture name/Line 24 in game.py
+    #needs to be able to die
+
+
+
+
 
