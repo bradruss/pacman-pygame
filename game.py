@@ -1,11 +1,12 @@
 import pacman
-# import ghost
+import ghost
 import pygame as pg
 import level
 
 # Set game size
 WINDOW_HEIGHT = 600
 WINDOW_WIDTH = 1200
+
 
 def main():
     # Initialize Level 1
