@@ -34,13 +34,13 @@ class Ghost ():
         self.weak = True
         self.time = 10
 
-    def moveGhosts(pacman):
+    def moveGhosts(self, pacman):
         ver = pacman.rect.left - self.rect.left
         hor = pacman.rect.top - self.rect.top
         if ver > 0:
             self.rect.left -= 1
-        else if ver < 0:
-            slef.rect.left +=1
+        elif ver < 0:
+            self.rect.left +=1
             
         
             
