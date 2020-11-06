@@ -1,5 +1,5 @@
 import pacman
-import ghost
+from ghost import Ghost
 import pygame as pg
 import level
 
@@ -125,6 +125,9 @@ def main():
         level_one.draw_level(disp)
         # 30 fps
         clock.tick(30)
+        ghosts = [Ghost ()]
+        for g in ghosts:
+            disp.blit(g.surface, g.rect)
         pg.display.update()
         print("x is " + str(x) + "and y is " + str(y))
 
