@@ -3,9 +3,10 @@ import ghost
 import pygame as pg
 import level
 
-# Global Constants for window size
+# Global Constants
 WINDOW_HEIGHT = 600
 WINDOW_WIDTH = 1200
+FONT = pg.font.Font('joystix.monospace.ttf', 20)
 
 class Game:
     """
@@ -57,7 +58,7 @@ class Game:
         while True:
             # Display pacman and background
             self.disp.blit(self.background, (0, 0))
-
+            self.loadLives()
             '''
             Below loop doesnt work for input but
             is required for the keys_pressed
@@ -152,8 +153,21 @@ class Game:
         """
         Updates game with current lives
         """
-        print()
+        # TODO: add pacman class lives
+        # temp var for now
+        templives = 5
+        x = 900
+        y = 0
 
+        # Text Color -> white
+        color = (255, 255, 255)
+        text = FONT.render('Lives:', False, color)
+        self.disp.blit(text, (800, 5))
+
+        for i in range(templives):
+            temp = pg.transform.scale(self.heart_sprite, (30,30))
+            self.disp.blit(temp, (x, y))
+            x += 30
 
 
 if __name__ == '__main__':
