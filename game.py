@@ -6,7 +6,10 @@ import level
 # Global Constants
 WINDOW_HEIGHT = 600
 WINDOW_WIDTH = 1200
+
+# Graphics Constants
 FONT = pg.font.Font('joystix.monospace.ttf', 20)
+WHITE = (255, 255, 255)
 
 class Game:
     """
@@ -59,6 +62,7 @@ class Game:
             # Display pacman and background
             self.disp.blit(self.background, (0, 0))
             self.loadLives()
+            self.loadScore()
             '''
             Below loop doesnt work for input but
             is required for the keys_pressed
@@ -139,7 +143,9 @@ class Game:
             # 30 fps
             self.clock.tick(30)
             pg.display.update()
-            print("x is " + str(x) + " and y is " + str(y))
+
+            # Pacman pos debugging
+            #print("x is " + str(x) + " and y is " + str(y))
 
 
     def setLevel(self, lvl):
@@ -156,19 +162,25 @@ class Game:
         # TODO: add pacman class lives
         # temp var for now
         templives = 5
-        x = 900
+        x = 950
         y = 0
 
-        # Text Color -> white
-        color = (255, 255, 255)
-        text = FONT.render('Lives:', False, color)
-        self.disp.blit(text, (800, 5))
+        text = FONT.render('LIVES:', False, WHITE)
+        self.disp.blit(text, (850, 5))
 
         for i in range(templives):
             temp = pg.transform.scale(self.heart_sprite, (30,30))
             self.disp.blit(temp, (x, y))
             x += 30
 
+
+    def loadScore(self):
+        """
+        Updates game with current score
+        """
+
+        text = FONT.render('SCORE:', False, WHITE)
+        self.disp.blit(text, (500, 5))
 
 if __name__ == '__main__':
     g = Game()
