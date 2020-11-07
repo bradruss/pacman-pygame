@@ -1,5 +1,5 @@
 import pacman
-import ghost
+from ghost import Ghost
 import pygame as pg
 import level
 
@@ -142,6 +142,9 @@ class Game:
             self.current_level.draw_level(self.disp)
             # 30 fps
             self.clock.tick(30)
+            ghosts = [Ghost()]
+            for g in ghosts:
+                self.disp.blit(g.surface, g.rect)
             pg.display.update()
 
             # Pacman pos debugging
@@ -174,10 +177,12 @@ class Game:
             x += 30
 
 
+
     def loadScore(self):
         """
         Updates game with current score
         """
+
 
         text = FONT.render('SCORE:', False, WHITE)
         self.disp.blit(text, (500, 5))
@@ -185,3 +190,4 @@ class Game:
 if __name__ == '__main__':
     g = Game()
     g.runLevel()
+
