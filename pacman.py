@@ -1,8 +1,10 @@
+import pygame as pg
 
 class Pacman:
 
 
-    def __init__(self, numCoins, isDangerous):
+    def __init__(self, numCoins, isDangerous, numLives):
+        self.numLives = numLives
         self.numCoins = numCoins
         self.isDangerous = isDangerous
 
@@ -18,8 +20,23 @@ class Pacman:
     def collectCoin(self):
         self.numCoins += 1
 
+    def getNumLives(self):
+        return self.numLives
+
+    def setNumLives(self, numlives):
+        self.numLives = numlives
+
+
+    #def endLife(self):
+    #
+
+
     #add array of string of picture name/Line 24 in game.py
     #needs to be able to die
+
+    pacman_sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
+
+
 
 
 
