@@ -28,6 +28,7 @@ class Pacman:
 
 
     #def endLife(self):
+    #
 
 
     #add array of string of picture name/Line 24 in game.py
