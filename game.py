@@ -1,4 +1,4 @@
-import pacman
+from pacman import Pacman
 from ghost import Ghost
 import pygame as pg
 import level
@@ -8,7 +8,6 @@ WINDOW_HEIGHT = 600
 WINDOW_WIDTH = 1200
 
 # Graphics Constants
-FONT = pg.font.Font('joystix.monospace.ttf', 20)
 WHITE = (255, 255, 255)
 
 class Game:
@@ -23,6 +22,9 @@ class Game:
         pg.init()
         self.disp = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
+        # Static Font Family
+        self.FONT = pg.font.Font('joystix.monospace.ttf', 20)
+
         # Set window title
         pg.display.set_caption("Pac-man")
 
@@ -32,9 +34,8 @@ class Game:
         # hearts
         self.heart_sprite = pg.image.load('heart.png')
 
-        # Pacman sprite array
-        self.pacman_sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'),
-                         pg.image.load('pacman/Pacman3.png')]
+        # Create pacman
+        self.pacman = Pacman()
 
         # Load background
         self.background = pg.image.load('background.jpg')
@@ -85,7 +86,7 @@ class Game:
                     # Rotate Pacman 90 degrees
                     rotation = 90
                     isLeft = False
-                    self.disp.blit(pg.transform.rotate(self.pacman_sprite[pacman_image], rotation), (x, y))
+                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
 
             elif keys_pressed[pg.K_DOWN]:
 
@@ -99,7 +100,7 @@ class Game:
                     # Rotate Pacman -90 degrees
                     rotation = -90
                     isLeft = False
-                    self.disp.blit(pg.transform.rotate(self.pacman_sprite[pacman_image], rotation), (x, y))
+                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
 
             elif keys_pressed[pg.K_LEFT]:
                 if x >= 5 and self.current_level.check_valid(x - 5, y):
@@ -112,7 +113,7 @@ class Game:
                     isLeft = True
 
                     # Flip params = (image, X axis flip bool, Y axis flip bool)
-                    temp = pg.transform.flip(pg.transform.rotate(self.pacman_sprite[pacman_image], 0), True, False)
+                    temp = pg.transform.flip(pg.transform.rotate(self.pacman.sprite[pacman_image], 0), True, False)
                     self.disp.blit(temp, (x, y))
 
             elif keys_pressed[pg.K_RIGHT]:
@@ -124,7 +125,7 @@ class Game:
                         pacman_image = 0
                     rotation = 0
                     isLeft = False
-                    self.disp.blit(pg.transform.rotate(self.pacman_sprite[pacman_image], rotation), (x, y))
+                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
 
             elif keys_pressed[pg.K_ESCAPE]:
                 quit()
@@ -132,19 +133,23 @@ class Game:
             else:
                 # Dont set rotation - occurs when key left
                 if isLeft:
-                    temp = pg.transform.flip(pg.transform.rotate(self.pacman_sprite[pacman_image], 0), True, False)
+                    temp = pg.transform.flip(pg.transform.rotate(self.pacman.sprite[pacman_image], 0), True, False)
                     self.disp.blit(temp, (x, y))
 
                 # Set rotation - occurs when key up, down, and right
                 else:
-                    self.disp.blit(pg.transform.rotate(self.pacman_sprite[pacman_image], rotation), (x, y))
+                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
 
             self.current_level.draw_level(self.disp)
+
             # 30 fps
             self.clock.tick(30)
-            ghosts = [Ghost()]
-            for g in ghosts:
+            ghosts_array = [Ghost()]
+
+            # Display static ghost
+            for g in ghosts_array:
                 self.disp.blit(g.surface, g.rect)
+
             pg.display.update()
 
             # Pacman pos debugging
@@ -162,30 +167,26 @@ class Game:
         """
         Updates game with current lives
         """
-        # TODO: add pacman class lives
-        # temp var for now
-        templives = 5
         x = 950
         y = 0
 
-        text = FONT.render('LIVES:', False, WHITE)
+        text = self.FONT.render('LIVES:', False, WHITE)
         self.disp.blit(text, (850, 5))
 
-        for i in range(templives):
+        for i in range(self.pacman.numLives):
             temp = pg.transform.scale(self.heart_sprite, (30,30))
             self.disp.blit(temp, (x, y))
             x += 30
-
-
 
     def loadScore(self):
         """
         Updates game with current score
         """
+        # TODO: implement current score
 
-
-        text = FONT.render('SCORE:', False, WHITE)
+        text = self.FONT.render('SCORE:', False, WHITE)
         self.disp.blit(text, (500, 5))
+
 
 if __name__ == '__main__':
     g = Game()
