@@ -5,7 +5,6 @@ class Ghost():
               pygame.image.load ("weakGhost.png")]
     images = [pygame.transform.rotozoom(images_original[0],0,2),
              pygame.transform.rotozoom(images_original[1],0,0.15)]
-    ghosts = []
         
     def __init__(self):
         self.surface = Ghost.images [0]
@@ -16,8 +15,6 @@ class Ghost():
         self.rect.left = 3
         #self.rect.top = 100
 
-    # def addGhost(self, ghost):
-    #     self.ghosts.append(ghost)
 
     def notVulnerable(self):
         self.surface = Ghost.images [0]
