@@ -54,10 +54,10 @@ class CorridorH:
         # Draw Bottom Line
         pygame.draw.line(window, WHITE, (self.x_startb, self.y_end), (self.x_endb, self.y_end))
 
-        for p in self.points:
-            pygame.draw.circle(window, WHITE, (p.get_x(), p.get_y()), 3)
-            print(p.get_x())
-            print(p.get_y())
+        # for p in self.points:
+        #     pygame.draw.circle(window, WHITE, (p.get_x(), p.get_y()), 3)
+        #     print(p.get_x())
+        #     print(p.get_y())
 
 
 

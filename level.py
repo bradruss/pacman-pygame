@@ -7,6 +7,7 @@ import corridorV as cv
 
 #width of the corridors
 WIDTH = 50
+WHITE = (255,255,255)
 
 class Level:
     def __init__(self, filename):
@@ -14,6 +15,7 @@ class Level:
         self.points = 0
         self.win = False
         self.c_map = {}
+        self.p_map = {}
         # loads in file to dictionary c_map
         self.file_reader()
 
@@ -33,6 +35,11 @@ class Level:
                 cor.y_end = int(array[7])
                 cor.update_points()
                 self.c_map[array[1]] = cor
+                for point in cor.points:
+                    key = (point.get_x() + (5 - (point.get_x() % 5)), point.get_y())
+                    dummy_key = (point.get_x(), point.get_y() + (5 - (point.get_y() % 5)))
+                    if key not in self.p_map and dummy_key not in self.p_map:
+                        self.p_map[key] = point
 
             if array[0] == 'V':
                 cor = cv.CorridorV(0, 0, 0)
@@ -44,16 +51,24 @@ class Level:
                 cor.y_endr = int(array[7])
                 cor.update_points()
                 self.c_map[array[1]] = cor
+                for point in cor.points:
+                    key = (point.get_x(), point.get_y() + (5 - (point.get_y() % 5)))
+                    dummy_key = (point.get_x() + (5 - (point.get_x() % 5)), point.get_y())
+                    if key not in self.p_map and dummy_key not in self.p_map:
+                        self.p_map[key] = point
 
-        print("Level File Loaded In")
+        # print("Level File Loaded In")
         f.close()
 
 
     # draws the level to display
-    def draw_level(self, disp):
+    def draw_level(self, disp, p_map):
         for key in self.c_map:
             self.c_map[key].draw(disp)
+        for point in p_map:
+            pg.draw.circle(disp, WHITE, (p_map[point].get_x(), p_map[point].get_y()), 3)
         pg.display.flip()
+
 
     # checks to see if the inputted x and y coordinates of pacman are a "valid" move so that pacman
     # doesn't go through the walls of the map. Checks this by seeing if pacman will run into any of the
@@ -77,28 +92,28 @@ class Level:
 
                 # make sure pacman's edges aren't passing through any of the lines
                 # check the left line of the vertical corridor
-                print("check left of " + key)
+                # print("check left of " + key)
                 if left_edge < cor.x_start < right_edge and ((cor.y_startl < top_edge or cor.y_startl < bottom_edge) and (cor.y_endl > bottom_edge or cor.y_endl > top_edge)):
                     valid = False
-                    print("rule 1")
+                    # print("rule 1")
 
                 # check the right line of the vertical corridor
-                print("check right of " + key)
+                # print("check right of " + key)
                 if left_edge < cor.x_end < right_edge and ((cor.y_startr < top_edge or cor.y_startr < bottom_edge) and (cor.y_endr > bottom_edge or cor.y_endr > top_edge)):
                     valid = False
-                    print("rule 2")
+                    # print("rule 2")
 
             if type(cor) is ch.CorridorH:
                 # check the top line of the horizontal corridor
-                print("check top of " + key)
+                # print("check top of " + key)
                 if top_edge < cor.y_start < bottom_edge and ((cor.x_startt < left_edge or cor.x_startt < right_edge) and (cor.x_endt > right_edge or cor.x_endt > left_edge)):
                     valid = False
-                    print("rule 3")
+                    # print("rule 3")
                 # check the bottom line of the horizontal corridor
-                print("check bottom of " + key)
+                # print("check bottom of " + key)
                 if top_edge < cor.y_end < bottom_edge and ((cor.x_startb < left_edge or cor.x_startb < right_edge) and (cor.x_endb > right_edge or cor.x_endb > left_edge)):
                     valid = False
-                    print("rule 4")
+                    # print("rule 4")
 
         return valid
 

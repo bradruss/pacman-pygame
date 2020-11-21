@@ -2,6 +2,7 @@ from pacman import Pacman
 from ghost import Ghost
 import pygame as pg
 import level
+import copy
 
 # Global Constants
 WINDOW_HEIGHT = 600
@@ -9,6 +10,7 @@ WINDOW_WIDTH = 1200
 
 # Graphics Constants
 WHITE = (255, 255, 255)
+WIDTH = 50
 
 class Game:
     """
@@ -17,6 +19,8 @@ class Game:
     def __init__(self):
         # Set Game Level
         self.current_level = level.Level('level1')
+        self.point_map = copy.deepcopy(self.current_level.p_map)
+        print(self.point_map)
 
         # Initialize window
         pg.init()
@@ -140,7 +144,8 @@ class Game:
                 else:
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
 
-            self.current_level.draw_level(self.disp)
+            self.check_points(x, y)
+            self.current_level.draw_level(self.disp, self.point_map)
 
             # 30 fps
             self.clock.tick(30)
@@ -154,6 +159,51 @@ class Game:
 
             # Pacman pos debugging
             #print("x is " + str(x) + " and y is " + str(y))
+
+
+    def check_points(self, x, y):
+        midx = x + WIDTH / 2
+        midy = y + WIDTH / 2
+
+        left_edge = x  # This is the left edge of pacman
+        right_edge = x + WIDTH  # This is the right edge of pacman
+
+        top_edge = y  # This is the top edge of pacman
+        bottom_edge = y + WIDTH  # This is the bottom edge of pacman
+
+        # locationh1 = str(right_edge) + "," + str(midy)
+        # locationh2 = str(left_edge) + "," + str(midy)
+        #
+        # locationv1 = str(midx) + "," + str(top_edge)
+        # locationv2 = str(midx) + "," + str(bottom_edge)
+
+        location = str(midx) + ","  +str(midy)
+
+        # if locationh1 in self.point_map:
+        #     del self.point_map[locationh1]
+        #
+        # if locationh2 in self.point_map:
+        #     del self.point_map[locationh2]
+        #
+        # if locationv1 in self.point_map:
+        #     del self.point_map[locationv1]
+        #
+        # if locationv2 in self.point_map:
+        #     del self.point_map[locationv2]
+
+        print(midx)
+        print(midy)
+        if (midx, midy) in self.point_map:
+            del self.point_map[(midx, midy)]
+            print("point removed")
+            self.pacman.collectCoin()
+        if (midx + (5 - (midx % 5)), midy) in self.point_map:
+            del self.point_map[(midx + (5 - (midx % 5)), midy)]
+            self.pacman.collectCoin()
+        if (midx, midy + (5 - (midx % 5))) in self.point_map:
+            del self.point_map[(midx, midy + (5 - (midx % 5)))]
+            self.pacman.collectCoin()
+
 
 
     def setLevel(self, lvl):
@@ -184,7 +234,10 @@ class Game:
         """
         # TODO: implement current score
 
-        text = self.FONT.render('SCORE:', False, WHITE)
+        coins = self.pacman.getNumCoins()
+        score_text = 'SCORE: ' +  str(coins)
+        text = self.FONT.render(score_text, False, WHITE)
+        # text = self.FONT.render('SCORE:', False, WHITE)
         self.disp.blit(text, (500, 5))
 
 

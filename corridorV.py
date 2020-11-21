@@ -52,8 +52,8 @@ class CorridorV:
         # Draw Right Line
         pygame.draw.line(window, WHITE, (self.x_end, self.y_startr), (self.x_end, self.y_endr))
 
-        for p in self.points:
-            pygame.draw.circle(window, WHITE, (p.get_x(), p.get_y()), 3)
+        # for p in self.points:
+        #     pygame.draw.circle(window, WHITE, (p.get_x(), p.get_y()), 3)
 
     def check_in_corridor(self, x, y):
         if (x >= self.x_start and x <= self.x_end and y >= self.y_start and y <= self.y_end):
