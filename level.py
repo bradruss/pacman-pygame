@@ -31,6 +31,7 @@ class Level:
                 cor.x_endt = int(array[5])
                 cor.x_endb = int(array[6])
                 cor.y_end = int(array[7])
+                cor.update_points()
                 self.c_map[array[1]] = cor
 
             if array[0] == 'V':
@@ -41,6 +42,7 @@ class Level:
                 cor.x_end = int(array[5])
                 cor.y_endl = int(array[6])
                 cor.y_endr = int(array[7])
+                cor.update_points()
                 self.c_map[array[1]] = cor
 
         print("Level File Loaded In")
