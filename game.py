@@ -43,6 +43,8 @@ class Game:
         # Create pacman
         self.pacman = Pacman()
 
+        self.blue_ghost = Ghost("blue")
+
         # Load background
         self.background = pg.image.load('background.jpg')
 
@@ -71,6 +73,10 @@ class Game:
             self.loadLives()
             self.loadScore()
             self.loadLevelText()
+
+
+            self.disp.blit(self.blue_ghost.sprite, (0, 0))
+
             '''
             Below loop doesnt work for input but
             is required for the keys_pressed
@@ -150,13 +156,12 @@ class Game:
             self.check_points(x, y)
             self.current_level.draw_level(self.disp, self.point_map)
 
+
             # 30 fps
             self.clock.tick(30)
-            ghosts_array = [Ghost()]
 
             # Display static ghost
-            for g in ghosts_array:
-                self.disp.blit(g.surface, g.rect)
+
 
             pg.display.update()
 
