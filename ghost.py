@@ -24,14 +24,14 @@ class Ghost():
         self.weak = True
         self.time = 10
 
-    def reset(self)
+    def reset(self):
         self.surface = Ghost.images [0]
         self.weak = False
         self.time = 0
         self.course = 10
         self.rect.left = 3
 
-    # def moveGhosts(self, pacman):
+    def moveGhosts(self, pacman):
     #     ver = pacman.rect.left - self.rect.left
     #     hor = pacman.rect.top - self.rect.top
     #     if ver > 0 and level_one.check_valid(self.rect.left,self.rect.top):
