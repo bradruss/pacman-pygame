@@ -1,8 +1,6 @@
 import pygame as pg
 
 class Pacman:
-
-
     def __init__(self):
         self.numLives = 5
         self.numCoins = 0
