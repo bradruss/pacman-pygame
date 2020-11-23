@@ -1,4 +1,6 @@
 import pygame
+import random
+
 
 class Ghost():
     images_original = [pygame.image.load ("strongGhost.png"),
@@ -13,7 +15,7 @@ class Ghost():
         self.course = 10
         self.rect = self.surface.get_rect()
         self.rect.left = 3
-        #self.rect.top = 100
+        self.rect.top = 1
 
     def notVulnerable(self):
         self.surface = Ghost.images [0]
@@ -31,14 +33,26 @@ class Ghost():
         self.course = 10
         self.rect.left = 3
 
-    def moveGhosts(self, pacman):
-    #     ver = pacman.rect.left - self.rect.left
-    #     hor = pacman.rect.top - self.rect.top
-    #     if ver > 0 and level_one.check_valid(self.rect.left,self.rect.top):
-    #         self.rect.left -= 1
-    #     elif ver < 0 and level_one.check_valid(self.rect.left,self.rect.top):
-    #         self.rect.left +=1
-    #     elif hor > 0 and level_one.check_valid(self.rect.left,self.rect.top):
-    #         self.rect.top -=1
+    def moveGhosts(self, x, y):
+        ver = x - self.rect.left
+        hor = y - self.rect.top
+        r = random.randint(1,10)
+        if r >= 5:
+            if ver > 10:
+                self.rect.left -= 10
+            elif ver < 10:
+                self.rect.left += 10
+            elif hor > 0:
+                self.rect.top -= 10
+            elif hor < 0:
+                self.rect.top += 10
+        elif r == 1:
+             self.rect.left -= 1
+        elif r == 2:
+            self.rect.left += 1
+        elif r == 3:
+            self.rect.top -= 1
+        elif r == 4:
+            self.rect.top += 1
         
             
