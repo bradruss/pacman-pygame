@@ -16,6 +16,7 @@ class Level:
         self.win = False
         self.c_map = {}
         self.p_map = {}
+        self.total_points = 0
         # loads in file to dictionary c_map
         self.file_reader()
 
@@ -57,8 +58,9 @@ class Level:
                     if key not in self.p_map and dummy_key not in self.p_map:
                         self.p_map[key] = point
 
-        # print("Level File Loaded In")
+        print("Level File Loaded In")
         f.close()
+        self.total_points = len(self.p_map)
 
 
     # draws the level to display

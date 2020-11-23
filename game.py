@@ -21,6 +21,7 @@ class Game:
         self.current_level = level.Level('level1')
         self.point_map = copy.deepcopy(self.current_level.p_map)
         print(self.point_map)
+        self.current_level_total_points = self.current_level.total_points
 
         # Initialize window
         pg.init()
@@ -63,7 +64,8 @@ class Game:
 
         # Used for pac man display
         isLeft = False
-        while True:
+        levelOver = False
+        while not levelOver:
             # Display pacman and background
             self.disp.blit(self.background, (0, 0))
             self.loadLives()
@@ -157,8 +159,30 @@ class Game:
 
             pg.display.update()
 
+            if self.pacman.numCoins == self.current_level_total_points:
+                levelOver = True
+
             # Pacman pos debugging
             #print("x is " + str(x) + " and y is " + str(y))
+
+        if(self.pacman.numCoins == self.current_level_total_points):
+            return 0
+        else:
+            return 1
+
+    def runGame(self):
+        return_code = self.runLevel()
+        if return_code == 0:
+            while True:
+                self.disp.blit(self.background, (0, 0))
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        quit()
+                        break
+                self.loadYouPassed()
+                self.clock.tick(30)
+                pg.display.update()
+
 
 
     def check_points(self, x, y):
@@ -240,8 +264,13 @@ class Game:
         # text = self.FONT.render('SCORE:', False, WHITE)
         self.disp.blit(text, (500, 5))
 
+    def loadYouPassed(self):
+        score_text = "YOU PASSED LEVEL 1!"
+        text = self.FONT.render(score_text, False, WHITE)
+        self.disp.blit(text, (500, 5))
+
 
 if __name__ == '__main__':
     g = Game()
-    g.runLevel()
+    g.runGame()
 
