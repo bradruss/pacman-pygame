@@ -1,29 +1,37 @@
 import pygame
 
 class Ghost():
-    images_original = [pygame.image.load ("strongGhost.png"),
-              pygame.image.load ("weakGhost.png")]
-    images = [pygame.transform.rotozoom(images_original[0],0,2),
-             pygame.transform.rotozoom(images_original[1],0,0.15)]
+    weakGhost = pygame.image.load("weakGhost.png")
+    images = [pygame.image.load("redGhost.png"), pygame.image.load("blueGhost.png")]
+
         
-    def __init__(self):
-        self.surface = Ghost.images [0]
+    def __init__(self, color):
+        # Color selection
+        if color == "red":
+            self.surface = self.images[0]
+
+        elif color == "blue":
+            self.surface = self.images[1]
+
+
         self.weak = False
-        self.time = 0
-        self.course = 10
-        self.rect = self.surface.get_rect()
-        self.rect.left = 3
-        #self.rect.top = 100
+
+
+
+        # self.time = 0
+        # self.course = 10
+        # self.rect = self.surface.get_rect()
+        # self.rect.left = 3
+        # #self.rect.top = 100
 
 
     def notVulnerable(self):
-        self.surface = Ghost.images [0]
         self.weak = False
 
     def vulnerable(self):
-        self.surface = Ghost.images [1]
+        self.surface = self.weakGhost
         self.weak = True
-        self.time = 10
+        #self.time = 10
 
     # def moveGhosts(self, pacman):
     #     ver = pacman.rect.left - self.rect.left
