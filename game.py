@@ -19,6 +19,8 @@ class Game:
     def __init__(self):
         # Set Game Level
         self.current_level = level.Level('level1')
+        self.current_level_int = 1
+
         self.point_map = copy.deepcopy(self.current_level.p_map)
         print(self.point_map)
 
@@ -68,6 +70,7 @@ class Game:
             self.disp.blit(self.background, (0, 0))
             self.loadLives()
             self.loadScore()
+            self.loadLevelText()
             '''
             Below loop doesnt work for input but
             is required for the keys_pressed
@@ -207,38 +210,55 @@ class Game:
 
 
     def setLevel(self, lvl):
-        """
-        Set the current level
-        Modifies class var current_level
-        """
-        self.current_level = level.Level(lvl)
+        # TODO: make it so when you want to change levels, change current level int then call setLevel
+        self.current_level = level.Level('level' + str(self.current_level_int))
 
     def loadLives(self):
-        """
-        Updates game with current lives
-        """
         x = 950
         y = 0
 
-        text = self.FONT.render('LIVES:', False, WHITE)
+        text = self.FONT.render('LIVES', False, WHITE)
         self.disp.blit(text, (850, 5))
 
+        semi_colon = self.FONT.render(':', False, WHITE)
+        self.disp.blit(semi_colon, (930, 7))
+
         for i in range(self.pacman.numLives):
-            temp = pg.transform.scale(self.heart_sprite, (30,30))
+            temp = pg.transform.scale(self.heart_sprite, (30, 30))
             self.disp.blit(temp, (x, y))
             x += 30
 
-    def loadScore(self):
-        """
-        Updates game with current score
-        """
-        # TODO: implement current score
 
+    def loadScore(self):
         coins = self.pacman.getNumCoins()
-        score_text = 'SCORE: ' +  str(coins)
-        text = self.FONT.render(score_text, False, WHITE)
-        # text = self.FONT.render('SCORE:', False, WHITE)
+
+        text = self.FONT.render('SCORE', False, WHITE)
         self.disp.blit(text, (500, 5))
+
+        text2 = ':'
+        text_semi = self.FONT.render(text2, False, WHITE)
+        self.disp.blit(text_semi, (580, 7))
+
+        text3 = str(coins)
+        text_score = self.FONT.render(text3, False, WHITE)
+        self.disp.blit(text_score, (600, 5))
+
+        # score_text = 'SCORE: ' + str(coins)
+        # text = self.FONT.render(score_text, False, WHITE)
+        # # text = self.FONT.render('SCORE:', False, WHITE)
+        # self.disp.blit(text, (500, 5))
+
+
+    def loadLevelText(self):
+        # Updates game with current level rendered
+        text = self.FONT.render('LEVEL', False, WHITE)
+        self.disp.blit(text, (350, 5))
+
+        semi_colon = self.FONT.render(':', False, WHITE)
+        self.disp.blit(semi_colon, (430, 7))
+
+        text2 = self.FONT.render(str(self.current_level_int), False, WHITE)
+        self.disp.blit(text2, (450, 5))
 
 
 if __name__ == '__main__':
