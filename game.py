@@ -247,6 +247,7 @@ class Game:
         # text = self.FONT.render(score_text, False, WHITE)
         # # text = self.FONT.render('SCORE:', False, WHITE)
         # self.disp.blit(text, (500, 5))
+        # comment
 
 
     def loadLevelText(self):
