@@ -65,8 +65,13 @@ class Game:
         # Rotation in degrees
         rotation = 0
 
+        # Keep track of previous frame for wall collision
+        previous_pacman_image = pacman_image
+
         # Used for pac man display
         isLeft = False
+
+
         while True:
             # Display pacman and background
             self.disp.blit(self.background, (0, 0))
@@ -92,35 +97,46 @@ class Game:
                 if y >= 5 and self.current_level.check_valid(x, y - 5):
                     y -= 5
                     if pacman_image < 2:
+                        previous_pacman_image = pacman_image
                         pacman_image += 1
                     else:
+                        previous_pacman_image = pacman_image
                         pacman_image = 0
 
                     # Rotate Pacman 90 degrees
                     rotation = 90
                     isLeft = False
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+                else:
+                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
+
 
             elif keys_pressed[pg.K_DOWN]:
 
                 if y <= 460 and self.current_level.check_valid(x, y + 5):
                     y += 5
                     if pacman_image < 2:
+                        previous_pacman_image = pacman_image
                         pacman_image += 1
                     else:
+                        previous_pacman_image = pacman_image
                         pacman_image = 0
 
                     # Rotate Pacman -90 degrees
                     rotation = -90
                     isLeft = False
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+                else:
+                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
             elif keys_pressed[pg.K_LEFT]:
                 if x >= 5 and self.current_level.check_valid(x - 5, y):
                     x -= 5
                     if pacman_image < 2:
+                        previous_pacman_image = pacman_image
                         pacman_image += 1
                     else:
+                        previous_pacman_image = pacman_image
                         pacman_image = 0
 
                     isLeft = True
@@ -128,17 +144,23 @@ class Game:
                     # Flip params = (image, X axis flip bool, Y axis flip bool)
                     temp = pg.transform.flip(pg.transform.rotate(self.pacman.sprite[pacman_image], 0), True, False)
                     self.disp.blit(temp, (x, y))
+                else:
+                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
             elif keys_pressed[pg.K_RIGHT]:
                 if x <= 1075 and self.current_level.check_valid(x + 5, y):
                     x += 5
                     if pacman_image < 2:
+                        previous_pacman_image = pacman_image
                         pacman_image += 1
                     else:
+                        previous_pacman_image = pacman_image
                         pacman_image = 0
                     rotation = 0
                     isLeft = False
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+                else:
+                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
             elif keys_pressed[pg.K_ESCAPE]:
                 quit()
@@ -159,9 +181,6 @@ class Game:
 
             # 30 fps
             self.clock.tick(30)
-
-            # Display static ghost
-
 
             pg.display.update()
 

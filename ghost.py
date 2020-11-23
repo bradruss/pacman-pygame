@@ -6,16 +6,8 @@ class Ghost():
               pygame.image.load("orangeGhost.png"), pygame.image.load("pinkGhost.png")]
         
     def __init__(self, color):
-        # Color selection
         self.sprite = self.loadGhost(color)
         self.weak = False
-
-
-        # self.time = 0
-        # self.course = 10
-        # self.rect = self.surface.get_rect()
-        # self.rect.left = 3
-        # #self.rect.top = 100
 
     def loadGhost(self, color):
         temp = None
@@ -38,28 +30,25 @@ class Ghost():
     def vulnerable(self):
         self.surface = self.weakGhost
         self.weak = True
-        #self.time = 10
 
-    # def moveGhosts(self, pacman):
-    #     ver = pacman.rect.left - self.rect.left
-    #     hor = pacman.rect.top - self.rect.top
-    #     if ver > 0 and level_one.check_valid(self.rect.left,self.rect.top):
-    #         self.rect.left -= 1
-    #     elif ver < 0 and level_one.check_valid(self.rect.left,self.rect.top):
-    #         self.rect.left +=1
-    #     elif hor > 0 and level_one.check_valid(self.rect.left,self.rect.top):
-    #         self.rect.top -=1
-        
 
-    # chase, scatter,
+
+    # movement on new/ fresh level:
+        # red ghost spawns outside, right above the box
+        # up/down in box before spawn. after 5 seconds have passed, spawn new ghost
+        # 3 "slots" total in the box. (if somehow the player gets 4 ghost, make two overlap/ put in same slot)
+
+
+
+    # chase, scatter, frigtened
     # ghost only move 1 step ahead in map
         # chase player for 20 secs
             # try to chase pac man
             # get position of pac man
-            #
+
 
         # scatter for 7 secs
             # go to corners of board
 
 
-
+        # fright mode random generated
