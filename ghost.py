@@ -1,5 +1,8 @@
 import pygame
 import random
+from pacman import Pacman
+import level
+import copy
 
 class Ghost():
     weakGhost = pygame.image.load("weakGhost.png")
@@ -11,6 +14,9 @@ class Ghost():
         self.weak = False
         self.x_pos = 0
         self.y_pos = 0
+        self.current_level = level.Level('level2')
+        self.current_level_int = 1
+        self.point_map = copy.deepcopy(self.current_level.p_map)
 
 
     def loadGhost(self, color):
@@ -63,13 +69,13 @@ class Ghost():
     def moveGhosts(self, x, y):
         ver = x - self.x_pos
         hor = y - self.y_pos
-        if ver > 10 and self.current_level.check_valid(self.x_pos, self.y_pos):
+        if ver > 10 and self.current_level.check_valid(self.x_pos + 5, self.y_pos):
             self.x_pos += 5
-        elif ver < 10:
+        elif ver < 10 and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
             self.x_pos -= 5
-        elif hor > 0:
+        elif hor > 0 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
             self.y_pos += 5
-        elif hor < 0:
+        elif hor < 0 and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
             self.y_pos -= 5
         #r = random.randint(1,10)
         #if r >=5:
