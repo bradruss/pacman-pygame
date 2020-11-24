@@ -8,6 +8,8 @@ class Ghost():
     def __init__(self, color):
         self.sprite = self.loadGhost(color)
         self.weak = False
+        self.x_pos = 0
+        self.y_pos = 0
 
     def loadGhost(self, color):
         temp = None
@@ -28,11 +30,36 @@ class Ghost():
         self.weak = False
 
     def vulnerable(self):
-        self.surface = self.weakGhost
+        self.sprite = self.weakGhost
         self.weak = True
 
+    # inside width = 170px
+    # 30 px of move up and down -> 110px
+    # spawn box at center of screen
 
 
+    # after being eaten: middle -> left -> right
+
+    def spawnOutside(self):
+        # Designated for red ghost starting position
+        # Only called when new level
+        self.x_pos = 600
+        self.y_pos = 300
+
+    def spawnleft(self):
+        self.x_pos = 550
+        self.y_pos = 350
+
+    def spawnMiddle(self):
+        self.x_pos = 600
+        self.y_pos = 350
+
+    def spawnRight(self):
+        self.x_pos = 650
+        self.y_pos = 350
+
+
+    # TODO: movement algs
     # movement on new/ fresh level:
         # red ghost spawns outside, right above the box
         # up/down in box before spawn. after 5 seconds have passed, spawn new ghost
