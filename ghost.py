@@ -71,6 +71,25 @@ class Ghost():
             self.y_pos += 5
         elif hor < 0:
             self.y_pos -= 5
+        #r = random.randint(1,10)
+        #if r >=5:
+        #      if ver > 10 and self.current_level.check_valid(self.x_pos, self.y_pos):
+        #            self.x_pos += 5
+        #        elif ver < 10:
+        #            self.x_pos -= 5
+        #        elif hor > 0:
+        #            self.y_pos += 5
+        #        elif hor < 0:
+        #           self.y_pos -= 5
+        #elif r == 1:
+        #   self.x_pos += 5
+        #elif r == 2:
+        #   self.x_pos -+ 5
+        #elif r == 3:
+        #   self.y_pos += 5
+        #elif r == 4:
+        #   self.y_pos -= 5
+     
 
       
 
