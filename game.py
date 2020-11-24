@@ -18,7 +18,7 @@ class Game:
     """
     def __init__(self):
         # Set Game Level
-        self.current_level = level.Level('level1')
+        self.current_level = level.Level('level2')
         self.current_level_int = 1
 
         self.point_map = copy.deepcopy(self.current_level.p_map)
@@ -41,6 +41,8 @@ class Game:
         self.heart_sprite = pg.image.load('heart.png')
 
         self.pacman = Pacman()
+        self.in_motion = False
+        self.motion_type = None
         self.red_ghost = Ghost("red")
         self.blue_ghost = Ghost("blue")
         self.orange_ghost = Ghost("orange")
@@ -116,90 +118,203 @@ class Game:
                 if event.type == pg.QUIT:
                     quit()
                     break
+            if self.in_motion:
+                keys_pressed = pg.key.get_pressed()
 
-            # Use the following code for keyboard operations
-            keys_pressed = pg.key.get_pressed()
-            if keys_pressed[pg.K_UP]:
-                if y >= 0 and self.current_level.check_valid(x, y - 5):
-                    y -= 5
-                    if pacman_image < 2:
-                        previous_pacman_image = pacman_image
-                        pacman_image += 1
-                    else:
-                        previous_pacman_image = pacman_image
-                        pacman_image = 0
-
-                    # Rotate Pacman 90 degrees
-                    rotation = 90
-                    isLeft = False
-                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
-                else:
+                if keys_pressed[pg.K_UP] and self.current_level.check_valid(x, y - 5) and self.motion_type != "up":
+                    self.motion_type = "up"
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
-
-            elif keys_pressed[pg.K_DOWN]:
-
-                if y <= 550 and self.current_level.check_valid(x, y + 5):
-                    y += 5
-                    if pacman_image < 2:
-                        previous_pacman_image = pacman_image
-                        pacman_image += 1
-                    else:
-                        previous_pacman_image = pacman_image
-                        pacman_image = 0
-
-                    # Rotate Pacman -90 degrees
-                    rotation = -90
-                    isLeft = False
-                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
-                else:
+                elif keys_pressed[pg.K_DOWN] and self.current_level.check_valid(x, y + 5) and self.motion_type != "down":
+                    self.motion_type = "down"
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
-            elif keys_pressed[pg.K_LEFT]:
-                if x >= 0 and self.current_level.check_valid(x - 5, y):
-                    x -= 5
-                    if pacman_image < 2:
-                        previous_pacman_image = pacman_image
-                        pacman_image += 1
-                    else:
-                        previous_pacman_image = pacman_image
-                        pacman_image = 0
-
-                    isLeft = True
-
-                    # Flip params = (image, X axis flip bool, Y axis flip bool)
-                    temp = pg.transform.flip(pg.transform.rotate(self.pacman.sprite[pacman_image], 0), True, False)
-                    self.disp.blit(temp, (x, y))
-                else:
+                elif keys_pressed[pg.K_RIGHT] and self.current_level.check_valid(x + 5, y) and self.motion_type != "right":
+                    self.motion_type = "right"
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
-            elif keys_pressed[pg.K_RIGHT]:
-                if x <= 1150 and self.current_level.check_valid(x + 5, y):
-                    x += 5
-                    if pacman_image < 2:
-                        previous_pacman_image = pacman_image
-                        pacman_image += 1
-                    else:
-                        previous_pacman_image = pacman_image
-                        pacman_image = 0
-                    rotation = 0
-                    isLeft = False
-                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
-                else:
+                elif keys_pressed[pg.K_LEFT] and self.current_level.check_valid(x - 5, y) and self.motion_type != "left":
+                    self.motion_type = "left"
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
-            elif keys_pressed[pg.K_ESCAPE]:
-                quit()
+                elif self.motion_type == "up":
+                    if y >= 0 and self.current_level.check_valid(x, y - 5):
+                        y -= 5
+                        self.in_motion = True
+                        self.motion_type = "up"
+                        if pacman_image < 2:
+                            previous_pacman_image = pacman_image
+                            pacman_image += 1
+                        else:
+                            previous_pacman_image = pacman_image
+                            pacman_image = 0
+
+                        # Rotate Pacman 90 degrees
+                        rotation = 90
+                        isLeft = False
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+                    else:
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
+                        self.in_motion = False
+
+                elif self.motion_type == "down":
+
+                    if y <= 550 and self.current_level.check_valid(x, y + 5):
+                        y += 5
+                        self.in_motion = True
+                        self.motion_type = "down"
+                        if pacman_image < 2:
+                            previous_pacman_image = pacman_image
+                            pacman_image += 1
+                        else:
+                            previous_pacman_image = pacman_image
+                            pacman_image = 0
+
+                        # Rotate Pacman -90 degrees
+                        rotation = -90
+                        isLeft = False
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+                    else:
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
+                        self.in_motion = False
+
+                elif self.motion_type == "left":
+                    if x >= 0 and self.current_level.check_valid(x - 5, y):
+                        self.in_motion = True
+                        self.motion_type = "left"
+                        x -= 5
+                        if pacman_image < 2:
+                            previous_pacman_image = pacman_image
+                            pacman_image += 1
+                        else:
+                            previous_pacman_image = pacman_image
+                            pacman_image = 0
+
+                        isLeft = True
+
+                        # Flip params = (image, X axis flip bool, Y axis flip bool)
+                        temp = pg.transform.flip(pg.transform.rotate(self.pacman.sprite[pacman_image], 0), True, False)
+                        self.disp.blit(temp, (x, y))
+                    else:
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
+                        self.in_motion = False
+
+                elif self.motion_type == "right":
+                    if x <= 1150 and self.current_level.check_valid(x + 5, y):
+                        x += 5
+                        self.in_motion = True
+                        self.motion_type = "right"
+                        if pacman_image < 2:
+                            previous_pacman_image = pacman_image
+                            pacman_image += 1
+                        else:
+                            previous_pacman_image = pacman_image
+                            pacman_image = 0
+                        rotation = 0
+                        isLeft = False
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+                    else:
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
+                        self.in_motion = False
+
+                else:
+                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
+                    self.in_motion = False
 
             else:
-                # Dont set rotation - occurs when key left
-                if isLeft:
-                    temp = pg.transform.flip(pg.transform.rotate(self.pacman.sprite[pacman_image], 0), True, False)
-                    self.disp.blit(temp, (x, y))
 
-                # Set rotation - occurs when key up, down, and right
+
+                # Use the following code for keyboard operations
+                keys_pressed = pg.key.get_pressed()
+                if keys_pressed[pg.K_UP]:
+                    if y >= 0 and self.current_level.check_valid(x, y - 5):
+                        y -= 5
+                        self.in_motion = True
+                        self.motion_type = "up"
+                        if pacman_image < 2:
+                            previous_pacman_image = pacman_image
+                            pacman_image += 1
+                        else:
+                            previous_pacman_image = pacman_image
+                            pacman_image = 0
+
+                        # Rotate Pacman 90 degrees
+                        rotation = 90
+                        isLeft = False
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+                    else:
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
+
+
+                elif keys_pressed[pg.K_DOWN]:
+
+                    if y <= 550 and self.current_level.check_valid(x, y + 5):
+                        y += 5
+                        self.in_motion = True
+                        self.motion_type = "down"
+                        if pacman_image < 2:
+                            previous_pacman_image = pacman_image
+                            pacman_image += 1
+                        else:
+                            previous_pacman_image = pacman_image
+                            pacman_image = 0
+
+                        # Rotate Pacman -90 degrees
+                        rotation = -90
+                        isLeft = False
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+                    else:
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
+
+                elif keys_pressed[pg.K_LEFT]:
+                    if x >= 0 and self.current_level.check_valid(x - 5, y):
+                        self.in_motion = True
+                        self.motion_type = "left"
+                        x -= 5
+                        if pacman_image < 2:
+                            previous_pacman_image = pacman_image
+                            pacman_image += 1
+                        else:
+                            previous_pacman_image = pacman_image
+                            pacman_image = 0
+
+                        isLeft = True
+
+                        # Flip params = (image, X axis flip bool, Y axis flip bool)
+                        temp = pg.transform.flip(pg.transform.rotate(self.pacman.sprite[pacman_image], 0), True, False)
+                        self.disp.blit(temp, (x, y))
+                    else:
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
+
+                elif keys_pressed[pg.K_RIGHT]:
+                    if x <= 1150 and self.current_level.check_valid(x + 5, y):
+                        x += 5
+                        self.in_motion = True
+                        self.motion_type = "right"
+                        if pacman_image < 2:
+                            previous_pacman_image = pacman_image
+                            pacman_image += 1
+                        else:
+                            previous_pacman_image = pacman_image
+                            pacman_image = 0
+                        rotation = 0
+                        isLeft = False
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+                    else:
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
+
+                elif keys_pressed[pg.K_ESCAPE]:
+                    quit()
+
                 else:
-                    self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+                    # Dont set rotation - occurs when key left
+                    if isLeft:
+                        temp = pg.transform.flip(pg.transform.rotate(self.pacman.sprite[pacman_image], 0), True, False)
+                        self.disp.blit(temp, (x, y))
+
+                    # Set rotation - occurs when key up, down, and right
+                    else:
+                        self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
 
             self.check_points(x, y)
             self.current_level.draw_level(self.disp, self.point_map)
