@@ -205,7 +205,7 @@ class Game:
                         self.in_motion = True
                         self.motion_type = "right"
                         if pacman_image < 2:
-                            previous_pacman_image = pacman_image
+                            previous_pacmanc_image = pacman_image
                             pacman_image += 1
                         else:
                             previous_pacman_image = pacman_image
@@ -318,10 +318,13 @@ class Game:
 
             self.check_points(x, y)
             self.current_level.draw_level(self.disp, self.point_map)
-            self.red_ghost.maze("red")
-            self.red_ghost.moveGhosts(x,y)
+            self.red_ghost.moveRandom(x,y)
+            self.blue_ghost.moveRandom(x,y)
+            self.orange_ghost.moveRandom(x,y)
+            self.pink_ghost.moveRandom(x,y)
 
 
+    
 
             # 30 fps
             self.clock.tick(30)

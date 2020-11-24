@@ -3,6 +3,7 @@ import random
 from pacman import Pacman
 import level
 import copy
+import time
 
 class Ghost():
     weakGhost = pygame.image.load("weakGhost.png")
@@ -18,6 +19,7 @@ class Ghost():
         self.current_level_int = 1
         self.point_map = copy.deepcopy(self.current_level.p_map)
         self.disp = pygame.display.set_mode((1200, 600))
+
 
 
 
@@ -54,7 +56,7 @@ class Ghost():
         # Designated for red ghost starting position
         # Only called when new level
         self.x_pos = 600
-        self.y_pos = 300
+        self.y_pos = 250
 
     def spawnleft(self):
         self.x_pos = 550
@@ -75,38 +77,54 @@ class Ghost():
                 self.disp.blit(self.sprite, (self.x_pos, self.y_pos))
 
 
-    def moveGhosts(self, x, y):
+    def moveGhost(self, x, y):
         ver = x - self.x_pos
         hor = y - self.y_pos
-        if ver > 10 and self.current_level.check_valid(self.x_pos + 5, self.y_pos):
+        if ver > 0 and self.current_level.check_valid(self.x_pos + 5, self.y_pos):
             self.x_pos += 5
-        elif ver < 10 and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
+        elif ver < 0 and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
             self.x_pos -= 5
         elif hor > 0 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
             self.y_pos += 5
         elif hor < 0 and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
             self.y_pos -= 5
-        #r = random.randint(1,10)
-        #if r >=5:
-        #      if ver > 10 and self.current_level.check_valid(self.x_pos, self.y_pos):
-        #            self.x_pos += 5
-        #        elif ver < 10:
-        #            self.x_pos -= 5
-        #        elif hor > 0:
-        #            self.y_pos += 5
-        #        elif hor < 0:
-        #           self.y_pos -= 5
-        #elif r == 1:
-        #   self.x_pos += 5
-        #elif r == 2:
-        #   self.x_pos -+ 5
-        #elif r == 3:
-        #   self.y_pos += 5
-        #elif r == 4:
-        #   self.y_pos -= 5
-     
 
-      
+    def moveRandom(self, x, y):
+        ver = x - self.x_pos
+        hor = y - self.y_pos
+        r = random.randint(1,15)
+        if r >= 4:
+            if ver > 0 and self.current_level.check_valid(self.x_pos + 5, self.y_pos):
+                #for i in range(10):
+                #if self.current_level.check_valid(self.x_pos + 5, self.y_pos):
+                self.x_pos += 5
+            elif ver < 0 and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
+                #i = 0
+                #while i < 10:
+                #if self.current_level.check_valid(self.x_pos + 5, self.y_pos):
+                self.x_pos -= 5
+                #   i += 1
+            elif hor > 0 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
+                self.y_pos += 5
+            elif hor < 0 and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
+                self.y_pos -= 5
+        elif r == 1:
+            if self.current_level.check_valid(self.x_pos + 5, self.y_pos):
+                self.x_pos += 5
+        elif r == 2:
+            if self.current_level.check_valid(self.x_pos - 5, self.y_pos):
+                self.x_pos -= 5
+        elif r == 3:
+            if self.current_level.check_valid(self.x_pos, self.y_pos + 5):
+                self.y_pos += 5
+        elif r == 4:
+            if self.current_level.check_valid(self.x_pos, self.y_pos - 5):
+                self.y_pos -= 5
+            
+
+    def moveLeft(self):
+        self.x_pos -= 5
+    
 
     # TODO: movement algs
     # movement on new/ fresh level:
