@@ -37,13 +37,14 @@ class Game:
         # Create timer for frames
         self.clock = pg.time.Clock()
 
-        # hearts
+        # Hearts
         self.heart_sprite = pg.image.load('heart.png')
 
-        # Create pacman
         self.pacman = Pacman()
-
+        self.red_ghost = Ghost("red")
         self.blue_ghost = Ghost("blue")
+        self.orange_ghost = Ghost("orange")
+        self.pink_ghost = Ghost("pink")
 
         # Load background
         self.background = pg.image.load('background.jpg')
@@ -71,6 +72,10 @@ class Game:
         # Used for pac man display
         isLeft = False
 
+        new_game = True
+
+
+        # TODO: make it so when you press left or right when going up or down, it constantly checks to see if barrier is there
 
         while True:
             # Display pacman and background
@@ -79,8 +84,29 @@ class Game:
             self.loadScore()
             self.loadLevelText()
 
+            # TODO: dont forget about movement algs
+            if new_game:
+                # put ghosts at fixed pos
+                self.red_ghost.spawnOutside()
+                self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
 
-            self.disp.blit(self.blue_ghost.sprite, (0, 0))
+                self.blue_ghost.spawnleft()
+                self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
+
+                self.pink_ghost.spawnMiddle()
+                self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
+
+                self.orange_ghost.spawnRight()
+                self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
+
+            else:
+                # put ghosts at their respective positions
+                self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
+                self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
+                self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
+                self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
+
+            new_game = False
 
             '''
             Below loop doesnt work for input but
@@ -94,7 +120,7 @@ class Game:
             # Use the following code for keyboard operations
             keys_pressed = pg.key.get_pressed()
             if keys_pressed[pg.K_UP]:
-                if y >= 5 and self.current_level.check_valid(x, y - 5):
+                if y >= 0 and self.current_level.check_valid(x, y - 5):
                     y -= 5
                     if pacman_image < 2:
                         previous_pacman_image = pacman_image
@@ -113,7 +139,7 @@ class Game:
 
             elif keys_pressed[pg.K_DOWN]:
 
-                if y <= 460 and self.current_level.check_valid(x, y + 5):
+                if y <= 550 and self.current_level.check_valid(x, y + 5):
                     y += 5
                     if pacman_image < 2:
                         previous_pacman_image = pacman_image
@@ -130,7 +156,7 @@ class Game:
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
             elif keys_pressed[pg.K_LEFT]:
-                if x >= 5 and self.current_level.check_valid(x - 5, y):
+                if x >= 0 and self.current_level.check_valid(x - 5, y):
                     x -= 5
                     if pacman_image < 2:
                         previous_pacman_image = pacman_image
@@ -148,7 +174,7 @@ class Game:
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
             elif keys_pressed[pg.K_RIGHT]:
-                if x <= 1075 and self.current_level.check_valid(x + 5, y):
+                if x <= 1150 and self.current_level.check_valid(x + 5, y):
                     x += 5
                     if pacman_image < 2:
                         previous_pacman_image = pacman_image
@@ -266,13 +292,6 @@ class Game:
         text3 = str(coins)
         text_score = self.FONT.render(text3, False, WHITE)
         self.disp.blit(text_score, (600, 5))
-
-        # score_text = 'SCORE: ' + str(coins)
-        # text = self.FONT.render(score_text, False, WHITE)
-        # # text = self.FONT.render('SCORE:', False, WHITE)
-        # self.disp.blit(text, (500, 5))
-        # comment
-
 
     def loadLevelText(self):
         # Updates game with current level rendered
