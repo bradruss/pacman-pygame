@@ -318,7 +318,7 @@ class Game:
 
             self.check_points(x, y)
             self.current_level.draw_level(self.disp, self.point_map)
-
+            self.red_ghost.maze("red")
             self.red_ghost.moveGhosts(x,y)
 
 

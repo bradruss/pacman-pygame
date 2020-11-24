@@ -1,4 +1,4 @@
-import pygame
+import pygame 
 import random
 from pacman import Pacman
 import level
@@ -17,6 +17,8 @@ class Ghost():
         self.current_level = level.Level('level2')
         self.current_level_int = 1
         self.point_map = copy.deepcopy(self.current_level.p_map)
+        self.disp = pygame.display.set_mode((1200, 600))
+
 
 
     def loadGhost(self, color):
@@ -65,6 +67,13 @@ class Ghost():
     def spawnRight(self):
         self.x_pos = 650
         self.y_pos = 350
+
+    def maze(self, color):
+        if color == "red":
+            while self.y_pos != 250:
+                self.y_pos -= 5
+                self.disp.blit(self.sprite, (self.x_pos, self.y_pos))
+
 
     def moveGhosts(self, x, y):
         ver = x - self.x_pos
