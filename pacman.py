@@ -5,7 +5,7 @@ class Pacman:
         self.numLives = 5
         self.numCoins = 0
         self.isDangerous = False
-        self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
+        self.sprite = [pg.image.load('biden/close.png'), pg.image.load('biden/close2.png'), pg.image.load('biden/open.png')]
 
     def getNumCoins(self):
         return self.numCoins
