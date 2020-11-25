@@ -6,6 +6,7 @@ class Pacman:
         self.numCoins = 0
         self.isDangerous = False
         self.sprite = [pg.image.load('biden/close.png'), pg.image.load('biden/close2.png'), pg.image.load('biden/open.png')]
+        self.waka = pg.mixer.Sound('Sound/waka.wav')
 
     def getNumCoins(self):
         return self.numCoins

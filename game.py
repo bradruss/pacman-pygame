@@ -42,6 +42,7 @@ class Game:
 
         self.pacman = Pacman()
         self.in_motion = False
+        self.play_waka = False
         self.motion_type = None
         self.red_ghost = Ghost("red")
         self.blue_ghost = Ghost("blue")
@@ -75,6 +76,11 @@ class Game:
         isLeft = False
 
         new_game = True
+
+        # music stuff
+
+        channel = pg.mixer.Channel(1)
+
 
 
         # TODO: make it so when you press left or right when going up or down, it constantly checks to see if barrier is there
@@ -120,6 +126,8 @@ class Game:
                     break
             if self.in_motion:
                 keys_pressed = pg.key.get_pressed()
+                if not channel.get_busy():
+                    channel.play(self.pacman.waka)
 
                 if keys_pressed[pg.K_UP] and self.current_level.check_valid(x, y - 5) and self.motion_type != "up":
                     self.motion_type = "up"
@@ -221,9 +229,10 @@ class Game:
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
                     self.in_motion = False
 
+
+
             else:
-
-
+                channel.stop()
                 # Use the following code for keyboard operations
                 keys_pressed = pg.key.get_pressed()
                 if keys_pressed[pg.K_UP]:
