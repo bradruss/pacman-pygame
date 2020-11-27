@@ -17,6 +17,7 @@ class Pacman:
 
 
         self.waka = pg.mixer.Sound('Sound/waka.wav')
+        self.waka.set_volume(0.5)
 
     def getNumCoins(self):
         return self.numCoins
