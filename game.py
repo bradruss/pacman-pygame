@@ -448,7 +448,7 @@ class Game:
             # Change pac man icon to pac man, biden or trump
             self.disp.blit(self.background, (0, 0))
 
-            
+
 
             default_color = BLUE
             biden_color = WHITE
@@ -580,6 +580,6 @@ class Game:
 
 if __name__ == '__main__':
     g = Game()
-    g.loadSettings()
+    g.loadMenu()
 
 
