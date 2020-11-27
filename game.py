@@ -324,10 +324,10 @@ class Game:
             # self.orange_ghost.moveRandom()
             # self.pink_ghost.moveRandom()
 
-            self.red_ghost.moveGhost(x,y)
-            self.blue_ghost.moveGhost(x,y)
-            self.orange_ghost.moveGhost(x,y)
-            self.pink_ghost.moveGhost(x,y)
+            self.red_ghost.moveChase(x,y)
+            self.blue_ghost.moveChase(x,y)
+            self.orange_ghost.moveChase(x,y)
+            self.pink_ghost.moveChase(x,y)
 
 
     

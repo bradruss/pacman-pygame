@@ -91,7 +91,7 @@ class Ghost():
                 self.disp.blit(self.sprite, (self.x_pos, self.y_pos))
 
 
-    def moveGhost(self, x, y):
+    def moveChase(self, x, y):
         ver = x - self.x_pos
         hor = y - self.y_pos
         if hor > 0 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
