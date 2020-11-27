@@ -441,30 +441,39 @@ class Game:
         print()
 
     def loadSettings(self):
-        # Change pac man icon to pac man, biden or trump
-        self.disp.blit(self.background, (0, 0))
-        default_color = BLUE
-        biden_color = WHITE
-        trump_color = WHITE
-        back_color = WHITE
+        while True:
+            # TODO: make settings and choose pac man or biden
+            # pass in icon name to setIcon
 
-        text = self.FONT.render('SKIN SELECTION:', False, WHITE)
-        self.disp.blit(text, (590, 200))
+            # Change pac man icon to pac man, biden or trump
+            self.disp.blit(self.background, (0, 0))
 
-        text = self.FONT.render('DEFAULT', False, default_color)
-        self.disp.blit(text, (590, 250))
+            
 
-        text = self.FONT.render('BIDEN', False, biden_color)
-        self.disp.blit(text, (540, 300))
+            default_color = BLUE
+            biden_color = WHITE
+            trump_color = WHITE
+            back_color = WHITE
 
-        text = self.FONT.render('TRUMP', False, trump_color)
-        self.disp.blit(text, (560, 350))
+            text = self.FONT.render('SKIN SELECTION:', False, WHITE)
+            self.disp.blit(text, (490, 200))
 
-        text = self.FONT.render('BACK', False, back_color)
-        self.disp.blit(text, (590, 400))
+            text = self.FONT.render('DEFAULT', False, default_color)
+            self.disp.blit(text, (490, 250))
+
+            text = self.FONT.render('BIDEN', False, biden_color)
+            self.disp.blit(text, (490, 300))
+
+            text = self.FONT.render('TRUMP', False, trump_color)
+            self.disp.blit(text, (490, 350))
+
+            text = self.FONT.render('BACK', False, back_color)
+            self.disp.blit(text, (490, 400))
 
 
-        # also change points icon to nevada for biden, penn for trump
+            # also change points icon to nevada for biden, penn for trump
+            self.clock.tick(10)
+            pg.display.update()
 
 
 
@@ -479,7 +488,6 @@ class Game:
         settings_color = WHITE
         quit_color = WHITE
         while True:
-            selection = "play"
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     quit()
@@ -549,8 +557,6 @@ class Game:
                     play_color = BLUE
                     current = 0
 
-            # TODO: make settings and choose pac man or biden
-            # pass in icon name to setIcon
             elif keys_pressed[pg.K_RETURN]:
                 if current == 0:
                     break
@@ -559,7 +565,7 @@ class Game:
                     print('leaderboard selected')
                     break
                 elif current == 2:
-                    print('settings selected')
+                    self.loadSettings()
                     break
                 elif current == 3:
                     quit()
@@ -568,17 +574,12 @@ class Game:
             self.clock.tick(10)
             pg.display.update()
 
-        g.runLevel()
-        # Make it so it quits out of while loop after pressing enter
-
-
-        #g.runLevel()
-
-
+        if current == 0:
+            g.runLevel()
 
 
 if __name__ == '__main__':
     g = Game()
-    g.loadMenu()
+    g.loadSettings()
 
 
