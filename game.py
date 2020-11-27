@@ -5,7 +5,7 @@ import level
 import copy
 
 # Global Constants
-WINDOW_HEIGHT = 600
+WINDOW_HEIGHT = 650
 WINDOW_WIDTH = 1200
 
 # Graphics Constants

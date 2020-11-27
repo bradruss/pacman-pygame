@@ -55,15 +55,56 @@ def write_out(file_name):
     outF = open(file_name, "w")
     for key in curr_map:
         if type(curr_map[key]) is cv.CorridorV:
-            string_out = 'V,' + key + ',' + str(curr_map[key].x_start) + ',' + str(curr_map[key].y_startl) + ',' + str(curr_map[key].y_startr) + ',' + str(curr_map[key].x_end) + ',' + str(curr_map[key].y_endl) + ',' + str(curr_map[key].y_endr) + '\n'
+            string_out = 'V,' + key + ',' + str(curr_map[key].x_start) + ',' + str(curr_map[key].y_startl + 50) + ',' + str(curr_map[key].y_startr + 50) + ',' + str(curr_map[key].x_end) + ',' + str(curr_map[key].y_endl + 50) + ',' + str(curr_map[key].y_endr + 50) + '\n'
             outF.write(string_out)
         if type(curr_map[key]) is ch.CorridorH:
-            string_out = 'H,' + key + ',' + str(curr_map[key].x_startt) + ',' + str(curr_map[key].x_startb) + ',' + str(curr_map[key].y_start) + ',' + str(curr_map[key].x_endt) + ',' + str(curr_map[key].x_endb) + ',' + str(curr_map[key].y_end) + '\n'
+            string_out = 'H,' + key + ',' + str(curr_map[key].x_startt) + ',' + str(curr_map[key].x_startb) + ',' + str(curr_map[key].y_start + 50) + ',' + str(curr_map[key].x_endt) + ',' + str(curr_map[key].x_endb) + ',' + str(curr_map[key].y_end + 50) + '\n'
             outF.write(string_out)
     outF.close()
     print("DONE WRITING OUT")
 
-
+def file_reader(filename):
+    f = open(filename, "r")
+    # loops through file to load in coordinates for either a horizontal or vertical corridor
+    for x in f:
+        curr_line = x
+        a = curr_line.split(',')
+        try:
+            # Makes a horizontal Hallway and stores it in the map
+            if a[1] == 'H':
+                curr_map[a[0]] = ch.CorridorH(int(a[2]), int(a[3]), int(a[4]))
+                copy_map = copy.deepcopy(curr_map)
+                iteration_log.append(copy_map)
+            # Makes a vertical hallway and stores it in the map
+            elif a[1] == 'V':
+                curr_map[a[0]] = cv.CorridorV(int(a[2]), int(a[4]), int(a[5]))
+                copy_map = copy.deepcopy(curr_map)
+                iteration_log.append(copy_map)
+            # Joins two speicfied hallways in the specified way
+            elif a[0] == 'join':
+                join(a[1], a[2], a[3])
+                copy_map = copy.deepcopy(curr_map)
+                iteration_log.append(copy_map)
+            # Deletes a specified hallway
+            elif a[0] == 'delete':
+                del curr_map[a[1]]
+                copy_map = copy.deepcopy(curr_map)
+                iteration_log.append(copy_map)
+            # Ends the creation process and stores the level map in a specified file
+            elif a[0] == 'done':
+                write_out(a[1])
+                finished = True
+            # Reverts level map back one iteration
+            elif a[0] == 'revert':
+                print("Im about to revert")
+                curr_map.clear()
+                temp = copy.deepcopy(iteration_log[len(iteration_log) - 2])
+                curr_map.update(temp)
+                iteration_log.remove(iteration_log[len(iteration_log) - 1])
+            else:
+                print("incorrect input")
+        except:
+            print("exception error incorrect input")
 
 
 def main():
@@ -134,11 +175,15 @@ def main():
                 finished = True
             # Reverts level map back one iteration
             elif a[0] == 'revert':
-                print("Im about to revert")
+                print("I'm about to revert")
                 curr_map.clear()
                 temp = copy.deepcopy(iteration_log[len(iteration_log) - 2])
                 curr_map.update(temp)
                 iteration_log.remove(iteration_log[len(iteration_log) - 1])
+            elif a[0] == 'read_file':
+                print("I'm about to read a file")
+                file_reader(a[1])
+                print("I'm done reading the file")
             else:
                 print("incorrect input")
         except:
