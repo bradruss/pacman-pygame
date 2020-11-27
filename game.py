@@ -318,10 +318,10 @@ class Game:
 
             self.check_points(x, y)
             self.current_level.draw_level(self.disp, self.point_map)
-            self.red_ghost.moveRandom(x,y)
-            self.blue_ghost.moveRandom(x,y)
-            self.orange_ghost.moveRandom(x,y)
-            self.pink_ghost.moveRandom(x,y)
+            self.red_ghost.moveRandom()
+            self.blue_ghost.moveRandom()
+            self.orange_ghost.moveRandom()
+            self.pink_ghost.moveRandom()
 
 
     
@@ -365,8 +365,8 @@ class Game:
         # if locationv2 in self.point_map:
         #     del self.point_map[locationv2]
 
-        print(midx)
-        print(midy)
+        # print(midx)
+        # print(midy)
         if (midx, midy) in self.point_map:
             del self.point_map[(midx, midy)]
             print("point removed")

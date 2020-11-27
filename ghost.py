@@ -21,6 +21,7 @@ class Ghost():
         self.disp = pygame.display.set_mode((1200, 600))
         self.clock = pygame.time.Clock()
         self.clock.tick(30)
+        self.current_direction = "right"
         loop = 0
 
 
@@ -93,7 +94,55 @@ class Ghost():
         elif hor < 0 and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
             self.y_pos -= 5
 
-    def moveRandom(self, x, y):
+    def moveRandom(self):
+        print(self.current_direction)
+        if self.current_direction == "up" and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
+            self.y_pos -= 5
+        elif self.current_direction == "down" and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
+            self.y_pos += 5
+        elif self.current_direction == "right" and self.current_level.check_valid(self.x_pos + 5, self.y_pos):
+            self.x_pos += 5
+        elif self.current_direction == "left" and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
+            self.x_pos -= 5
+
+        else:
+            r = random.randint(1, 4)
+            # test if up is good
+            if r == 1 and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
+                self.current_direction = "up"
+                self.y_pos -= 5
+            elif r == 2 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
+                self.current_direction = "down"
+                self.y_pos += 5
+            elif r == 3 and self.current_level.check_valid(self.x_pos + 5, self.y_pos):
+                self.current_direction = "right"
+                self.x_pos += 5
+            elif r == 4 and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
+                self.current_direction = "left"
+                self.x_pos -= 5
+
+        # if r == 1 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
+        #     self.y_pos += 5
+        # else:
+        #     r = 2
+        #
+        # if r == 2 and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
+        #     self.y_pos -= 5
+        # else:
+        #     r = 3
+        #
+        # if r == 3 and self.current_level.check_valid(self.x_pos + 5, self.y_pos):
+        #     self.x_pos += 5
+        # else:
+        #     r = 4
+        #
+        # if r == 4 and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
+        #     self.x_pos -= 5
+        # else:
+        #     r = 1
+
+
+    def chaseRandom(self, x, y):
         ver = x - self.x_pos
         hor = y - self.y_pos
         r = random.randint(1,15)
