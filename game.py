@@ -459,6 +459,28 @@ class Game:
         print()
 
     def loadSettings(self):
+        # Load previous setting
+        current = 0
+        if self.icon == "biden":
+            default_color = WHITE
+            biden_color = BLUE
+            trump_color = WHITE
+            back_color = WHITE
+            current = 1
+
+        elif self.icon == "trump":
+            default_color = WHITE
+            biden_color = WHITE
+            trump_color = BLUE
+            back_color = WHITE
+            current = 2
+
+        else:
+            default_color = BLUE
+            biden_color = WHITE
+            trump_color = WHITE
+            back_color = WHITE
+
         while True:
             # TODO: make settings and choose pac man or biden
             # pass in icon name to setIcon
@@ -466,32 +488,97 @@ class Game:
             # Change pac man icon to pac man, biden or trump
             self.disp.blit(self.background, (0, 0))
 
-
-
-            default_color = BLUE
-            biden_color = WHITE
-            trump_color = WHITE
-            back_color = WHITE
-
             text = self.FONT.render('SKIN SELECTION:', False, WHITE)
             self.disp.blit(text, (490, 200))
 
             text = self.FONT.render('DEFAULT', False, default_color)
-            self.disp.blit(text, (490, 250))
+            self.disp.blit(text, (550, 250))
 
             text = self.FONT.render('BIDEN', False, biden_color)
-            self.disp.blit(text, (490, 300))
+            self.disp.blit(text, (560, 300))
 
             text = self.FONT.render('TRUMP', False, trump_color)
-            self.disp.blit(text, (490, 350))
+            self.disp.blit(text, (560, 350))
 
-            text = self.FONT.render('BACK', False, back_color)
-            self.disp.blit(text, (490, 400))
+            text = self.FONT.render('BACK TO MENU', False, back_color)
+            self.disp.blit(text, (510, 400))
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+
+            keys_pressed = pg.key.get_pressed()
+            if keys_pressed[pg.K_ESCAPE]:
+                quit()
+
+            elif keys_pressed[pg.K_UP]:
+                if current == 0:
+                    default_color = WHITE
+                    back_color = BLUE
+                    current = 3
+
+                elif current == 1:
+                    biden_color = WHITE
+                    default_color = BLUE
+                    current = 0
+
+                elif current == 2:
+                    trump_color = WHITE
+                    biden_color = BLUE
+                    current = 1
+
+                elif current == 3:
+                    back_color = WHITE
+                    trump_color = BLUE
+                    current = 2
+
+            elif keys_pressed[pg.K_DOWN]:
+                if current == 0:
+                    default_color = WHITE
+                    biden_color = BLUE
+                    current = 1
+                elif current == 1:
+                    biden_color = WHITE
+                    trump_color = BLUE
+                    current = 2
+
+                elif current == 2:
+                    trump_color = WHITE
+                    back_color = BLUE
+                    current = 3
+
+                elif current == 3:
+                    back_color = WHITE
+                    default_color = BLUE
+                    current = 0
+
+            elif keys_pressed[pg.K_RETURN]:
+                if current == 0:
+                    self.icon = "pacman"
 
 
-            # also change points icon to nevada for biden, penn for trump
+
+
+                elif current == 1:
+                    self.icon = "biden"
+
+
+
+
+                elif current == 2:
+                    self.icon = "trump"
+
+
+
+
+                elif current == 3:
+                    break
+
+            # Bottom of while loop
             self.clock.tick(10)
             pg.display.update()
+
 
 
 
@@ -584,7 +671,6 @@ class Game:
                     break
                 elif current == 2:
                     self.loadSettings()
-                    break
                 elif current == 3:
                     quit()
 
