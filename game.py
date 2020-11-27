@@ -18,7 +18,8 @@ class Game:
     # Setup window
     def __init__(self):
         # Set Game Level
-        self.current_level = level.Level('level2')
+        self.level = 'level2b'
+        self.current_level = level.Level(self.level)
         self.current_level_int = 1
         self.icon = ""
 
@@ -47,10 +48,13 @@ class Game:
         self.in_motion = False
         self.play_waka = False
         self.motion_type = None
-        self.red_ghost = Ghost("red")
-        self.blue_ghost = Ghost("blue")
-        self.orange_ghost = Ghost("orange")
-        self.pink_ghost = Ghost("pink")
+        self.red_ghost = Ghost("red", self.level)
+        self.blue_ghost = Ghost("blue", self.level)
+        self.orange_ghost = Ghost("orange", self.level)
+        self.pink_ghost = Ghost("pink", self.level)
+
+        self.chase_iterations = 0
+        self.random_iterations = -1
 
         # Load background
         self.background = pg.image.load('background.jpg')
@@ -67,7 +71,7 @@ class Game:
         """
         # Set initial Pacman point
         x = 0
-        y = 0
+        y = 50
 
         # Pacman sprite array index
         pacman_image = 0
@@ -153,7 +157,7 @@ class Game:
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
                 elif self.motion_type == "up":
-                    if y >= 0 and self.current_level.check_valid(x, y - 5):
+                    if y >= 50 and self.current_level.check_valid(x, y - 5):
                         y -= 5
                         self.in_motion = True
                         self.motion_type = "up"
@@ -174,7 +178,7 @@ class Game:
 
                 elif self.motion_type == "down":
 
-                    if y <= 550 and self.current_level.check_valid(x, y + 5):
+                    if y <= 600 and self.current_level.check_valid(x, y + 5):
                         y += 5
                         self.in_motion = True
                         self.motion_type = "down"
@@ -334,6 +338,20 @@ class Game:
 
             self.check_points(x, y)
             self.current_level.draw_level(self.disp, self.point_map)
+
+            if self.chase_iterations <= 200 and self.chase_iterations != -1:
+                self.red_ghost.moveChase(x, y)
+                self.chase_iterations += 1
+                if self.chase_iterations > 200:
+                    self.chase_iterations = -1
+                    self.random_iterations = 0
+
+            if self.random_iterations <= 150 and self.random_iterations != -1:
+                self.red_ghost.moveRandom()
+                self.random_iterations += 1
+                if self.random_iterations > 150:
+                    self.random_iterations = -1
+                    self.chase_iterations = 0
 
 
             # 30 fps
