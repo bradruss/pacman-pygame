@@ -2,7 +2,7 @@ import pygame as pg
 
 class Pacman:
 
-    #test
+
     def __init__(self, numCoins, isDangerous, numLives):
         self.numLives = numLives
         self.numCoins = numCoins
