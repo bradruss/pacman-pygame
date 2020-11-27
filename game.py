@@ -62,6 +62,7 @@ class Game:
         self.disp.blit(self.background, (0, 0))
 
         self.intro_sound = pg.mixer.Sound("Sound/intro.wav")
+        self.intro_sound.set_volume(0.2)
 
     def setIcon(self, icon):
         self.icon = icon
@@ -177,13 +178,8 @@ class Game:
         new_game = True
 
         # music stuff
-
         channel = pg.mixer.Channel(1)
 
-
-
-        # TODO: make it so when you press left or right when going up or down, it constantly checks to see if barrier is there
-        # TODO: also make sure a new level is loaded when the max score is achieved and lives > 0
 
         while True:
             # Display pacman and background
@@ -568,9 +564,6 @@ class Game:
             back_color = WHITE
 
         while True:
-            # TODO: make settings and choose pac man or biden
-            # pass in icon name to setIcon
-
             # Change pac man icon to pac man, biden or trump
             self.disp.blit(self.background, (0, 0))
 
@@ -640,28 +633,24 @@ class Game:
                     current = 0
 
             elif keys_pressed[pg.K_RETURN]:
+                # TODO: add point sprite change here
                 if current == 0:
                     self.icon = "pacman"
-
-
-
 
                 elif current == 1:
                     self.icon = "biden"
 
-
-
+                    # set points to nevada
 
                 elif current == 2:
                     self.icon = "trump"
 
-
-
+                    # set points to penn
 
                 elif current == 3:
                     break
 
-            # Bottom of while loop
+
             self.clock.tick(10)
             pg.display.update()
 
