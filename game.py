@@ -587,7 +587,7 @@ class Game:
 
 
     def loadMenu(self):
-
+        pg.mixer.Sound.play(self.intro_sound)
         # Set current selection
         current = 0
         play_color = BLUE
