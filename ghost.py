@@ -19,6 +19,10 @@ class Ghost():
         self.current_level_int = 1
         self.point_map = copy.deepcopy(self.current_level.p_map)
         self.disp = pygame.display.set_mode((1200, 600))
+        self.clock = pygame.time.Clock()
+        self.clock.tick(30)
+        loop = 0
+
 
 
 
@@ -72,7 +76,7 @@ class Ghost():
 
     def maze(self, color):
         if color == "red":
-            while self.y_pos != 250:
+            for i in range(10):
                 self.y_pos -= 5
                 self.disp.blit(self.sprite, (self.x_pos, self.y_pos))
 
@@ -93,17 +97,25 @@ class Ghost():
         ver = x - self.x_pos
         hor = y - self.y_pos
         r = random.randint(1,15)
-        if r >= 4:
+        move_side_event = pygame.USEREVENT + 1
+
+        # make sure the ghost will chase pacman in the same line
+        if ver == 0:
+            if hor > 0 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
+                self.y_pos += 5
+            elif hor < 0 and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
+                self.y_pos -= 5
+        if hor == 0:
             if ver > 0 and self.current_level.check_valid(self.x_pos + 5, self.y_pos):
-                #for i in range(10):
-                #if self.current_level.check_valid(self.x_pos + 5, self.y_pos):
                 self.x_pos += 5
             elif ver < 0 and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
-                #i = 0
-                #while i < 10:
-                #if self.current_level.check_valid(self.x_pos + 5, self.y_pos):
                 self.x_pos -= 5
-                #   i += 1
+        # randomly chase otherwise    
+        if r >= 4:
+            if ver > 0 and self.current_level.check_valid(self.x_pos + 5, self.y_pos):
+                self.x_pos += 5
+            elif ver < 0 and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
+                self.x_pos -= 5
             elif hor > 0 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
                 self.y_pos += 5
             elif hor < 0 and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
