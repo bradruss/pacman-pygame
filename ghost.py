@@ -20,6 +20,8 @@ class Ghost():
         self.current_level_int = 1
         self.point_map = copy.deepcopy(self.current_level.p_map)
         self.current_direction = None
+        self.chase_iterations = 0
+        self.random_iterations = -1
         r = random.randint(1, 4)
         if r == 1:
             self.current_direction = "up"

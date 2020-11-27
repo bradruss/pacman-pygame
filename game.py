@@ -17,6 +17,7 @@ WIDTH = 50
 class Game:
     # Setup window
     def __init__(self):
+        self.num_iterations = 0
         # Set Game Level
         self.level = 'level2b'
         self.current_level = level.Level(self.level)
@@ -53,8 +54,6 @@ class Game:
         self.orange_ghost = Ghost("orange", self.level)
         self.pink_ghost = Ghost("pink", self.level)
 
-        self.chase_iterations = 0
-        self.random_iterations = -1
 
         # Load background
         self.background = pg.image.load('background.jpg')
@@ -66,6 +65,90 @@ class Game:
 
     def setIcon(self, icon):
         self.icon = icon
+
+    def red_ghost_move(self, num_iterations, x, y):
+        if num_iterations < 0 :
+            pass
+        else:
+            if self.red_ghost.chase_iterations <= 200 and self.red_ghost.chase_iterations != -1:
+                self.red_ghost.moveChase(x, y)
+                self.red_ghost.chase_iterations += 1
+                if self.red_ghost.chase_iterations > 200:
+                    self.red_ghost.chase_iterations = -1
+                    self.red_ghost.random_iterations = 0
+
+            if self.red_ghost.random_iterations <= 150 and self.red_ghost.random_iterations != -1:
+                self.red_ghost.moveRandom()
+                self.red_ghost.random_iterations += 1
+                if self.red_ghost.random_iterations > 150:
+                    self.red_ghost.random_iterations = -1
+                    self.red_ghost.chase_iterations = 0
+
+    def orange_ghost_move(self, num_iterations, x, y):
+        if num_iterations < 500 :
+            pass
+        
+        elif num_iterations == 500:
+            self.orange_ghost.spawnOutside()
+            
+        else:
+            if self.orange_ghost.chase_iterations <= 200 and self.orange_ghost.chase_iterations != -1:
+                self.orange_ghost.moveChase(x, y)
+                self.orange_ghost.chase_iterations += 1
+                if self.orange_ghost.chase_iterations > 200:
+                    self.orange_ghost.chase_iterations = -1
+                    self.orange_ghost.random_iterations = 0
+
+            if self.orange_ghost.random_iterations <= 150 and self.orange_ghost.random_iterations != -1:
+                self.orange_ghost.moveRandom()
+                self.orange_ghost.random_iterations += 1
+                if self.orange_ghost.random_iterations > 150:
+                    self.orange_ghost.random_iterations = -1
+                    self.orange_ghost.chase_iterations = 0
+
+    def blue_ghost_move(self, num_iterations, x, y):
+        if num_iterations < 1000:
+            pass
+
+        elif num_iterations == 1000:
+            self.blue_ghost.spawnOutside()
+
+        else:
+            if self.blue_ghost.chase_iterations <= 200 and self.blue_ghost.chase_iterations != -1:
+                self.blue_ghost.moveChase(x, y)
+                self.blue_ghost.chase_iterations += 1
+                if self.blue_ghost.chase_iterations > 200:
+                    self.blue_ghost.chase_iterations = -1
+                    self.blue_ghost.random_iterations = 0
+
+            if self.blue_ghost.random_iterations <= 150 and self.blue_ghost.random_iterations != -1:
+                self.blue_ghost.moveRandom()
+                self.blue_ghost.random_iterations += 1
+                if self.blue_ghost.random_iterations > 150:
+                    self.blue_ghost.random_iterations = -1
+                    self.blue_ghost.chase_iterations = 0
+
+    def pink_ghost_move(self, num_iterations, x, y):
+        if num_iterations < 1500:
+            pass
+
+        elif num_iterations == 1500:
+            self.pink_ghost.spawnOutside()
+
+        else:
+            if self.pink_ghost.chase_iterations <= 200 and self.pink_ghost.chase_iterations != -1:
+                self.pink_ghost.moveChase(x, y)
+                self.pink_ghost.chase_iterations += 1
+                if self.pink_ghost.chase_iterations > 200:
+                    self.pink_ghost.chase_iterations = -1
+                    self.pink_ghost.random_iterations = 0
+
+            if self.pink_ghost.random_iterations <= 150 and self.pink_ghost.random_iterations != -1:
+                self.pink_ghost.moveRandom()
+                self.pink_ghost.random_iterations += 1
+                if self.pink_ghost.random_iterations > 150:
+                    self.pink_ghost.random_iterations = -1
+                    self.pink_ghost.chase_iterations = 0
 
     def runLevel(self):
         """
@@ -341,25 +424,18 @@ class Game:
             self.check_points(x, y)
             self.current_level.draw_level(self.disp, self.point_map)
 
-            if self.chase_iterations <= 200 and self.chase_iterations != -1:
-                self.red_ghost.moveChase(x, y)
-                self.chase_iterations += 1
-                if self.chase_iterations > 200:
-                    self.chase_iterations = -1
-                    self.random_iterations = 0
-
-            if self.random_iterations <= 150 and self.random_iterations != -1:
-                self.red_ghost.moveRandom()
-                self.random_iterations += 1
-                if self.random_iterations > 150:
-                    self.random_iterations = -1
-                    self.chase_iterations = 0
+            self.red_ghost_move(self.num_iterations, x, y)
+            self.blue_ghost_move(self.num_iterations, x, y)
+            self.orange_ghost_move(self.num_iterations, x, y)
+            self.pink_ghost_move(self.num_iterations, x, y)
 
 
             # 30 fps
             self.clock.tick(30)
 
             pg.display.update()
+
+            self.num_iterations += 1
 
             # Pacman pos debugging
             #print("x is " + str(x) + " and y is " + str(y))
