@@ -99,7 +99,7 @@ class Ghost():
         r = random.randint(1,15)
         move_side_event = pygame.USEREVENT + 1
 
-        # make sure the ghost will chase pacman in the same line
+        # make sure the ghost will chase pacman if theyin the same line
         if ver == 0:
             if hor > 0 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
                 self.y_pos += 5
