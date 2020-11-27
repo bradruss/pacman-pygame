@@ -21,7 +21,16 @@ class Ghost():
         self.disp = pygame.display.set_mode((1200, 600))
         self.clock = pygame.time.Clock()
         self.clock.tick(30)
-        self.current_direction = "right"
+        self.current_direction = None
+        r = random.randint(1,4)
+        if r == 1:
+            self.current_direction = "up"
+        elif r == 2:
+            self.current_direction = "down"
+        elif r == 3:
+            self.current_direction = "right"
+        else:
+            self.current_direction = "left"
         loop = 0
 
 
