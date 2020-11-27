@@ -318,10 +318,16 @@ class Game:
 
             self.check_points(x, y)
             self.current_level.draw_level(self.disp, self.point_map)
-            self.red_ghost.moveRandom()
-            self.blue_ghost.moveRandom()
-            self.orange_ghost.moveRandom()
-            self.pink_ghost.moveRandom()
+
+            # self.red_ghost.moveRandom()
+            # self.blue_ghost.moveRandom()
+            # self.orange_ghost.moveRandom()
+            # self.pink_ghost.moveRandom()
+
+            self.red_ghost.moveGhost(x,y)
+            self.blue_ghost.moveGhost(x,y)
+            self.orange_ghost.moveGhost(x,y)
+            self.pink_ghost.moveGhost(x,y)
 
 
     

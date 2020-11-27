@@ -94,14 +94,15 @@ class Ghost():
     def moveGhost(self, x, y):
         ver = x - self.x_pos
         hor = y - self.y_pos
-        if ver > 0 and self.current_level.check_valid(self.x_pos + 5, self.y_pos):
-            self.x_pos += 5
-        elif ver < 0 and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
-            self.x_pos -= 5
-        elif hor > 0 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
+        if hor > 0 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
             self.y_pos += 5
         elif hor < 0 and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
             self.y_pos -= 5
+        elif ver > 0 and self.current_level.check_valid(self.x_pos + 5, self.y_pos):
+            self.x_pos += 5
+        elif ver < 0 and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
+            self.x_pos -= 5
+
 
     def moveRandom(self):
         print(self.current_direction)
