@@ -11,17 +11,14 @@ class Ghost():
     images = [pygame.image.load("redGhost.png"), pygame.image.load("blueGhost.png"),
               pygame.image.load("orangeGhost.png"), pygame.image.load("pinkGhost.png")]
 
-    def __init__(self, color):
+    def __init__(self, color, level_num):
         self.sprite = self.loadGhost(color)
         self.weak = False
         self.x_pos = 0
         self.y_pos = 0
-        self.current_level = level.Level('level2')
+        self.current_level = level.Level(level_num)
         self.current_level_int = 1
         self.point_map = copy.deepcopy(self.current_level.p_map)
-        self.disp = pygame.display.set_mode((1200, 600))
-        self.clock = pygame.time.Clock()
-        self.clock.tick(30)
         self.current_direction = None
         r = random.randint(1, 4)
         if r == 1:
@@ -65,19 +62,19 @@ class Ghost():
         # Designated for red ghost starting position
         # Only called when new level
         self.x_pos = 600
-        self.y_pos = 250
+        self.y_pos = 300
 
     def spawnleft(self):
         self.x_pos = 550
-        self.y_pos = 350
+        self.y_pos = 400
 
     def spawnMiddle(self):
         self.x_pos = 600
-        self.y_pos = 350
+        self.y_pos = 400
 
     def spawnRight(self):
         self.x_pos = 650
-        self.y_pos = 350
+        self.y_pos = 400
 
     def maze(self, color):
         if color == "red":
