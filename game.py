@@ -10,16 +10,17 @@ WINDOW_WIDTH = 1200
 
 # Graphics Constants
 WHITE = (255, 255, 255)
+YELLOW = (248, 252, 13)
+BLUE = (13, 45, 252)
 WIDTH = 50
 
 class Game:
-    """
-    Setup window
-    """
+    # Setup window
     def __init__(self):
         # Set Game Level
         self.current_level = level.Level('level2')
         self.current_level_int = 1
+        self.icon = ""
 
         self.point_map = copy.deepcopy(self.current_level.p_map)
         print(self.point_map)
@@ -30,9 +31,10 @@ class Game:
 
         # Static Font Family
         self.FONT = pg.font.Font('joystix.monospace.ttf', 20)
+        self.FONT_LARGE = pg.font.Font('joystix.monospace.ttf', 30)
 
         # Set window title
-        pg.display.set_caption("Pac-man")
+        pg.display.set_caption("Pac-Man")
 
         # Create timer for frames
         self.clock = pg.time.Clock()
@@ -40,7 +42,8 @@ class Game:
         # Hearts
         self.heart_sprite = pg.image.load('heart.png')
 
-        self.pacman = Pacman()
+        self.pacman = Pacman(self.icon)
+        pg.display.set_icon(self.pacman.sprite[2])
         self.in_motion = False
         self.play_waka = False
         self.motion_type = None
@@ -54,6 +57,9 @@ class Game:
 
         # Display the background image
         self.disp.blit(self.background, (0, 0))
+
+    def setIcon(self, icon):
+        self.icon = icon
 
     def runLevel(self):
         """
@@ -84,6 +90,7 @@ class Game:
 
 
         # TODO: make it so when you press left or right when going up or down, it constantly checks to see if barrier is there
+        # TODO: also make sure a new level is loaded when the max score is achieved and lives > 0
 
         while True:
             # Display pacman and background
@@ -429,7 +436,149 @@ class Game:
         self.disp.blit(text2, (450, 5))
 
 
+    # TODO: most likely want to use a separate file here...
+    def loadLeaderboard(self):
+        print()
+
+    def loadSettings(self):
+        # Change pac man icon to pac man, biden or trump
+        self.disp.blit(self.background, (0, 0))
+        default_color = BLUE
+        biden_color = WHITE
+        trump_color = WHITE
+        back_color = WHITE
+
+        text = self.FONT.render('SKIN SELECTION:', False, WHITE)
+        self.disp.blit(text, (590, 200))
+
+        text = self.FONT.render('DEFAULT', False, default_color)
+        self.disp.blit(text, (590, 250))
+
+        text = self.FONT.render('BIDEN', False, biden_color)
+        self.disp.blit(text, (540, 300))
+
+        text = self.FONT.render('TRUMP', False, trump_color)
+        self.disp.blit(text, (560, 350))
+
+        text = self.FONT.render('BACK', False, back_color)
+        self.disp.blit(text, (590, 400))
+
+
+        # also change points icon to nevada for biden, penn for trump
+
+
+
+
+
+    def loadMenu(self):
+
+        # Set current selection
+        current = 0
+        play_color = BLUE
+        leaderboard_color = WHITE
+        settings_color = WHITE
+        quit_color = WHITE
+        while True:
+            selection = "play"
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+
+            self.disp.blit(self.background, (0, 0))
+
+            self.disp.blit(pg.image.load('pacman/Pacman3.png'), (510, 165))
+
+            text = self.FONT_LARGE.render('Pac-Man', False, YELLOW)
+            self.disp.blit(text, (570, 170))
+
+            text = self.FONT.render('PLAY', False, play_color)
+            self.disp.blit(text, (590, 250))
+
+            text = self.FONT.render('LEADERBOARD', False, leaderboard_color)
+            self.disp.blit(text, (540, 300))
+
+            text = self.FONT.render('SETTINGS', False, settings_color)
+            self.disp.blit(text, (560, 350))
+
+            text = self.FONT.render('QUIT', False, quit_color)
+            self.disp.blit(text, (590, 400))
+
+            keys_pressed = pg.key.get_pressed()
+            if keys_pressed[pg.K_ESCAPE]:
+                quit()
+
+            elif keys_pressed[pg.K_UP]:
+                if current == 0:
+                    play_color = WHITE
+                    quit_color = BLUE
+                    current = 3
+
+                elif current == 1:
+                    leaderboard_color = WHITE
+                    play_color = BLUE
+                    current = 0
+
+                elif current == 2:
+                    settings_color = WHITE
+                    leaderboard_color = BLUE
+                    current = 1
+
+                elif current == 3:
+                    quit_color = WHITE
+                    settings_color = BLUE
+                    current = 2
+
+            elif keys_pressed[pg.K_DOWN]:
+                if current == 0:
+                    play_color = WHITE
+                    leaderboard_color = BLUE
+                    current = 1
+                elif current == 1:
+                    leaderboard_color = WHITE
+                    settings_color = BLUE
+                    current = 2
+
+                elif current == 2:
+                    settings_color = WHITE
+                    quit_color = BLUE
+                    current = 3
+
+                elif current == 3:
+                    quit_color = WHITE
+                    play_color = BLUE
+                    current = 0
+
+            # TODO: make settings and choose pac man or biden
+            # pass in icon name to setIcon
+            elif keys_pressed[pg.K_RETURN]:
+                if current == 0:
+                    break
+                elif current == 1:
+                    # TODO: implement firebase leaderboard
+                    print('leaderboard selected')
+                    break
+                elif current == 2:
+                    print('settings selected')
+                    break
+                elif current == 3:
+                    quit()
+
+
+            self.clock.tick(10)
+            pg.display.update()
+
+        g.runLevel()
+        # Make it so it quits out of while loop after pressing enter
+
+
+        #g.runLevel()
+
+
+
+
 if __name__ == '__main__':
     g = Game()
-    g.runLevel()
+    g.loadMenu()
+
 
