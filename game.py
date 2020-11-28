@@ -473,7 +473,7 @@ class Game:
             self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
 
             self.disp.blit(pg.transform.rotate(self.pacman.death[i // 8], 0), (x, y))
-            self.current_level.draw_level(self.disp, self.point_map)
+            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite)
 
             self.clock.tick(30)
             pg.display.update()
