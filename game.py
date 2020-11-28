@@ -509,11 +509,11 @@ class Game:
         # if locationv2 in self.point_map:
         #     del self.point_map[locationv2]
 
-        print(midx)
-        print(midy)
+        # print(midx)
+        # print(midy)
         if (midx, midy) in self.point_map:
             del self.point_map[(midx, midy)]
-            print("point removed")
+            # print("point removed")
             self.pacman.collectCoin()
         if (midx + (5 - (midx % 5)), midy) in self.point_map:
             del self.point_map[(midx + (5 - (midx % 5)), midy)]
