@@ -62,7 +62,7 @@ class Game:
         self.disp.blit(self.background, (0, 0))
 
         self.intro_sound = pg.mixer.Sound("Sound/intro.wav")
-        self.intro_sound.set_volume(0)
+        self.intro_sound.set_volume(0.2)
 
     def setIcon(self, icon):
         self.icon = icon
