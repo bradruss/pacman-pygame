@@ -23,6 +23,7 @@ class Game:
         self.current_level = level.Level(self.level)
         self.current_level_int = 1
         self.icon = ""
+        self.point_sprite = ""
 
         self.point_map = copy.deepcopy(self.current_level.p_map)
         print(self.point_map)
@@ -44,8 +45,7 @@ class Game:
         # Hearts
         self.heart_sprite = pg.image.load('heart.png')
 
-        self.pacman = Pacman(self.icon)
-        pg.display.set_icon(self.pacman.sprite[2])
+        pg.display.set_icon(pg.image.load('pacman/Pacman3.png'))
         self.in_motion = False
         self.play_waka = False
         self.motion_type = None
@@ -62,7 +62,7 @@ class Game:
         self.disp.blit(self.background, (0, 0))
 
         self.intro_sound = pg.mixer.Sound("Sound/intro.wav")
-        self.intro_sound.set_volume(0.2)
+        self.intro_sound.set_volume(0)
 
     def setIcon(self, icon):
         self.icon = icon
@@ -155,6 +155,7 @@ class Game:
         """
         Run the pacman game
         """
+        self.pacman = Pacman(self.icon)
         # Set initial Pacman point
         x = 0
         y = 50
@@ -418,7 +419,7 @@ class Game:
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
 
             self.check_points(x, y)
-            self.current_level.draw_level(self.disp, self.point_map)
+            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite)
 
             self.red_ghost_move(self.num_iterations, x, y)
             self.blue_ghost_move(self.num_iterations, x, y)
@@ -631,13 +632,11 @@ class Game:
 
                 elif current == 1:
                     self.icon = "biden"
-
-                    # set points to nevada
+                    self.point_sprite = "biden"
 
                 elif current == 2:
                     self.icon = "trump"
-
-                    # set points to penn
+                    self.point_sprite = "trump"
 
                 elif current == 3:
                     break

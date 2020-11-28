@@ -65,12 +65,19 @@ class Level:
 
 
     # draws the level to display
-    def draw_level(self, disp, p_map):
+    def draw_level(self, disp, p_map, sprite):
         for key in self.c_map:
             self.c_map[key].draw(disp)
-        for point in p_map:
-            # TODO: add sprite drawing here
-            pg.draw.circle(disp, WHITE, (p_map[point].get_x(), p_map[point].get_y()), 3)
+        if sprite == "biden":
+            for point in p_map:
+                disp.blit(pg.image.load('biden/nevada.png'), (p_map[point].get_x(), p_map[point].get_y()))
+        elif sprite == "trump":
+            for point in p_map:
+                disp.blit(pg.image.load('trump/pennsylvania.png'), (p_map[point].get_x(), p_map[point].get_y()))
+        else:
+            for point in p_map:
+                pg.draw.circle(disp, ORANGE, (p_map[point].get_x(), p_map[point].get_y()), 3)
+
         pg.display.flip()
 
 
@@ -120,7 +127,3 @@ class Level:
                     # print("rule 4")
 
         return valid
-
-
-    def setPointSprite(self):
-        print()
