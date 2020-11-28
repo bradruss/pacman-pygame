@@ -17,8 +17,10 @@ WIDTH = 50
 class Game:
     # Setup window
     def __init__(self):
+        self.num_iterations = 0
         # Set Game Level
-        self.current_level = level.Level('level2')
+        self.level = 'level2b'
+        self.current_level = level.Level(self.level)
         self.current_level_int = 1
         self.icon = ""
 
@@ -47,10 +49,11 @@ class Game:
         self.in_motion = False
         self.play_waka = False
         self.motion_type = None
-        self.red_ghost = Ghost("red")
-        self.blue_ghost = Ghost("blue")
-        self.orange_ghost = Ghost("orange")
-        self.pink_ghost = Ghost("pink")
+        self.red_ghost = Ghost("red", self.level)
+        self.blue_ghost = Ghost("blue", self.level)
+        self.orange_ghost = Ghost("orange", self.level)
+        self.pink_ghost = Ghost("pink", self.level)
+
 
         # Load background
         self.background = pg.image.load('background.jpg')
@@ -58,8 +61,99 @@ class Game:
         # Display the background image
         self.disp.blit(self.background, (0, 0))
 
+        self.intro_sound = pg.mixer.Sound("Sound/intro.wav")
+        self.intro_sound.set_volume(0.2)
+
     def setIcon(self, icon):
         self.icon = icon
+
+    def red_ghost_move(self, num_iterations, x, y):
+        if num_iterations < 0 :
+            pass
+        else:
+            if self.red_ghost.chase_iterations <= 200 and self.red_ghost.chase_iterations != -1:
+                self.red_ghost.moveChase(x, y)
+                self.red_ghost.chase_iterations += 1
+                if self.red_ghost.chase_iterations > 200:
+                    self.red_ghost.chase_iterations = -1
+                    self.red_ghost.random_iterations = 0
+
+            if self.red_ghost.random_iterations <= 150 and self.red_ghost.random_iterations != -1:
+                self.red_ghost.moveRandom()
+                self.red_ghost.random_iterations += 1
+                if self.red_ghost.random_iterations > 150:
+                    self.red_ghost.random_iterations = -1
+                    self.red_ghost.chase_iterations = 0
+
+    def orange_ghost_move(self, num_iterations, x, y):
+        if num_iterations < 500 :
+            pass
+        
+        elif num_iterations == 500:
+            self.orange_ghost.spawnOutside()
+            
+        else:
+            if self.orange_ghost.chase_iterations <= 200 and self.orange_ghost.chase_iterations != -1:
+                self.orange_ghost.moveChase(x, y)
+                self.orange_ghost.chase_iterations += 1
+                if self.orange_ghost.chase_iterations > 200:
+                    self.orange_ghost.chase_iterations = -1
+                    self.orange_ghost.random_iterations = 0
+
+            if self.orange_ghost.random_iterations <= 150 and self.orange_ghost.random_iterations != -1:
+                self.orange_ghost.moveRandom()
+                self.orange_ghost.random_iterations += 1
+                if self.orange_ghost.random_iterations > 150:
+                    self.orange_ghost.random_iterations = -1
+                    self.orange_ghost.chase_iterations = 0
+
+    def blue_ghost_move(self, num_iterations, x, y):
+        if num_iterations < 1000:
+            pass
+
+        elif num_iterations == 1000:
+            self.blue_ghost.spawnOutside()
+
+        else:
+            if self.blue_ghost.chase_iterations <= 200 and self.blue_ghost.chase_iterations != -1:
+                self.blue_ghost.moveChase(x, y)
+                self.blue_ghost.chase_iterations += 1
+                if self.blue_ghost.chase_iterations > 200:
+                    self.blue_ghost.chase_iterations = -1
+                    self.blue_ghost.random_iterations = 0
+
+            if self.blue_ghost.random_iterations <= 150 and self.blue_ghost.random_iterations != -1:
+                self.blue_ghost.moveRandom()
+                self.blue_ghost.random_iterations += 1
+                if self.blue_ghost.random_iterations > 150:
+                    self.blue_ghost.random_iterations = -1
+                    self.blue_ghost.chase_iterations = 0
+
+    def pink_ghost_move(self, num_iterations, x, y):
+        if num_iterations < 1500:
+            pass
+
+        elif num_iterations == 1500:
+            self.pink_ghost.spawnOutside()
+
+        else:
+            if self.pink_ghost.chase_iterations <= 200 and self.pink_ghost.chase_iterations != -1:
+                self.pink_ghost.moveChase(x, y)
+                self.pink_ghost.chase_iterations += 1
+                if self.pink_ghost.chase_iterations > 200:
+                    self.pink_ghost.chase_iterations = -1
+                    self.pink_ghost.random_iterations = 0
+
+            if self.pink_ghost.random_iterations <= 150 and self.pink_ghost.random_iterations != -1:
+                self.pink_ghost.moveRandom()
+                self.pink_ghost.random_iterations += 1
+                if self.pink_ghost.random_iterations > 150:
+                    self.pink_ghost.random_iterations = -1
+                    self.pink_ghost.chase_iterations = 0
+
+    def check_death(self, x, y):
+        return self.red_ghost.checkDeath(x, y) or self.blue_ghost.checkDeath(x, y) or self.pink_ghost.checkDeath(x, y) or self.orange_ghost.checkDeath(x, y)
+
 
     def runLevel(self):
         """
@@ -67,7 +161,7 @@ class Game:
         """
         # Set initial Pacman point
         x = 0
-        y = 0
+        y = 50
 
         # Pacman sprite array index
         pacman_image = 0
@@ -84,13 +178,8 @@ class Game:
         new_game = True
 
         # music stuff
-
         channel = pg.mixer.Channel(1)
 
-
-
-        # TODO: make it so when you press left or right when going up or down, it constantly checks to see if barrier is there
-        # TODO: also make sure a new level is loaded when the max score is achieved and lives > 0
 
         while True:
             # Display pacman and background
@@ -153,7 +242,7 @@ class Game:
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
                 elif self.motion_type == "up":
-                    if y >= 0 and self.current_level.check_valid(x, y - 5):
+                    if y >= 50 and self.current_level.check_valid(x, y - 5):
                         y -= 5
                         self.in_motion = True
                         self.motion_type = "up"
@@ -174,7 +263,7 @@ class Game:
 
                 elif self.motion_type == "down":
 
-                    if y <= 550 and self.current_level.check_valid(x, y + 5):
+                    if y <= 600 and self.current_level.check_valid(x, y + 5):
                         y += 5
                         self.in_motion = True
                         self.motion_type = "down"
@@ -335,11 +424,22 @@ class Game:
             self.check_points(x, y)
             self.current_level.draw_level(self.disp, self.point_map)
 
+            self.red_ghost_move(self.num_iterations, x, y)
+            self.blue_ghost_move(self.num_iterations, x, y)
+            self.orange_ghost_move(self.num_iterations, x, y)
+            self.pink_ghost_move(self.num_iterations, x, y)
+
 
             # 30 fps
             self.clock.tick(30)
 
             pg.display.update()
+
+            if self.check_death(x,y):
+                self.pacman.setNumLives(self.pacman.numLives - 1)
+                break
+
+            self.num_iterations += 1
 
             # Pacman pos debugging
             #print("x is " + str(x) + " and y is " + str(y))
@@ -441,37 +541,116 @@ class Game:
         print()
 
     def loadSettings(self):
-        while True:
-            # TODO: make settings and choose pac man or biden
-            # pass in icon name to setIcon
+        # Load previous setting
+        current = 0
+        if self.icon == "biden":
+            default_color = WHITE
+            biden_color = BLUE
+            trump_color = WHITE
+            back_color = WHITE
+            current = 1
 
-            # Change pac man icon to pac man, biden or trump
-            self.disp.blit(self.background, (0, 0))
+        elif self.icon == "trump":
+            default_color = WHITE
+            biden_color = WHITE
+            trump_color = BLUE
+            back_color = WHITE
+            current = 2
 
-
-
+        else:
             default_color = BLUE
             biden_color = WHITE
             trump_color = WHITE
             back_color = WHITE
 
+        while True:
+            # Change pac man icon to pac man, biden or trump
+            self.disp.blit(self.background, (0, 0))
+
             text = self.FONT.render('SKIN SELECTION:', False, WHITE)
             self.disp.blit(text, (490, 200))
 
             text = self.FONT.render('DEFAULT', False, default_color)
-            self.disp.blit(text, (490, 250))
+            self.disp.blit(text, (550, 250))
 
             text = self.FONT.render('BIDEN', False, biden_color)
-            self.disp.blit(text, (490, 300))
+            self.disp.blit(text, (560, 300))
 
             text = self.FONT.render('TRUMP', False, trump_color)
-            self.disp.blit(text, (490, 350))
+            self.disp.blit(text, (560, 350))
 
-            text = self.FONT.render('BACK', False, back_color)
-            self.disp.blit(text, (490, 400))
+            text = self.FONT.render('BACK TO MENU', False, back_color)
+            self.disp.blit(text, (510, 400))
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+
+            keys_pressed = pg.key.get_pressed()
+            if keys_pressed[pg.K_ESCAPE]:
+                quit()
+
+            elif keys_pressed[pg.K_UP]:
+                if current == 0:
+                    default_color = WHITE
+                    back_color = BLUE
+                    current = 3
+
+                elif current == 1:
+                    biden_color = WHITE
+                    default_color = BLUE
+                    current = 0
+
+                elif current == 2:
+                    trump_color = WHITE
+                    biden_color = BLUE
+                    current = 1
+
+                elif current == 3:
+                    back_color = WHITE
+                    trump_color = BLUE
+                    current = 2
+
+            elif keys_pressed[pg.K_DOWN]:
+                if current == 0:
+                    default_color = WHITE
+                    biden_color = BLUE
+                    current = 1
+                elif current == 1:
+                    biden_color = WHITE
+                    trump_color = BLUE
+                    current = 2
+
+                elif current == 2:
+                    trump_color = WHITE
+                    back_color = BLUE
+                    current = 3
+
+                elif current == 3:
+                    back_color = WHITE
+                    default_color = BLUE
+                    current = 0
+
+            elif keys_pressed[pg.K_RETURN]:
+                # TODO: add point sprite change here
+                if current == 0:
+                    self.icon = "pacman"
+
+                elif current == 1:
+                    self.icon = "biden"
+
+                    # set points to nevada
+
+                elif current == 2:
+                    self.icon = "trump"
+
+                    # set points to penn
+
+                elif current == 3:
+                    break
 
 
-            # also change points icon to nevada for biden, penn for trump
             self.clock.tick(10)
             pg.display.update()
 
@@ -479,8 +658,9 @@ class Game:
 
 
 
-    def loadMenu(self):
 
+    def loadMenu(self):
+        pg.mixer.Sound.play(self.intro_sound)
         # Set current selection
         current = 0
         play_color = BLUE
@@ -566,7 +746,6 @@ class Game:
                     break
                 elif current == 2:
                     self.loadSettings()
-                    break
                 elif current == 3:
                     quit()
 

@@ -8,6 +8,7 @@ import corridorV as cv
 #width of the corridors
 WIDTH = 50
 WHITE = (255,255,255)
+ORANGE = (252, 147, 48)
 
 class Level:
     def __init__(self, filename):
@@ -68,6 +69,7 @@ class Level:
         for key in self.c_map:
             self.c_map[key].draw(disp)
         for point in p_map:
+            # TODO: add sprite drawing here
             pg.draw.circle(disp, WHITE, (p_map[point].get_x(), p_map[point].get_y()), 3)
         pg.display.flip()
 
@@ -120,4 +122,5 @@ class Level:
         return valid
 
 
-
+    def setPointSprite(self):
+        print()

@@ -1,12 +1,23 @@
 import pygame as pg
 
 class Pacman:
+    def __init__(self, icon):
+        self.numLives = 5
+        self.numCoins = 0
+        self.isDangerous = False
+        self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
+        if icon == 'biden':
+            self.sprite = [pg.image.load('biden/close.png'), pg.image.load('biden/close2.png'), pg.image.load('biden/open.png')]
+
+        # TODO: change the icon paths
+        elif icon == 'trump':
+            self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
+        elif icon == 'pacman':
+            self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
 
 
-    def __init__(self, numCoins, isDangerous, numLives):
-        self.numLives = numLives
-        self.numCoins = numCoins
-        self.isDangerous = isDangerous
+        self.waka = pg.mixer.Sound('Sound/waka.wav')
+        self.waka.set_volume(0.5)
 
     def getNumCoins(self):
         return self.numCoins
@@ -34,7 +45,7 @@ class Pacman:
     #add array of string of picture name/Line 24 in game.py
     #needs to be able to die
 
-    pacman_sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
+
 
 
 

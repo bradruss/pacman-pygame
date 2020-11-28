@@ -67,8 +67,9 @@ def file_reader(filename):
     f = open(filename, "r")
     # loops through file to load in coordinates for either a horizontal or vertical corridor
     for x in f:
-        curr_line = x
+        curr_line = x.rstrip('\n')
         a = curr_line.split(',')
+        print(a)
         try:
             # Makes a horizontal Hallway and stores it in the map
             if a[1] == 'H':
@@ -141,7 +142,7 @@ def main():
         clock.tick(20)
 
         #prompts user for input
-        print("Input (name,H or V,start x,end x,start y,end y), or (join,horizontal corridor,vertical corridor,type), (del,corridor), (done,file_name), or (revert, now)")
+        print("Input (name,H or V,start x,end x,start y,end y), or (join,horizontal corridor,vertical corridor,type), (del,corridor), (done,file_name), (revert, now), or (read_file, filename)")
         val = input(": ")
         val = val.replace('(', '')
         val = val.replace(')', '')
