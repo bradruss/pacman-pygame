@@ -8,10 +8,16 @@ class Pacman:
         self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
         if icon == 'biden':
             self.sprite = [pg.image.load('biden/close.png'), pg.image.load('biden/close2.png'), pg.image.load('biden/open.png')]
-
-        # TODO: change the icon paths
+            self.death = [pg.image.load('pacman/pacman-death-1.png'), pg.image.load('pacman/pacman-death-2.png'), pg.image.load('pacman/pacman-death-3.png'), pg.image.load('pacman/pacman-death-4.png'),
+                          pg.image.load('pacman/pacman-death-5.png'), pg.image.load('pacman/pacman-death-6.png'), pg.image.load('pacman/pacman-death-7.png'), pg.image.load('pacman/pacman-death-8.png')]
         elif icon == 'trump':
+            self.sprite = [pg.image.load('trump/trump-closed.png'), pg.image.load('trump/trump-open.png'),pg.image.load('trump/trump-closed.png')]
+            self.death = [pg.image.load('pacman/pacman-death-1.png'), pg.image.load('pacman/pacman-death-2.png'), pg.image.load('pacman/pacman-death-3.png'), pg.image.load('pacman/pacman-death-4.png'),
+                          pg.image.load('pacman/pacman-death-5.png'), pg.image.load('pacman/pacman-death-6.png'), pg.image.load('pacman/pacman-death-7.png'), pg.image.load('pacman/pacman-death-8.png')]
+        elif icon == 'pacman':
             self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
+            self.death = [pg.image.load('pacman/pacman-death-1.png'), pg.image.load('pacman/pacman-death-2.png'), pg.image.load('pacman/pacman-death-3.png'), pg.image.load('pacman/pacman-death-4.png'),
+                          pg.image.load('pacman/pacman-death-5.png'), pg.image.load('pacman/pacman-death-6.png'), pg.image.load('pacman/pacman-death-7.png'), pg.image.load('pacman/pacman-death-8.png')]
         else:
             self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
             self.death = [pg.image.load('pacman/pacman-death-1.png'), pg.image.load('pacman/pacman-death-2.png'), pg.image.load('pacman/pacman-death-3.png'), pg.image.load('pacman/pacman-death-4.png'),
