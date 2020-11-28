@@ -12,8 +12,10 @@ class Pacman:
         # TODO: change the icon paths
         elif icon == 'trump':
             self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
-        elif icon == 'pacman':
+        else:
             self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
+            self.death = [pg.image.load('pacman/pacman-death-1.png'), pg.image.load('pacman/pacman-death-2.png'), pg.image.load('pacman/pacman-death-3.png'), pg.image.load('pacman/pacman-death-4.png'),
+                          pg.image.load('pacman/pacman-death-5.png'), pg.image.load('pacman/pacman-death-6.png'), pg.image.load('pacman/pacman-death-7.png'), pg.image.load('pacman/pacman-death-8.png')]
 
 
         self.waka = pg.mixer.Sound('Sound/waka.wav')
@@ -36,6 +38,15 @@ class Pacman:
 
     def setNumLives(self, numlives):
         self.numLives = numlives
+
+    def showDeath(self, disp, rotation, x, y):
+        clock = pg.time.Clock()
+        for i in range(0, 8):
+            disp.blit(pg.transform.rotate(self.death[i], rotation), (x, y))
+            clock.tick(100000)
+            pg.display.update()
+
+
 
 
     #def endLife(self):

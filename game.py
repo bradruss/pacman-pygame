@@ -436,6 +436,7 @@ class Game:
             pg.display.update()
 
             if self.check_death(x,y):
+                self.showDeath(rotation, x, y)
                 self.pacman.setNumLives(self.pacman.numLives - 1)
                 break
 
@@ -443,6 +444,31 @@ class Game:
 
             # Pacman pos debugging
             #print("x is " + str(x) + " and y is " + str(y))
+
+    def showDeath(self, rotation, x, y):
+
+        for i in range(0, 120):
+            # Display pacman and background
+            self.disp.blit(self.background, (0, 0))
+            self.loadLives()
+            self.loadScore()
+            self.loadLevelText()
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+
+            self.current_level.draw_level(self.disp, self.point_map)
+
+            self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
+            self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
+            self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
+            self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
+
+            self.disp.blit(pg.transform.rotate(self.pacman.death[i // 15], rotation), (x, y))
+            self.clock.tick(30)
+            pg.display.update()
 
 
     def check_points(self, x, y):
