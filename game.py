@@ -150,6 +150,10 @@ class Game:
                     self.pink_ghost.random_iterations = -1
                     self.pink_ghost.chase_iterations = 0
 
+    def check_death(self, x, y):
+        return self.red_ghost.checkDeath(x, y) or self.blue_ghost.checkDeath(x, y) or self.pink_ghost.checkDeath(x, y) or self.orange_ghost.checkDeath(x, y)
+
+
     def runLevel(self):
         """
         Run the pacman game
@@ -434,6 +438,10 @@ class Game:
             self.clock.tick(30)
 
             pg.display.update()
+
+            if self.check_death(x,y):
+                self.pacman.setNumLives(self.pacman.numLives - 1)
+                break
 
             self.num_iterations += 1
 
