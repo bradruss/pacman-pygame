@@ -64,6 +64,9 @@ class Game:
         self.intro_sound = pg.mixer.Sound("Sound/intro.wav")
         self.intro_sound.set_volume(0.2)
 
+        self.death_sound = pg.mixer.Sound("Sound/death.wav")
+        self.death_sound.set_volume(0.2)
+
     def setIcon(self, icon):
         self.icon = icon
 
@@ -150,6 +153,10 @@ class Game:
                 if self.pink_ghost.random_iterations > 150:
                     self.pink_ghost.random_iterations = -1
                     self.pink_ghost.chase_iterations = 0
+
+    def check_death(self, x, y):
+        return self.red_ghost.checkDeath(x, y) or self.blue_ghost.checkDeath(x, y) or self.pink_ghost.checkDeath(x, y) or self.orange_ghost.checkDeath(x, y)
+
 
     def runLevel(self):
         """
@@ -432,10 +439,44 @@ class Game:
 
             pg.display.update()
 
+            if self.check_death(x, y):
+                pg.mixer.Sound.play(self.death_sound)
+                self.show_death(rotation, x, y)
+                self.pacman.setNumLives(self.pacman.numLives - 1)
+                break
+
             self.num_iterations += 1
 
             # Pacman pos debugging
             #print("x is " + str(x) + " and y is " + str(y))
+
+    def show_death(self, rotation, x, y):
+
+        self.disp.blit(pg.transform.rotate(self.pacman.death[0 // 10], rotation), (x, y))
+
+        for i in range(0, 64):
+            # Display pacman and background
+            self.disp.blit(self.background, (0, 0))
+            self.loadLives()
+            self.loadScore()
+            self.loadLevelText()
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+
+
+            self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
+            self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
+            self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
+            self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
+
+            self.disp.blit(pg.transform.rotate(self.pacman.death[i // 8], 0), (x, y))
+            self.current_level.draw_level(self.disp, self.point_map)
+
+            self.clock.tick(30)
+            pg.display.update()
 
 
     def check_points(self, x, y):

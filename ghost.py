@@ -123,6 +123,13 @@ class Ghost():
                 self.current_direction = "left"
                 self.x_pos -= 5
 
+    def checkDeath(self,x,y):
+        if (self.x_pos <= (x + 25) <= self.x_pos + 50) and (self.y_pos <= (y + 25) <= self.y_pos + 50):
+            return True
+
+        else:
+            return False
+
     # TODO: movement algs
     # movement on new/ fresh level:
     # red ghost spawns outside, right above the box
