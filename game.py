@@ -443,12 +443,69 @@ class Game:
                 pg.mixer.Sound.play(self.death_sound)
                 self.show_death(rotation, x, y)
                 self.pacman.setNumLives(self.pacman.numLives - 1)
-                break
+
+                if self.pacman.numLives == 0:
+                    break
+
+                else:
+                    self.red_ghost.resetGhost()
+                    self.blue_ghost.resetGhost()
+                    self.orange_ghost.resetGhost()
+                    self.pink_ghost.resetGhost()
+                    self.pacman_respawn()
+                    self.num_iterations = 0
+                    rotation = 0
+                    x = 0
+                    y = 50
 
             self.num_iterations += 1
 
             # Pacman pos debugging
             #print("x is " + str(x) + " and y is " + str(y))
+
+    def pacman_respawn(self):
+        # Set initial Pacman point
+        x = 0
+        y = 50
+
+        # Pacman sprite array index
+        pacman_image = 0
+
+        # Rotation in degrees
+        rotation = 0
+
+        for i in range(0, 64):
+            # Display pacman and background
+            self.disp.blit(self.background, (0, 0))
+            self.loadLives()
+            self.loadScore()
+            self.loadLevelText()
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+
+            self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite)
+
+            # put ghosts at fixed pos
+            self.red_ghost.spawnOutside()
+            self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
+
+            self.blue_ghost.spawnleft()
+            self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
+
+            self.pink_ghost.spawnMiddle()
+            self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
+
+            self.orange_ghost.spawnRight()
+            self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
+
+
+            self.clock.tick(30)
+            pg.display.update()
+
 
     def show_death(self, rotation, x, y):
 
