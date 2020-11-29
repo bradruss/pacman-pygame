@@ -21,6 +21,15 @@ join,bb,eee,tr
 join,b,ee,tr
 join,bbb,eee,tl
 join,bbb,eeee,tr
+x,H,0,100,250,250
+y,V,0,0,240,300
+join,x,y,bl
+z,V,0,0,250,310
+join,x,z,tl
+j,V,0,0,540,600
+k,H,0,60,550,550
+join,k,j,bl
+
 
 
 
