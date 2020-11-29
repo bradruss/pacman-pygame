@@ -88,6 +88,12 @@ class Game:
             self.current_level = level.Level(self.level)
             self.point_map = copy.deepcopy(self.current_level.p_map)
 
+            #update ghosts' levels
+            self.red_ghost.current_level = self.current_level
+            self.blue_ghost.current_level = self.current_level
+            self.orange_ghost.current_level = self.current_level
+            self.pink_ghost.current_level = self.current_level
+
             return 0
         else:
             text = self.FONT.render('YOU BEAT THE GAME! ', False, WHITE)
