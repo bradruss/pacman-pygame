@@ -2,7 +2,7 @@ import pygame as pg
 
 class Pacman:
     def __init__(self, icon):
-        self.numLives = 1
+        self.numLives = 5
         self.numCoins = 0
         self.isDangerous = False
         self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
