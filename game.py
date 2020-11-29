@@ -3,6 +3,7 @@ from ghost import Ghost
 import pygame as pg
 import level
 import copy
+from leaderboard import Leaderboard
 
 # Global Constants
 WINDOW_HEIGHT = 650
@@ -25,6 +26,7 @@ class Game:
         self.max_level = 10
         self.icon = ""
         self.point_sprite = ""
+        self.hasLoadedLeaderboard = False
 
         self.point_map = copy.deepcopy(self.current_level.p_map)
         print(self.point_map)
@@ -68,6 +70,9 @@ class Game:
         self.death_sound = pg.mixer.Sound("Sound/death.wav")
         self.death_sound.set_volume(0.2)
 
+        self.leaderboard = Leaderboard()
+        pg.mixer.Sound.play(self.intro_sound)
+
     def load_new_level(self):
         if 0 < self.current_level_int <= 10:
             self.current_level_int += 1
@@ -109,10 +114,8 @@ class Game:
             return -1
 
 
-
-    def setIcon(self, icon):
-        self.icon = icon
-
+    # TODO: implement powerup movement -> num of iterattions has to be greater than 500 for it to move
+    # reset iterations when resetting ghosts
     def red_ghost_move(self, num_iterations, x, y):
         if num_iterations < 0 :
             pass
@@ -206,6 +209,7 @@ class Game:
         Run the pacman game
         """
         self.pacman = Pacman(self.icon)
+        self.removePowerUpState()
         # Set initial Pacman point
         x = 0
         y = 50
@@ -235,7 +239,7 @@ class Game:
             self.loadScore()
             self.loadLevelText()
 
-            # TODO: dont forget about movement algs
+
             if new_game:
                 # put ghosts at fixed pos
                 self.red_ghost.spawnOutside()
@@ -261,7 +265,7 @@ class Game:
 
             '''
             Below loop doesnt work for input but
-            is required for the keys_pressed
+            is required for keys_pressed
             '''
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -469,7 +473,11 @@ class Game:
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
 
             self.check_points(x, y)
-            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite)
+            # if pacman isDangerous = true
+                # create timer for 500 iterations
+
+
+            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite, self.current_level_int)
 
             self.red_ghost_move(self.num_iterations, x, y)
             self.blue_ghost_move(self.num_iterations, x, y)
@@ -522,6 +530,9 @@ class Game:
             # Pacman pos debugging
             #print("x is " + str(x) + " and y is " + str(y))
 
+        if self.leaderboard.file is not None:
+            self.leaderboard.file.close()
+
     def pacman_respawn(self):
         # Set initial Pacman point
         x = 0
@@ -546,7 +557,7 @@ class Game:
                     break
 
             self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
-            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite)
+            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite, self.current_level_int)
 
             # put ghosts at fixed pos
             self.red_ghost.spawnOutside()
@@ -589,10 +600,51 @@ class Game:
             self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
 
             self.disp.blit(pg.transform.rotate(self.pacman.death[i // 8], 0), (x, y))
-            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite)
+            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite, self.current_level_int)
 
             self.clock.tick(30)
             pg.display.update()
+
+
+    # def loadPowerUpState(self):
+    #     print("point is powerup")
+    #     for i in range(0, 500):
+    #         self.disp.blit(self.background, (0, 0))
+    #         self.loadLives()
+    #         self.loadScore()
+    #         self.loadLevelText()
+    #
+    #
+    #
+    #         for event in pg.event.get():
+    #             if event.type == pg.QUIT:
+    #                 quit()
+    #                 break
+    #
+    #         self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
+    #         self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
+    #         self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
+    #         self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
+    #
+    #         self.current_level.draw_level(self.disp, self.point_map, self.point_sprite, self.current_level_int)
+    #
+    #         self.clock.tick(30)
+    #         pg.display.update()
+
+    # TODO: change it out of state
+    def loadPowerUpState(self):
+        self.pacman.isDangerous = True
+        self.red_ghost.vulnerable()
+        self.blue_ghost.vulnerable()
+        self.pink_ghost.vulnerable()
+        self.orange_ghost.vulnerable()
+
+    def removePowerUpState(self):
+        self.pacman.isDangerous = False
+        self.red_ghost.notVulnerable()
+        self.blue_ghost.notVulnerable()
+        self.pink_ghost.notVulnerable()
+        self.orange_ghost.notVulnerable()
 
 
     def check_points(self, x, y):
@@ -628,33 +680,149 @@ class Game:
         # print(midx)
         # print(midy)
         if (midx, midy) in self.point_map:
+
+            if self.point_map[(midx, midy)].isPowerup == True:
+                self.loadPowerUpState()
             del self.point_map[(midx, midy)]
             # print("point removed")
             self.pacman.collectCoin()
+
         if (midx + (5 - (midx % 5)), midy) in self.point_map:
+            if self.point_map[(midx + (5 - (midx % 5)), midy)].isPowerup == True:
+                self.loadPowerUpState()
             del self.point_map[(midx + (5 - (midx % 5)), midy)]
             self.pacman.collectCoin()
+
         if (midx, midy + (5 - (midx % 5))) in self.point_map:
+            if self.point_map[(midx, midy + (5 - (midx % 5)))].isPowerup == True:
+                self.loadPowerUpState()
             del self.point_map[(midx, midy + (5 - (midx % 5)))]
             self.pacman.collectCoin()
 
-    def game_over(self):
-        text = self.FONT.render('Game Over', False, WHITE)
-        for i in range(0, 600):
+    def submit_score(self):
+        text = ""
+        flag = True
+        while flag:
+            self.disp.blit(self.background, (0, 0))
+            text1 = self.FONT.render('Type your initials', False, WHITE)
+            self.disp.blit(text1, (460, 150))
+
+            text1 = self.FONT.render('Press enter when finished', False, WHITE)
+            self.disp.blit(text1, (420, 200))
+
+            pg.draw.line(self.disp, WHITE, (540, 290), (650, 290), 3)
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     quit()
                     break
-            self.disp.blit(self.background, (0, 0))
-            self.disp.blit(text, (500, 300))
-            self.clock.tick(30)
+
+                elif event.type == pg.KEYDOWN:
+                    if event.key == pg.K_RETURN:
+                        text = text.upper()
+                        temp1 = []
+                        temp1.append(text)
+                        temp1.append(self.pacman.numCoins)
+                        self.leaderboard.update_leaderboard(temp1)
+                        flag = False
+
+                    elif event.key == pg.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        if len(text) < 3:
+                            text += event.unicode
+
+            text1 = self.FONT_LARGE.render(text, False, YELLOW)
+            self.disp.blit(text1, (560, 250))
+
+            self.clock.tick(10)
             pg.display.update()
 
+        g.loadMenu()
+
+    def game_over(self):
+        current = 0
+        play_again_color = BLUE
+        submit_color = WHITE
+        quit_color = WHITE
+
+        while True:
+            self.disp.blit(self.background, (0, 0))
+            text = self.FONT_LARGE.render('Game Over', False, WHITE)
+            self.disp.blit(text, (490, 150))
+
+            text = self.FONT.render("Total Score:", False, WHITE)
+            self.disp.blit(text, (510, 225))
+
+            text = self.FONT.render(str(self.pacman.numCoins), False, WHITE)
+            self.disp.blit(text, (560, 260))
 
 
-    def setLevel(self, lvl):
-        # TODO: make it so when you want to change levels, change current level int then call setLevel
-        self.current_level = level.Level('level' + str(self.current_level_int))
+            text = self.FONT.render('PLAY AGAIN?', False, play_again_color)
+            self.disp.blit(text, (510, 310))
+
+            text = self.FONT.render('SUBMIT SCORE', False, submit_color)
+            self.disp.blit(text, (500, 350))
+
+            text = self.FONT.render('QUIT', False, quit_color)
+            self.disp.blit(text, (550, 400))
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+
+            keys_pressed = pg.key.get_pressed()
+            if keys_pressed[pg.K_ESCAPE]:
+                quit()
+
+            elif keys_pressed[pg.K_UP]:
+                if current == 0:
+                    play_again_color = WHITE
+                    quit_color = BLUE
+                    current = 2
+
+                elif current == 1:
+                    submit_color = WHITE
+                    play_again_color = BLUE
+                    current = 0
+
+                elif current == 2:
+                    quit_color = WHITE
+                    submit_color = BLUE
+                    current = 1
+
+            elif keys_pressed[pg.K_DOWN]:
+                if current == 0:
+                    play_again_color = WHITE
+                    submit_color = BLUE
+                    current = 1
+
+                elif current == 1:
+                    submit_color = WHITE
+                    quit_color = BLUE
+                    current = 2
+
+                elif current == 2:
+                    quit_color = WHITE
+                    play_again_color = BLUE
+                    current = 0
+
+            elif keys_pressed[pg.K_RETURN]:
+                if current == 0:
+                    break
+
+                elif current == 1:
+                    self.submit_score()
+
+                elif current == 2:
+                    quit()
+
+            self.clock.tick(10)
+            pg.display.update()
+
+        g.runLevel()
+
 
     def loadLives(self):
         x = 950
@@ -697,10 +865,6 @@ class Game:
         text2 = self.FONT.render(str(self.current_level_int), False, WHITE)
         self.disp.blit(text2, (450, 5))
 
-
-    # TODO: most likely want to use a separate file here...
-    def loadLeaderboard(self):
-        print()
 
     def loadSettings(self):
         # Load previous setting
@@ -794,18 +958,24 @@ class Game:
                     default_color = BLUE
                     current = 0
 
+            # TODO return to main menu when a skin is selected
             elif keys_pressed[pg.K_RETURN]:
-                # TODO: add point sprite change here
                 if current == 0:
                     self.icon = "pacman"
+                    print("pacman selected")
+                    break
 
                 elif current == 1:
                     self.icon = "biden"
                     self.point_sprite = "biden"
+                    print("biden selected")
+                    break
 
                 elif current == 2:
                     self.icon = "trump"
                     self.point_sprite = "trump"
+                    print("trump selected")
+                    break
 
                 elif current == 3:
                     break
@@ -815,12 +985,66 @@ class Game:
             pg.display.update()
 
 
+    def loadLeaderboard(self):
+        if self.hasLoadedLeaderboard == False:
+            self.leaderboard.update_top_scores()
+            self.hasLoadedLeaderboard = True
+        flag = True
+        while flag:
 
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
 
+            self.disp.blit(self.background, (0, 0))
+            text = self.FONT.render("Name  Score", False, YELLOW)
+            self.disp.blit(text, (540, 5))
+
+            text = self.FONT.render('GO BACK (Backspace)', False, BLUE)
+            self.disp.blit(text, (570, 570))
+
+            x = 500
+            y = 50
+            name = ""
+            score = ""
+            index = 1
+            for i in self.leaderboard.top_scores:
+                k = 0
+                for j in i:
+                    if k == 0:
+                        name = j
+                    else:
+                        score = j
+                    k += 1
+                text = self.FONT.render(str(index) + ". ", False, YELLOW)
+                if index >= 10:
+                    self.disp.blit(text, (x-20, y))
+                else:
+                    self.disp.blit(text, (x, y))
+                text = self.FONT.render(name, False, YELLOW)
+                self.disp.blit(text, (550, y))
+
+                text = self.FONT.render(str(score), False, YELLOW)
+                self.disp.blit(text, (650, y))
+
+                y += 25
+                index += 1
+
+            keys_pressed = pg.key.get_pressed()
+            if keys_pressed[pg.K_ESCAPE]:
+                quit()
+
+            elif keys_pressed[pg.K_BACKSPACE]:
+                flag = False
+
+            self.clock.tick(10)
+            pg.display.update()
+
+        g.loadMenu()
 
 
     def loadMenu(self):
-        pg.mixer.Sound.play(self.intro_sound)
         # Set current selection
         current = 0
         play_color = BLUE
@@ -901,9 +1125,7 @@ class Game:
                 if current == 0:
                     break
                 elif current == 1:
-                    # TODO: implement firebase leaderboard
-                    print('leaderboard selected')
-                    break
+                    self.loadLeaderboard()
                 elif current == 2:
                     self.loadSettings()
                 elif current == 3:

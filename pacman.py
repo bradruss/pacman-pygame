@@ -2,10 +2,11 @@ import pygame as pg
 
 class Pacman:
     def __init__(self, icon):
-        self.numLives = 5
+        self.numLives = 1
         self.numCoins = 0
         self.isDangerous = False
         self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
+        # TODO: Create custom death animations for trump and biden
         if icon == 'biden':
             self.sprite = [pg.image.load('biden/close.png'), pg.image.load('biden/close2.png'), pg.image.load('biden/open.png')]
             self.death = [pg.image.load('pacman/pacman-death-1.png'), pg.image.load('pacman/pacman-death-2.png'), pg.image.load('pacman/pacman-death-3.png'), pg.image.load('pacman/pacman-death-4.png'),
@@ -37,7 +38,7 @@ class Pacman:
         self.numCoins = numCoins
 
     def collectCoin(self):
-        self.numCoins += 1
+        self.numCoins += 10
 
     def getNumLives(self):
         return self.numLives
