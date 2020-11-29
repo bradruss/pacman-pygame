@@ -8,6 +8,7 @@ import pygame as pg
 import corridorH as ch
 import corridorV as cv
 import copy
+import threading
 
 # Set game size
 WINDOW_HEIGHT = 600
@@ -17,6 +18,8 @@ WIDTH = 50
 iteration_log = []  # keeps track of all changes
 curr_map = {}  # dictionary of current map of corridors
 iteration_log.append(curr_map)
+finished = False
+
 
 #joins corridors together. Note joins only horizontal and vertical corridors
 def join(cor_h,cor_v,join_type):
@@ -63,6 +66,7 @@ def write_out(file_name):
     outF.close()
     print("DONE WRITING OUT")
 
+
 def file_reader(filename):
     f = open(filename, "r")
     # loops through file to load in coordinates for either a horizontal or vertical corridor
@@ -108,10 +112,11 @@ def file_reader(filename):
             print("exception error incorrect input")
 
 
-def main():
+def display_map():
     # Initialize window
+    global finished
     pg.init()
-    disp = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
+    disp = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
     # Set window title
     pg.display.set_caption("Pac-man")
@@ -124,8 +129,6 @@ def main():
 
     # Manage how fast the screen updates
     clock = pg.time.Clock()
-
-    finished = False
 
     while not finished:
         # makes it so user can exit out of window and end session
@@ -141,6 +144,10 @@ def main():
         # 20 frames per second
         clock.tick(20)
 
+
+def prompt_user_input():
+    global finished
+    while not finished:
         #prompts user for input
         print("Input (name,H or V,start x,end x,start y,end y), or (join,horizontal corridor,vertical corridor,type), (del,corridor), (done,file_name), (revert, now), or (read_file, filename)")
         val = input(": ")
@@ -190,6 +197,25 @@ def main():
         except:
             print("exception error incorrect input")
 
+
+
+def main():
+    # creating thread
+    t1 = threading.Thread(target=display_map, args=())
+    t2 = threading.Thread(target=prompt_user_input, args=())
+
+    # starting thread 1
+    t1.start()
+    # starting thread 2
+    t2.start()
+
+    # wait until thread 1 is completely executed
+    t1.join()
+    # wait until thread 2 is completely executed
+    t2.join()
+
+    # both threads completely executed
+    print("Done!")
 
 
 if __name__ == '__main__':
