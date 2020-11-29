@@ -22,6 +22,7 @@ class Game:
         self.level = 'level2b'
         self.current_level = level.Level(self.level)
         self.current_level_int = 1
+        self.max_level = 10
         self.icon = ""
         self.point_sprite = ""
 
@@ -439,12 +440,14 @@ class Game:
 
             pg.display.update()
 
+
             if self.check_death(x, y):
                 pg.mixer.Sound.play(self.death_sound)
                 self.show_death(rotation, x, y)
                 self.pacman.setNumLives(self.pacman.numLives - 1)
 
                 if self.pacman.numLives == 0:
+                    self.game_over()
                     break
 
                 else:
@@ -578,6 +581,18 @@ class Game:
         if (midx, midy + (5 - (midx % 5))) in self.point_map:
             del self.point_map[(midx, midy + (5 - (midx % 5)))]
             self.pacman.collectCoin()
+
+    def game_over(self):
+        text = self.FONT.render('Game Over', False, WHITE)
+        for i in range(0, 600):
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+            self.disp.blit(self.background, (0, 0))
+            self.disp.blit(text, (500, 300))
+            self.clock.tick(30)
+            pg.display.update()
 
 
 
