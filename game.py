@@ -203,6 +203,7 @@ class Game:
         Run the pacman game
         """
         self.pacman = Pacman(self.icon)
+        self.pacman.numCoins = 0
         self.removePowerUpState()
         # Set initial Pacman point
         x = 0
@@ -952,7 +953,7 @@ class Game:
                     default_color = BLUE
                     current = 0
 
-            # TODO return to main menu when a skin is selected
+
             elif keys_pressed[pg.K_RETURN]:
                 if current == 0:
                     self.icon = "pacman"
