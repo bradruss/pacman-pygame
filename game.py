@@ -19,7 +19,7 @@ class Game:
     def __init__(self):
         self.num_iterations = 0
         # Set Game Level
-        self.level = 'level2b'
+        self.level = 'levels/level1'
         self.current_level = level.Level(self.level)
         self.current_level_int = 1
         self.max_level = 10
@@ -67,6 +67,42 @@ class Game:
 
         self.death_sound = pg.mixer.Sound("Sound/death.wav")
         self.death_sound.set_volume(0.2)
+
+    def load_new_level(self):
+        if 0 < self.current_level_int <= 10:
+            self.current_level_int += 1
+            text = self.FONT.render('Level ' + str(self.current_level_int), False, WHITE)
+            for i in range(0, 150):
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        quit()
+                        break
+                self.disp.blit(self.background, (0, 0))
+                self.disp.blit(text, (500, 300))
+                self.clock.tick(30)
+                pg.display.update()
+
+            self.pacman_respawn()
+            current_level_str = 'levels/level' + str(self.current_level_int)
+            self.level = current_level_str
+            self.current_level = level.Level(self.level)
+            self.point_map = copy.deepcopy(self.current_level.p_map)
+
+            return 0
+        else:
+            text = self.FONT.render('YOU BEAT THE GAME! ', False, WHITE)
+            for i in range(0, 500):
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        quit()
+                        break
+                self.disp.blit(self.background, (0, 0))
+                self.disp.blit(text, (500, 300))
+                self.clock.tick(30)
+                pg.display.update()
+            return -1
+
+
 
     def setIcon(self, icon):
         self.icon = icon
@@ -460,6 +496,20 @@ class Game:
                     rotation = 0
                     x = 0
                     y = 50
+
+            if len(self.point_map) == 0:
+                return_val = self.load_new_level()
+                self.red_ghost.resetGhost()
+                self.blue_ghost.resetGhost()
+                self.orange_ghost.resetGhost()
+                self.pink_ghost.resetGhost()
+                self.pacman_respawn()
+                self.num_iterations = 0
+                rotation = 0
+                x = 0
+                y = 50
+                if return_val == -1:
+                    break
 
             self.num_iterations += 1
 
