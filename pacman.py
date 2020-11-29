@@ -38,7 +38,7 @@ class Pacman:
         self.numCoins = numCoins
 
     def collectCoin(self):
-        self.numCoins += 1
+        self.numCoins += 10
 
     def getNumLives(self):
         return self.numLives
