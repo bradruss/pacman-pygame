@@ -143,6 +143,7 @@ def display_map():
         pg.display.flip()
         # 20 frames per second
         clock.tick(20)
+        prompt_user_input()
 
 
 def prompt_user_input():
@@ -200,25 +201,25 @@ def prompt_user_input():
 
 
 def main():
-    # creating thread
-    t1 = threading.Thread(target=display_map, args=())
-    t2 = threading.Thread(target=prompt_user_input, args=())
+    # # creating thread
+    # t1 = threading.Thread(target=display_map, args=())
+    # t2 = threading.Thread(target=prompt_user_input, args=())
+    #
+    # # starting thread 1
+    # t1.start()
+    # # starting thread 2
+    # t2.start()
+    #
+    # # wait until thread 1 is completely executed
+    # t1.join()
+    # # wait until thread 2 is completely executed
+    # t2.join()
+    #
+    # # both threads completely executed
+    # print("Done!")
 
-    # starting thread 1
-    t1.start()
-    # starting thread 2
-    t2.start()
+    display_map()
 
-    # wait until thread 1 is completely executed
-    t1.join()
-    # wait until thread 2 is completely executed
-    t2.join()
 
-    # both threads completely executed
-    print("Done!")
-
-#
-# if __name__ == '__main__':
-#     main()
-
-main()
+if __name__ == '__main__':
+    main()
