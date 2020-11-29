@@ -688,6 +688,7 @@ class Game:
             self.pacman.collectCoin()
 
     def submit_score(self):
+        # TODO make it so it limits to 3 characters
         print()
 
 
@@ -940,15 +941,34 @@ class Game:
                     break
 
             self.disp.blit(self.background, (0, 0))
+            text = self.FONT.render("Name  Score", False, YELLOW)
+            self.disp.blit(text, (540, 5))
 
             x = 500
             y = 50
-
+            name = ""
+            score = ""
             index = 1
             for i in self.leaderboard.top_scores:
-                text = self.FONT.render(str(index) + ". " + str(i), False, YELLOW)
-                self.disp.blit(text, (x, y))
-                y += 50
+                k = 0
+                for j in i:
+                    if k == 0:
+                        name = j
+                    else:
+                        score = j
+                    k += 1
+                text = self.FONT.render(str(index) + ". ", False, YELLOW)
+                #text = self.FONT.render(str(index) + ". " + name + " " +score, False, YELLOW)
+                if index == 10:
+                    self.disp.blit(text, (x-20, y))
+                else:
+                    self.disp.blit(text, (x, y))
+
+                text = self.FONT.render(name, False, YELLOW)
+                self.disp.blit(text, (550, y))
+
+
+                y += 25
                 index += 1
 
             keys_pressed = pg.key.get_pressed()
