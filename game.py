@@ -70,6 +70,8 @@ class Game:
     def setIcon(self, icon):
         self.icon = icon
 
+
+    # TODO: implement powerup movement
     def red_ghost_move(self, num_iterations, x, y):
         if num_iterations < 0 :
             pass
@@ -192,7 +194,7 @@ class Game:
             self.loadScore()
             self.loadLevelText()
 
-            # TODO: dont forget about movement algs
+
             if new_game:
                 # put ghosts at fixed pos
                 self.red_ghost.spawnOutside()
@@ -218,7 +220,7 @@ class Game:
 
             '''
             Below loop doesnt work for input but
-            is required for the keys_pressed
+            is required for keys_pressed
             '''
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -426,7 +428,11 @@ class Game:
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
 
             self.check_points(x, y)
-            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite)
+            # if pacman isDangerous = true
+                # create timer for 500 iterations
+
+
+            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite, self.current_level_int)
 
             self.red_ghost_move(self.num_iterations, x, y)
             self.blue_ghost_move(self.num_iterations, x, y)
@@ -473,10 +479,52 @@ class Game:
             self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
 
             self.disp.blit(pg.transform.rotate(self.pacman.death[i // 8], 0), (x, y))
-            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite)
+            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite, self.current_level_int)
 
             self.clock.tick(30)
             pg.display.update()
+
+
+    def loadPowerUpState(self):
+        print("point is powerup")
+
+        for i in range(0, 500):
+            self.disp.blit(self.background, (0, 0))
+            self.loadLives()
+            self.loadScore()
+            self.loadLevelText()
+
+
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+
+            self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
+            self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
+            self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
+            self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
+
+            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite, self.current_level_int)
+
+            self.clock.tick(30)
+            pg.display.update()
+
+    # TODO: change it out of state
+    def loadPowerUpState(self):
+        self.pacman.isDangerous = True
+        self.red_ghost.vulnerable()
+        self.blue_ghost.vulnerable()
+        self.pink_ghost.vulnerable()
+        self.orange_ghost.vulnerable()
+
+    def removePowerUpState(self):
+        self.pacman.isDangerous = False
+        self.red_ghost.notVulnerable()
+        self.blue_ghost.notVulnerable()
+        self.pink_ghost.notVulnerable()
+        self.orange_ghost.notVulnerable()
 
 
     def check_points(self, x, y):
@@ -512,13 +560,22 @@ class Game:
         print(midx)
         print(midy)
         if (midx, midy) in self.point_map:
+
+            if self.point_map[(midx, midy)].isPowerup == True:
+                self.loadPowerUpState()
             del self.point_map[(midx, midy)]
             print("point removed")
             self.pacman.collectCoin()
+
         if (midx + (5 - (midx % 5)), midy) in self.point_map:
+            if self.point_map[(midx + (5 - (midx % 5)), midy)].isPowerup == True:
+                self.loadPowerUpState()
             del self.point_map[(midx + (5 - (midx % 5)), midy)]
             self.pacman.collectCoin()
+
         if (midx, midy + (5 - (midx % 5))) in self.point_map:
+            if self.point_map[(midx, midy + (5 - (midx % 5)))].isPowerup == True:
+                self.loadPowerUpState()
             del self.point_map[(midx, midy + (5 - (midx % 5)))]
             self.pacman.collectCoin()
 
@@ -670,14 +727,17 @@ class Game:
                 # TODO: add point sprite change here
                 if current == 0:
                     self.icon = "pacman"
+                    print("pacman selected")
 
                 elif current == 1:
                     self.icon = "biden"
                     self.point_sprite = "biden"
+                    print("biden selected")
 
                 elif current == 2:
                     self.icon = "trump"
                     self.point_sprite = "trump"
+                    print("trump selected")
 
                 elif current == 3:
                     break
@@ -773,7 +833,7 @@ class Game:
                 if current == 0:
                     break
                 elif current == 1:
-                    # TODO: implement firebase leaderboard
+                    # TODO: implement local leaderboard
                     print('leaderboard selected')
                     break
                 elif current == 2:

@@ -130,7 +130,7 @@ class Ghost():
         else:
             return False
 
-    # TODO: movement algs
+
     # movement on new/ fresh level:
     # red ghost spawns outside, right above the box
     # up/down in box before spawn. after 5 seconds have passed, spawn new ghost

@@ -3,11 +3,11 @@ import pacman
 import pygame as pg
 import corridorH as ch
 import corridorV as cv
-
+import random
 
 #width of the corridors
 WIDTH = 50
-WHITE = (255,255,255)
+WHITE = (255, 255, 255)
 ORANGE = (252, 147, 48)
 
 class Level:
@@ -17,6 +17,8 @@ class Level:
         self.win = False
         self.c_map = {}
         self.p_map = {}
+        self.powerup_map = []
+        self.PowerUpsDrawn = False
         self.total_points = 0
         # loads in file to dictionary c_map
         self.file_reader()
@@ -65,18 +67,50 @@ class Level:
 
 
     # draws the level to display
-    def draw_level(self, disp, p_map, sprite):
+    def draw_level(self, disp, p_map, sprite, level_num):
+        if not self.PowerUpsDrawn:
+            num_powerups = 0
+            pwrup_locations = []
+            if level_num <= 5:
+                num_powerups = 1
+            elif 10 >= level_num >= 6:
+                num_powerups = 2
+            elif 15 >= level_num >= 11:
+                num_powerups = 3
+
+            for pwrup in range(num_powerups):
+                pwrup_locations.append(random.randrange(0, len(self.p_map)))
+
+            for p in range(num_powerups):
+                index = 0
+                for i in self.p_map:
+                    if pwrup_locations[p] == index:
+                        p_map[i].isPowerup = True
+                    index += 1
+            self.PowerUpsDrawn = True
+
         for key in self.c_map:
             self.c_map[key].draw(disp)
+
         if sprite == "biden":
             for point in p_map:
-                disp.blit(pg.image.load('biden/nevada.png'), (p_map[point].get_x(), p_map[point].get_y()))
+                if p_map[point].isPowerup:
+                    disp.blit(pg.image.load('biden/nevada-pwrup.png'), (p_map[point].get_x(), p_map[point].get_y()))
+                else:
+                    disp.blit(pg.image.load('biden/nevada.png'), (p_map[point].get_x(), p_map[point].get_y()))
+
         elif sprite == "trump":
             for point in p_map:
-                disp.blit(pg.image.load('trump/pennsylvania.png'), (p_map[point].get_x(), p_map[point].get_y()))
+                if p_map[point].isPowerup:
+                    disp.blit(pg.image.load('trump/penn-pwrup.png'), (p_map[point].get_x(), p_map[point].get_y()))
+                else:
+                    disp.blit(pg.image.load('trump/pennsylvania.png'), (p_map[point].get_x(), p_map[point].get_y()))
         else:
             for point in p_map:
-                pg.draw.circle(disp, ORANGE, (p_map[point].get_x(), p_map[point].get_y()), 3)
+                if p_map[point].isPowerup:
+                    pg.draw.circle(disp, ORANGE, (p_map[point].get_x(), p_map[point].get_y()), 7)
+                else:
+                    pg.draw.circle(disp, ORANGE, (p_map[point].get_x(), p_map[point].get_y()), 3)
 
         pg.display.flip()
 
