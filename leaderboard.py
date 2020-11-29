@@ -41,7 +41,9 @@ class Leaderboard:
 
         # Write out to CSV
         if self.file is not None:
-            self.file.write(element[0] + ',' + str(element[1]) + '\n')
-
+            self.file.close()
+            self.file = open('leaderboard.csv', 'a')
+            self.file.write('\n' + element[0] + ',' + str(element[1]))
+            self.file.close()
         else:
             print("Failed to update local leaderboard csv")

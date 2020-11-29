@@ -26,6 +26,7 @@ class Game:
         self.max_level = 10
         self.icon = ""
         self.point_sprite = ""
+        self.hasLoadedLeaderboard = False
 
         self.point_map = copy.deepcopy(self.current_level.p_map)
         print(self.point_map)
@@ -70,6 +71,7 @@ class Game:
         self.death_sound.set_volume(0.2)
 
         self.leaderboard = Leaderboard()
+        pg.mixer.Sound.play(self.intro_sound)
 
     def load_new_level(self):
         if 0 < self.current_level_int <= 10:
@@ -692,9 +694,45 @@ class Game:
             self.pacman.collectCoin()
 
     def submit_score(self):
-        # TODO make it so it limits to 3 characters
-        print()
+        text = ""
+        flag = True
+        while flag:
+            self.disp.blit(self.background, (0, 0))
+            text1 = self.FONT.render('Type your initials', False, WHITE)
+            self.disp.blit(text1, (460, 150))
 
+            text1 = self.FONT.render('Press enter when finished', False, WHITE)
+            self.disp.blit(text1, (420, 200))
+
+            pg.draw.line(self.disp, WHITE, (540, 290), (650, 290), 3)
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+
+                elif event.type == pg.KEYDOWN:
+                    if event.key == pg.K_RETURN:
+                        text = text.upper()
+                        temp1 = []
+                        temp1.append(text)
+                        temp1.append(self.pacman.numCoins)
+                        self.leaderboard.update_leaderboard(temp1)
+                        flag = False
+
+                    elif event.key == pg.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        if len(text) < 3:
+                            text += event.unicode
+
+            text1 = self.FONT_LARGE.render(text, False, YELLOW)
+            self.disp.blit(text1, (560, 250))
+
+            self.clock.tick(10)
+            pg.display.update()
+
+        g.loadMenu()
 
     def game_over(self):
         current = 0
@@ -711,11 +749,11 @@ class Game:
             self.disp.blit(text, (510, 225))
 
             text = self.FONT.render(str(self.pacman.numCoins), False, WHITE)
-            self.disp.blit(text, (560, 250))
+            self.disp.blit(text, (560, 260))
 
 
             text = self.FONT.render('PLAY AGAIN?', False, play_again_color)
-            self.disp.blit(text, (500, 300))
+            self.disp.blit(text, (510, 310))
 
             text = self.FONT.render('SUBMIT SCORE', False, submit_color)
             self.disp.blit(text, (500, 350))
@@ -919,16 +957,19 @@ class Game:
                 if current == 0:
                     self.icon = "pacman"
                     print("pacman selected")
+                    break
 
                 elif current == 1:
                     self.icon = "biden"
                     self.point_sprite = "biden"
                     print("biden selected")
+                    break
 
                 elif current == 2:
                     self.icon = "trump"
                     self.point_sprite = "trump"
                     print("trump selected")
+                    break
 
                 elif current == 3:
                     break
@@ -939,8 +980,11 @@ class Game:
 
 
     def loadLeaderboard(self):
-        self.leaderboard.update_top_scores()
-        while True:
+        if self.hasLoadedLeaderboard == False:
+            self.leaderboard.update_top_scores()
+            self.hasLoadedLeaderboard = True
+        flag = True
+        while flag:
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -950,6 +994,9 @@ class Game:
             self.disp.blit(self.background, (0, 0))
             text = self.FONT.render("Name  Score", False, YELLOW)
             self.disp.blit(text, (540, 5))
+
+            text = self.FONT.render('GO BACK (Backspace)', False, BLUE)
+            self.disp.blit(text, (570, 570))
 
             x = 500
             y = 50
@@ -982,13 +1029,16 @@ class Game:
             if keys_pressed[pg.K_ESCAPE]:
                 quit()
 
+            elif keys_pressed[pg.K_BACKSPACE]:
+                flag = False
+
             self.clock.tick(10)
             pg.display.update()
 
+        g.loadMenu()
 
 
     def loadMenu(self):
-        pg.mixer.Sound.play(self.intro_sound)
         # Set current selection
         current = 0
         play_color = BLUE
