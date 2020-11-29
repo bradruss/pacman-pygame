@@ -19,9 +19,10 @@ class Game:
     def __init__(self):
         self.num_iterations = 0
         # Set Game Level
-        self.level = 'level2b'
+        self.level = 'levels/level1'
         self.current_level = level.Level(self.level)
         self.current_level_int = 1
+        self.max_level = 10
         self.icon = ""
         self.point_sprite = ""
 
@@ -66,6 +67,42 @@ class Game:
 
         self.death_sound = pg.mixer.Sound("Sound/death.wav")
         self.death_sound.set_volume(0.2)
+
+    def load_new_level(self):
+        if 0 < self.current_level_int <= 10:
+            self.current_level_int += 1
+            text = self.FONT.render('Level ' + str(self.current_level_int), False, WHITE)
+            for i in range(0, 150):
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        quit()
+                        break
+                self.disp.blit(self.background, (0, 0))
+                self.disp.blit(text, (500, 300))
+                self.clock.tick(30)
+                pg.display.update()
+
+            self.pacman_respawn()
+            current_level_str = 'levels/level' + str(self.current_level_int)
+            self.level = current_level_str
+            self.current_level = level.Level(self.level)
+            self.point_map = copy.deepcopy(self.current_level.p_map)
+
+            return 0
+        else:
+            text = self.FONT.render('YOU BEAT THE GAME! ', False, WHITE)
+            for i in range(0, 500):
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        quit()
+                        break
+                self.disp.blit(self.background, (0, 0))
+                self.disp.blit(text, (500, 300))
+                self.clock.tick(30)
+                pg.display.update()
+            return -1
+
+
 
     def setIcon(self, icon):
         self.icon = icon
@@ -445,16 +482,89 @@ class Game:
 
             pg.display.update()
 
+
             if self.check_death(x, y):
                 pg.mixer.Sound.play(self.death_sound)
                 self.show_death(rotation, x, y)
                 self.pacman.setNumLives(self.pacman.numLives - 1)
-                break
+
+                if self.pacman.numLives == 0:
+                    self.game_over()
+                    break
+
+                else:
+                    self.red_ghost.resetGhost()
+                    self.blue_ghost.resetGhost()
+                    self.orange_ghost.resetGhost()
+                    self.pink_ghost.resetGhost()
+                    self.pacman_respawn()
+                    self.num_iterations = 0
+                    rotation = 0
+                    x = 0
+                    y = 50
+
+            if len(self.point_map) == 0:
+                return_val = self.load_new_level()
+                self.red_ghost.resetGhost()
+                self.blue_ghost.resetGhost()
+                self.orange_ghost.resetGhost()
+                self.pink_ghost.resetGhost()
+                self.pacman_respawn()
+                self.num_iterations = 0
+                rotation = 0
+                x = 0
+                y = 50
+                if return_val == -1:
+                    break
 
             self.num_iterations += 1
 
             # Pacman pos debugging
             #print("x is " + str(x) + " and y is " + str(y))
+
+    def pacman_respawn(self):
+        # Set initial Pacman point
+        x = 0
+        y = 50
+
+        # Pacman sprite array index
+        pacman_image = 0
+
+        # Rotation in degrees
+        rotation = 0
+
+        for i in range(0, 64):
+            # Display pacman and background
+            self.disp.blit(self.background, (0, 0))
+            self.loadLives()
+            self.loadScore()
+            self.loadLevelText()
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+
+            self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
+            self.current_level.draw_level(self.disp, self.point_map, self.point_sprite)
+
+            # put ghosts at fixed pos
+            self.red_ghost.spawnOutside()
+            self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
+
+            self.blue_ghost.spawnleft()
+            self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
+
+            self.pink_ghost.spawnMiddle()
+            self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
+
+            self.orange_ghost.spawnRight()
+            self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
+
+
+            self.clock.tick(30)
+            pg.display.update()
+
 
     def show_death(self, rotation, x, y):
 
@@ -557,14 +667,14 @@ class Game:
         # if locationv2 in self.point_map:
         #     del self.point_map[locationv2]
 
-        print(midx)
-        print(midy)
+        # print(midx)
+        # print(midy)
         if (midx, midy) in self.point_map:
 
             if self.point_map[(midx, midy)].isPowerup == True:
                 self.loadPowerUpState()
             del self.point_map[(midx, midy)]
-            print("point removed")
+            # print("point removed")
             self.pacman.collectCoin()
 
         if (midx + (5 - (midx % 5)), midy) in self.point_map:
@@ -578,6 +688,18 @@ class Game:
                 self.loadPowerUpState()
             del self.point_map[(midx, midy + (5 - (midx % 5)))]
             self.pacman.collectCoin()
+
+    def game_over(self):
+        text = self.FONT.render('Game Over', False, WHITE)
+        for i in range(0, 600):
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+            self.disp.blit(self.background, (0, 0))
+            self.disp.blit(text, (500, 300))
+            self.clock.tick(30)
+            pg.display.update()
 
 
 

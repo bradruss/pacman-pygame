@@ -33,6 +33,20 @@ class Ghost():
             self.current_direction = "left"
         loop = 0
 
+    def resetGhost(self):
+        self.current_direction = None
+        self.chase_iterations = 0
+        self.random_iterations = -1
+        r = random.randint(1, 4)
+        if r == 1:
+            self.current_direction = "up"
+        elif r == 2:
+            self.current_direction = "down"
+        elif r == 3:
+            self.current_direction = "right"
+        else:
+            self.current_direction = "left"
+
     def loadGhost(self, color):
         temp = None
         if color == "red":
