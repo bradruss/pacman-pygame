@@ -106,7 +106,8 @@ class Game:
             return -1
 
 
-    # TODO: implement powerup movement
+    # TODO: implement powerup movement -> num of iterattions has to be greater than 500 for it to move
+    # reset iterations when resetting ghosts
     def red_ghost_move(self, num_iterations, x, y):
         if num_iterations < 0 :
             pass
@@ -521,6 +522,9 @@ class Game:
             # Pacman pos debugging
             #print("x is " + str(x) + " and y is " + str(y))
 
+        if self.leaderboard.file is not None:
+            self.leaderboard.file.close()
+
     def pacman_respawn(self):
         # Set initial Pacman point
         x = 0
@@ -910,6 +914,7 @@ class Game:
                     default_color = BLUE
                     current = 0
 
+            # TODO return to main menu when a skin is selected
             elif keys_pressed[pg.K_RETURN]:
                 if current == 0:
                     self.icon = "pacman"
@@ -934,7 +939,9 @@ class Game:
 
 
     def loadLeaderboard(self):
+        self.leaderboard.update_top_scores()
         while True:
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     quit()
@@ -958,15 +965,15 @@ class Game:
                         score = j
                     k += 1
                 text = self.FONT.render(str(index) + ". ", False, YELLOW)
-                #text = self.FONT.render(str(index) + ". " + name + " " +score, False, YELLOW)
-                if index == 10:
+                if index >= 10:
                     self.disp.blit(text, (x-20, y))
                 else:
                     self.disp.blit(text, (x, y))
-
                 text = self.FONT.render(name, False, YELLOW)
                 self.disp.blit(text, (550, y))
 
+                text = self.FONT.render(str(score), False, YELLOW)
+                self.disp.blit(text, (650, y))
 
                 y += 25
                 index += 1
