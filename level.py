@@ -102,7 +102,7 @@ class Level:
         elif sprite == "trump":
             for point in p_map:
                 if p_map[point].isPowerup:
-                    disp.blit(pg.image.load('trump/penn-pwrup.png'), (p_map[point].get_x(), p_map[point].get_y()))
+                    disp.blit(pg.image.load('trump/penn-temp.png'), (p_map[point].get_x(), p_map[point].get_y()))
                 else:
                     disp.blit(pg.image.load('trump/pennsylvania.png'), (p_map[point].get_x(), p_map[point].get_y()))
         else:
