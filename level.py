@@ -95,14 +95,14 @@ class Level:
         if sprite == "biden":
             for point in p_map:
                 if p_map[point].isPowerup:
-                    disp.blit(pg.image.load('biden/nevada-pwrup.png'), (p_map[point].get_x(), p_map[point].get_y()))
+                    disp.blit(pg.image.load('biden/biden-pwrup.png'), (p_map[point].get_x(), p_map[point].get_y()))
                 else:
                     disp.blit(pg.image.load('biden/nevada.png'), (p_map[point].get_x(), p_map[point].get_y()))
 
         elif sprite == "trump":
             for point in p_map:
                 if p_map[point].isPowerup:
-                    disp.blit(pg.image.load('trump/penn-temp.png'), (p_map[point].get_x(), p_map[point].get_y()))
+                    disp.blit(pg.image.load('trump/trump-pwrup.png'), (p_map[point].get_x(), p_map[point].get_y()))
                 else:
                     disp.blit(pg.image.load('trump/pennsylvania.png'), (p_map[point].get_x(), p_map[point].get_y()))
         else:
