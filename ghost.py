@@ -10,6 +10,8 @@ class Ghost():
     weakGhost = pygame.image.load("weakGhost.png")
     images = [pygame.image.load("redGhost.png"), pygame.image.load("blueGhost.png"),
               pygame.image.load("orangeGhost.png"), pygame.image.load("pinkGhost.png")]
+    trump = [pygame.image.load("TrumpGhosts/TrumpGhost.png"), pygame.image.load("TrumpGhosts/GuilianiGhost.png"),
+              pygame.image.load("TrumpGhosts/PenceGhost.png"), pygame.image.load("TrumpGhosts/SessionsGhost.png")]
 
     def __init__(self, color, level_num):
         self.sprite = self.loadGhost(color)
@@ -60,6 +62,18 @@ class Ghost():
         else:
             temp = self.images[3]
         return temp
+
+    def loadTrumpGhosts(self, color):
+        if color == "red":
+            self.sprite = self.trump[0]
+        elif color == "blue":
+            self.sprite = self.trump[1]
+        elif color == "orange":
+            self.sprite = self.trump[2]
+        elif color == "pink":
+            self.sprite = self.trump[3]
+        else:
+            self.sprite = self.trump[3]
 
     def notVulnerable(self):
         self.weak = False
