@@ -34,6 +34,7 @@ class Ghost():
         self.random_iterations = -1
         self.death_iterations = 0
         self.dead = False
+        self.type = "Pacman"
         r = random.randint(1, 4)
         if r == 1:
             self.current_direction = "up"
@@ -74,6 +75,7 @@ class Ghost():
         return temp
 
     def loadTrumpGhosts(self, color):
+        self.type = "trump"
         if color == "red":
             self.sprite = self.trump[0]
         elif color == "blue":
@@ -87,6 +89,7 @@ class Ghost():
 
 
     def loadBidenGhosts(self, color):
+        type = "biden"
         if color == "red":
             self.sprite = self.biden[0]
         elif color == "blue":
@@ -99,36 +102,36 @@ class Ghost():
             self.sprite = self.biden[3]
 
     # TODO change it so it changes sprites and make trump weak sprites
-    def notVulnerable(self, name, ghost):
+    def notVulnerable(self):
         self.weak = False
-        if name == "biden":
-            if ghost == "red":
+        if self.type == "biden":
+            if self.color == "red":
                 print()
-            elif ghost == "blue":
+            elif self.color == "blue":
                 print()
-            elif ghost == "orange":
+            elif self.color == "orange":
                 print()
-            elif ghost == "pink":
+            elif self.color == "pink":
                 print()
 
-        elif name == "trump":
-            if ghost == "red":
+        elif self.type == "trump":
+            if self.color == "red":
                 print()
-            elif ghost == "blue":
+            elif self.color == "blue":
                 print()
-            elif ghost == "orange":
+            elif self.color == "orange":
                 print()
-            elif ghost == "pink":
+            elif self.color == "pink":
                 print()
 
         else:
-            if ghost == "red":
+            if self.color == "red":
                 print()
-            elif ghost == "blue":
+            elif self.color == "blue":
                 print()
-            elif ghost == "orange":
+            elif self.color == "orange":
                 print()
-            elif ghost == "pink":
+            elif self.color == "pink":
                 print()
 
 
