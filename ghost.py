@@ -98,7 +98,7 @@ class Ghost():
         self.x_pos = 600
         self.y_pos = 300
 
-    def spawnleft(self):
+    def spawnLeft(self):
         self.x_pos = 550
         self.y_pos = 400
 

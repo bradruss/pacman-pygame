@@ -62,6 +62,8 @@ class Game:
         self.pink_move = False
         self.dead_ghosts = []
 
+        self.powerup_iterations = 0
+
 
         # Load background
         self.background = pg.image.load('background.jpg')
@@ -122,12 +124,13 @@ class Game:
     # TODO: implement powerup movement -> num of iterattions has to be greater than 500 for it to move
     # reset iterations when resetting ghosts
     def red_ghost_move(self, num_iterations, x, y):
-        if self.red_ghost.weak:
-            self.red_ghost.moveRandom()
 
+        if num_iterations < 0 :
+            pass
         else:
-            if num_iterations < 0 :
-                pass
+            if self.red_ghost.weak:
+                self.red_ghost.moveRandom()
+
             else:
                 if self.red_ghost.chase_iterations <= 200 and self.red_ghost.chase_iterations != -1:
                     self.red_ghost.moveChase(x, y)
@@ -144,26 +147,30 @@ class Game:
                         self.red_ghost.chase_iterations = 0
 
     def orange_ghost_move(self, num_iterations, x, y):
+
         if num_iterations < 500 :
             pass
-        
+
         elif num_iterations == 500:
             self.orange_ghost.spawnOutside()
-            
-        else:
-            if self.orange_ghost.chase_iterations <= 200 and self.orange_ghost.chase_iterations != -1:
-                self.orange_ghost.moveChase(x, y)
-                self.orange_ghost.chase_iterations += 1
-                if self.orange_ghost.chase_iterations > 200:
-                    self.orange_ghost.chase_iterations = -1
-                    self.orange_ghost.random_iterations = 0
 
-            if self.orange_ghost.random_iterations <= 150 and self.orange_ghost.random_iterations != -1:
+        else:
+            if self.orange_ghost.weak:
                 self.orange_ghost.moveRandom()
-                self.orange_ghost.random_iterations += 1
-                if self.orange_ghost.random_iterations > 150:
-                    self.orange_ghost.random_iterations = -1
-                    self.orange_ghost.chase_iterations = 0
+            else:
+                if self.orange_ghost.chase_iterations <= 200 and self.orange_ghost.chase_iterations != -1:
+                    self.orange_ghost.moveChase(x, y)
+                    self.orange_ghost.chase_iterations += 1
+                    if self.orange_ghost.chase_iterations > 200:
+                        self.orange_ghost.chase_iterations = -1
+                        self.orange_ghost.random_iterations = 0
+
+                if self.orange_ghost.random_iterations <= 150 and self.orange_ghost.random_iterations != -1:
+                    self.orange_ghost.moveRandom()
+                    self.orange_ghost.random_iterations += 1
+                    if self.orange_ghost.random_iterations > 150:
+                        self.orange_ghost.random_iterations = -1
+                        self.orange_ghost.chase_iterations = 0
 
     def blue_ghost_move(self, num_iterations, x, y):
         if num_iterations < 1000:
@@ -173,19 +180,22 @@ class Game:
             self.blue_ghost.spawnOutside()
 
         else:
-            if self.blue_ghost.chase_iterations <= 200 and self.blue_ghost.chase_iterations != -1:
-                self.blue_ghost.moveChase(x, y)
-                self.blue_ghost.chase_iterations += 1
-                if self.blue_ghost.chase_iterations > 200:
-                    self.blue_ghost.chase_iterations = -1
-                    self.blue_ghost.random_iterations = 0
-
-            if self.blue_ghost.random_iterations <= 150 and self.blue_ghost.random_iterations != -1:
+            if self.blue_ghost.weak:
                 self.blue_ghost.moveRandom()
-                self.blue_ghost.random_iterations += 1
-                if self.blue_ghost.random_iterations > 150:
-                    self.blue_ghost.random_iterations = -1
-                    self.blue_ghost.chase_iterations = 0
+            else:
+                if self.blue_ghost.chase_iterations <= 200 and self.blue_ghost.chase_iterations != -1:
+                    self.blue_ghost.moveChase(x, y)
+                    self.blue_ghost.chase_iterations += 1
+                    if self.blue_ghost.chase_iterations > 200:
+                        self.blue_ghost.chase_iterations = -1
+                        self.blue_ghost.random_iterations = 0
+
+                if self.blue_ghost.random_iterations <= 150 and self.blue_ghost.random_iterations != -1:
+                    self.blue_ghost.moveRandom()
+                    self.blue_ghost.random_iterations += 1
+                    if self.blue_ghost.random_iterations > 150:
+                        self.blue_ghost.random_iterations = -1
+                        self.blue_ghost.chase_iterations = 0
 
     def pink_ghost_move(self, num_iterations, x, y):
         if num_iterations < 1500:
@@ -195,19 +205,22 @@ class Game:
             self.pink_ghost.spawnOutside()
 
         else:
-            if self.pink_ghost.chase_iterations <= 200 and self.pink_ghost.chase_iterations != -1:
-                self.pink_ghost.moveChase(x, y)
-                self.pink_ghost.chase_iterations += 1
-                if self.pink_ghost.chase_iterations > 200:
-                    self.pink_ghost.chase_iterations = -1
-                    self.pink_ghost.random_iterations = 0
-
-            if self.pink_ghost.random_iterations <= 150 and self.pink_ghost.random_iterations != -1:
+            if self.pink_ghost.weak:
                 self.pink_ghost.moveRandom()
-                self.pink_ghost.random_iterations += 1
-                if self.pink_ghost.random_iterations > 150:
-                    self.pink_ghost.random_iterations = -1
-                    self.pink_ghost.chase_iterations = 0
+            else:
+                if self.pink_ghost.chase_iterations <= 200 and self.pink_ghost.chase_iterations != -1:
+                    self.pink_ghost.moveChase(x, y)
+                    self.pink_ghost.chase_iterations += 1
+                    if self.pink_ghost.chase_iterations > 200:
+                        self.pink_ghost.chase_iterations = -1
+                        self.pink_ghost.random_iterations = 0
+
+                if self.pink_ghost.random_iterations <= 150 and self.pink_ghost.random_iterations != -1:
+                    self.pink_ghost.moveRandom()
+                    self.pink_ghost.random_iterations += 1
+                    if self.pink_ghost.random_iterations > 150:
+                        self.pink_ghost.random_iterations = -1
+                        self.pink_ghost.chase_iterations = 0
 
     def check_death(self, x, y):
         if not self.red_ghost.weak and self.red_ghost.checkDeath(x, y):
@@ -283,7 +296,7 @@ class Game:
                 self.red_ghost.spawnOutside()
                 self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
 
-                self.blue_ghost.spawnleft()
+                self.blue_ghost.spawnLeft()
                 self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
 
                 self.pink_ghost.spawnMiddle()
@@ -575,6 +588,10 @@ class Game:
                     self.blue_ghost.resetGhost()
                     self.orange_ghost.resetGhost()
                     self.pink_ghost.resetGhost()
+                    self.red_ghost.notVulnerable()
+                    self.blue_ghost.notVulnerable()
+                    self.orange_ghost.notVulnerable()
+                    self.pink_ghost.notVulnerable()
                     self.pacman_respawn()
                     self.num_iterations = 0
                     rotation = 0
@@ -590,18 +607,22 @@ class Game:
                         curr_ghost.spawnMiddleBack()
                         curr_ghost.dead = True
                         curr_ghost.notVulnerable()
+                        self.dead_ghosts.remove(curr_ghost)
                     if color == 'blue':
                         curr_ghost.spawnLeft()
                         curr_ghost.dead = True
                         curr_ghost.notVulnerable()
+                        self.dead_ghosts.remove(curr_ghost)
                     if color == 'orange':
                         curr_ghost.spawnRight()
                         curr_ghost.dead = True
                         curr_ghost.notVulnerable()
+                        self.dead_ghosts.remove(curr_ghost)
                     if color == 'pink':
                         curr_ghost.spawnMiddle()
                         curr_ghost.dead = True
                         curr_ghost.notVulnerable()
+                        self.dead_ghosts.remove(curr_ghost)
 
 
             if len(self.point_map) == 0:
@@ -621,6 +642,16 @@ class Game:
                 y = 50
                 if return_val == -1:
                     break
+
+            #check the powerup iterations to time powerup
+            if self.powerup_iterations > 700:
+                self.red_ghost.notVulnerable()
+                self.blue_ghost.notVulnerable()
+                self.orange_ghost.notVulnerable()
+                self.pink_ghost.notVulnerable()
+                self.powerup_iterations = 0
+            else:
+                self.powerup_iterations += 1
 
             self.num_iterations += 1
 
@@ -660,7 +691,7 @@ class Game:
             self.red_ghost.spawnOutside()
             self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
 
-            self.blue_ghost.spawnleft()
+            self.blue_ghost.spawnLeft()
             self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
 
             self.pink_ghost.spawnMiddle()
