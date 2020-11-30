@@ -12,6 +12,13 @@ class Ghost():
               pygame.image.load("orangeGhost.png"), pygame.image.load("pinkGhost.png")]
     trump = [pygame.image.load("TrumpGhosts/TrumpGhost.png"), pygame.image.load("TrumpGhosts/GuilianiGhost.png"),
               pygame.image.load("TrumpGhosts/PenceGhost.png"), pygame.image.load("TrumpGhosts/SessionsGhost.png")]
+    weakTrump = [pygame.image.load("TrumpGhosts/TrumpGhost.png"), pygame.image.load("TrumpGhosts/GuilianiGhost.png"),
+              pygame.image.load("TrumpGhosts/PenceGhost.png"), pygame.image.load("TrumpGhosts/SessionsGhost.png")]
+    biden = [pygame.image.load("BidenGhosts/BidenGhost.png"), pygame.image.load("BidenGhosts/HarrisGhost.png"),
+              pygame.image.load("BidenGhosts/ObamaGhost.png"), pygame.image.load("BidenGhosts/SandersGhost.png")]
+    weakBiden = [pygame.image.load("BidenGhosts/BidenGhostWeak.png"), pygame.image.load("BidenGhosts/HarrisGhostWeak.png"),
+              pygame.image.load("BidenGhosts/ObamaGhostWeak.png"), pygame.image.load("BidenGhosts/SandersGhostWeak.png")]
+
 
     def __init__(self, color, level_num):
         self.color = color
@@ -78,9 +85,52 @@ class Ghost():
         else:
             self.sprite = self.trump[3]
 
-    def notVulnerable(self):
-        self.sprite = self.loadGhost(self.color)
+
+    def loadBidenGhosts(self, color):
+        if color == "red":
+            self.sprite = self.biden[0]
+        elif color == "blue":
+            self.sprite = self.biden[1]
+        elif color == "orange":
+            self.sprite = self.biden[2]
+        elif color == "pink":
+            self.sprite = self.biden[3]
+        else:
+            self.sprite = self.biden[3]
+
+    # TODO change it so it changes sprites and make trump weak sprites
+    def notVulnerable(self, name, ghost):
         self.weak = False
+        if name == "biden":
+            if ghost == "red":
+                print()
+            elif ghost == "blue":
+                print()
+            elif ghost == "orange":
+                print()
+            elif ghost == "pink":
+                print()
+
+        elif name == "trump":
+            if ghost == "red":
+                print()
+            elif ghost == "blue":
+                print()
+            elif ghost == "orange":
+                print()
+            elif ghost == "pink":
+                print()
+
+        else:
+            if ghost == "red":
+                print()
+            elif ghost == "blue":
+                print()
+            elif ghost == "orange":
+                print()
+            elif ghost == "pink":
+                print()
+
 
     def vulnerable(self):
         self.sprite = self.weakGhost
