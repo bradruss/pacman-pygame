@@ -980,6 +980,10 @@ class Game:
                     self.icon = "trump"
                     self.point_sprite = "trump"
                     print("trump selected")
+                    self.red_ghost.loadTrumpGhosts("red")
+                    self.blue_ghost.loadTrumpGhosts("blue")
+                    self.orange_ghost.loadTrumpGhosts("orange")
+                    self.pink_ghost.loadTrumpGhosts("pink")
                     break
 
                 elif current == 3:
