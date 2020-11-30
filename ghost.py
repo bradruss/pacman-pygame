@@ -21,6 +21,7 @@ class Ghost():
 
 
     def __init__(self, color, level_num):
+        self.color = color
         self.sprite = self.loadGhost(color)
         self.weak = False
         self.x_pos = 0
@@ -31,6 +32,8 @@ class Ghost():
         self.current_direction = None
         self.chase_iterations = 0
         self.random_iterations = -1
+        self.death_iterations = 0
+        self.dead = False
         r = random.randint(1, 4)
         if r == 1:
             self.current_direction = "up"
@@ -81,6 +84,7 @@ class Ghost():
             self.sprite = self.trump[3]
         else:
             self.sprite = self.trump[3]
+
 
     def loadBidenGhosts(self, color):
         if color == "red":
@@ -155,6 +159,10 @@ class Ghost():
     def spawnRight(self):
         self.x_pos = 650
         self.y_pos = 400
+
+    def spawnMiddleBack(self):
+        self.x_pos = 600
+        self.y_pos = 450
 
     def maze(self, color):
         if color == "red":
