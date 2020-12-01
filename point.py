@@ -3,7 +3,7 @@ class Point:
         self.positionx = positionx
         self.positiony = positiony
         self.touched = False
-        self.isPowerup = False
+        self.is_power_up = False
 
     # Getters
 

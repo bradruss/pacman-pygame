@@ -1,15 +1,14 @@
-import pacman
-# import ghost
 import pygame as pg
 import corridorH as ch
 import corridorV as cv
 import random
 
 
-#width of the corridors
+# width of the corridors
 WIDTH = 50
 WHITE = (255, 255, 255)
 ORANGE = (252, 147, 48)
+
 
 class Level:
     def __init__(self, filename):
@@ -19,7 +18,7 @@ class Level:
         self.c_map = {}
         self.p_map = {}
         self.powerup_map = []
-        self.PowerUpsDrawn = False
+        self.power_ups_drawn = False
         self.total_points = 0
         # loads in file to dictionary c_map
         self.file_reader()
@@ -70,8 +69,8 @@ class Level:
                 f.close()
                 return -1
 
-
         f.close()
+
         if errors > 0:
             return -1
 
@@ -81,8 +80,9 @@ class Level:
 
 
     # draws the level to display
+
     def draw_level(self, disp, p_map, sprite, level_num):
-        if not self.PowerUpsDrawn:
+        if not self.power_ups_drawn:
             num_powerups = 0
             pwrup_locations = []
             if level_num <= 5:
@@ -99,29 +99,29 @@ class Level:
                 index = 0
                 for i in self.p_map:
                     if pwrup_locations[p] == index:
-                        p_map[i].isPowerup = True
+                        p_map[i].is_power_up = True
                     index += 1
-            self.PowerUpsDrawn = True
+            self.power_ups_drawn = True
 
         for key in self.c_map:
             self.c_map[key].draw(disp)
 
         if sprite == "biden":
             for point in p_map:
-                if p_map[point].isPowerup:
+                if p_map[point].is_power_up:
                     disp.blit(pg.image.load('biden/biden-pwrup.png'), (p_map[point].get_x(), p_map[point].get_y()))
                 else:
                     disp.blit(pg.image.load('biden/nevada.png'), (p_map[point].get_x(), p_map[point].get_y()))
 
         elif sprite == "trump":
             for point in p_map:
-                if p_map[point].isPowerup:
+                if p_map[point].is_power_up:
                     disp.blit(pg.image.load('trump/trump-pwrup.png'), (p_map[point].get_x(), p_map[point].get_y()))
                 else:
                     disp.blit(pg.image.load('trump/pennsylvania.png'), (p_map[point].get_x(), p_map[point].get_y()))
         else:
             for point in p_map:
-                if p_map[point].isPowerup:
+                if p_map[point].is_power_up:
                     pg.draw.circle(disp, ORANGE, (p_map[point].get_x(), p_map[point].get_y()), 7)
                 else:
                     pg.draw.circle(disp, ORANGE, (p_map[point].get_x(), p_map[point].get_y()), 3)
@@ -135,6 +135,7 @@ class Level:
     # of that particular corridor
 
     def check_valid(self, x, y):
+
         midx = x + WIDTH/2
         midy = y + WIDTH/2
         left_edge = x # This is the left edge of pacman
