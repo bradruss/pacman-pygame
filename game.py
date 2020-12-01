@@ -571,6 +571,8 @@ class Game:
 
             pg.display.update()
 
+            print(self.powerup_iterations)
+
             if self.check_death(x, y):
                 pg.mixer.Sound.play(self.death_sound)
                 self.show_death(rotation, x, y)
@@ -642,13 +644,14 @@ class Game:
                     break
 
             # check the powerup iterations to time powerup
-            if self.powerup_iterations > 700:
+            if self.powerup_iterations > 700 and self.pacman.isDangerous:
                 self.red_ghost.notVulnerable()
                 self.blue_ghost.notVulnerable()
                 self.orange_ghost.notVulnerable()
                 self.pink_ghost.notVulnerable()
                 self.powerup_iterations = 0
-            else:
+                self.pacman.isDangerous = False
+            elif self.pacman.isDangerous:
                 self.powerup_iterations += 1
 
             self.num_iterations += 1

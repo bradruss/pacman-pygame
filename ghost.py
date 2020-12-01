@@ -190,7 +190,7 @@ class Ghost():
             self.x_pos -= 5
 
     def moveRandom(self):
-        print(self.current_direction)
+        # print(self.current_direction)
         if self.current_direction == "up" and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
             self.y_pos -= 5
         elif self.current_direction == "down" and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
@@ -217,7 +217,7 @@ class Ghost():
                 self.x_pos -= 5
         
     def moveRandomSlow(self):
-        print(self.current_direction)
+        # print(self.current_direction)
         if self.current_direction == "up" and self.current_level.check_valid(self.x_pos, self.y_pos - 3):
             self.y_pos -= 3
         elif self.current_direction == "down" and self.current_level.check_valid(self.x_pos, self.y_pos + 3):
