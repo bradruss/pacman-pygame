@@ -129,7 +129,7 @@ class Game:
             pass
         else:
             if self.red_ghost.weak:
-                self.red_ghost.moveRandom()
+                self.red_ghost.moveRandomSlow()
 
             else:
                 if self.red_ghost.chase_iterations <= 200 and self.red_ghost.chase_iterations != -1:
@@ -156,7 +156,7 @@ class Game:
 
         else:
             if self.orange_ghost.weak:
-                self.orange_ghost.moveRandom()
+                self.orange_ghost.moveRandomSlow()
             else:
                 if self.orange_ghost.chase_iterations <= 200 and self.orange_ghost.chase_iterations != -1:
                     self.orange_ghost.moveChase(x, y)
@@ -181,7 +181,7 @@ class Game:
 
         else:
             if self.blue_ghost.weak:
-                self.blue_ghost.moveRandom()
+                self.blue_ghost.moveRandomSlow()
             else:
                 if self.blue_ghost.chase_iterations <= 200 and self.blue_ghost.chase_iterations != -1:
                     self.blue_ghost.moveChase(x, y)
@@ -206,7 +206,7 @@ class Game:
 
         else:
             if self.pink_ghost.weak:
-                self.pink_ghost.moveRandom()
+                self.pink_ghost.moveRandomSlow()
             else:
                 if self.pink_ghost.chase_iterations <= 200 and self.pink_ghost.chase_iterations != -1:
                     self.pink_ghost.moveChase(x, y)
