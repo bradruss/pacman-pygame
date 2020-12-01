@@ -15,7 +15,7 @@ Collect all coins to go to the next level.
 
 # Play your own Level
 By hitting enter for "play your own level" button, user can type which level he wants to play in the terminal.  
-The level should be from one to five.  
+The level should be a file 
 Type level like "level1.map" to run this command.  
 
 # Leaderboard

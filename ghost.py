@@ -7,9 +7,9 @@ import time
 
 class Ghost():
     # Regular Pac-Man ghost sprites
-    weak_ghost = pygame.image.load("weakGhost.png")
-    images = [pygame.image.load("redGhost.png"), pygame.image.load("blueGhost.png"),
-              pygame.image.load("orangeGhost.png"), pygame.image.load("pinkGhost.png")]
+    weak_ghost = pygame.image.load("Ghosts/weakGhost.png")
+    images = [pygame.image.load("Ghosts/redGhost.png"), pygame.image.load("Ghosts/blueGhost.png"),
+              pygame.image.load("Ghosts/orangeGhost.png"), pygame.image.load("Ghosts/pinkGhost.png")]
 
     # Trump Sprites
     trump = [pygame.image.load("TrumpGhosts/TrumpGhost.png"), pygame.image.load("TrumpGhosts/GuilianiGhost.png"),

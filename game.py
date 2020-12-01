@@ -49,7 +49,7 @@ class Game:
         self.clock = pg.time.Clock()
 
         # Hearts
-        self.heart_sprite = pg.image.load('heart.png')
+        self.heart_sprite = pg.image.load('Level_Pics/heart.png')
 
         pg.display.set_icon(pg.image.load('pacman/Pacman3.png'))
         self.in_motion = False
@@ -68,7 +68,7 @@ class Game:
         self.powerup_iterations = 0
 
         # Load background
-        self.background = pg.image.load('background.jpg')
+        self.background = pg.image.load('Level_Pics/background.jpg')
 
         # Display the background image
         self.disp.blit(self.background, (0, 0))

@@ -123,7 +123,7 @@ def display_map():
     pg.display.set_caption("Pac-man")
 
     # Load background
-    background = pg.image.load('background.jpg')
+    background = pg.image.load('Level_Pics/background.jpg')
 
     # Display the background image
     disp.blit(background, (0, 0))
