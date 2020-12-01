@@ -99,14 +99,14 @@ class Game:
         while not file_exists:
             print("Please Enter a Valid Level File, or type in 'quit' to exit")
             file_path = input(": ")
+            if file_path == "quit":
+                return 0
             file_exists = path.exists(file_path)
             if not file_exists:
                 continue
             curr_level_check = level.Level(file_path)
             if curr_level_check.file_reader() == -1:
                 file_exists = False
-            if file_path == "quit":
-                return 0
 
         self.current_level_int = 5
         text = self.FONT.render('Player Created Level', False, WHITE)
