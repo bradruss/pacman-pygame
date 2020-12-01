@@ -4,6 +4,8 @@ import pygame as pg
 import level
 import copy
 from leaderboard import Leaderboard
+import os.path
+from os import path
 
 # Global Constants
 WINDOW_HEIGHT = 650
@@ -80,8 +82,61 @@ class Game:
         self.leaderboard = Leaderboard()
         pg.mixer.Sound.play(self.intro_sound)
 
+    def load_player_level(self):
+        text = self.FONT.render('Please Type Valid File Name In Terminal', False, WHITE)
+        for i in range(0, 3):
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+            self.disp.blit(self.background, (0, 0))
+            self.disp.blit(text, (280, 300))
+            self.clock.tick(30)
+            pg.display.update()
+
+        file_exists = False
+        file_path = None
+        while not file_exists:
+            print("Please Enter a Valid Level File, or type in 'quit' to exit")
+            file_path = input(": ")
+            file_exists = path.exists(file_path)
+            if not file_exists:
+                continue
+            curr_level_check = level.Level(file_path)
+            if curr_level_check.file_reader() == -1:
+                file_exists = False
+            if file_path == "quit":
+                return 0
+
+        self.current_level_int = 5
+        text = self.FONT.render('Player Created Level', False, WHITE)
+        for i in range(0, 50):
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    quit()
+                    break
+            self.disp.blit(self.background, (0, 0))
+            self.disp.blit(text, (500, 300))
+            self.clock.tick(30)
+            pg.display.update()
+
+        current_level_str = file_path
+        self.level = current_level_str
+        self.current_level = level.Level(self.level)
+        self.point_map = copy.deepcopy(self.current_level.p_map)
+
+        # update ghosts' levels
+        self.red_ghost.current_level = self.current_level
+        self.blue_ghost.current_level = self.current_level
+        self.orange_ghost.current_level = self.current_level
+        self.pink_ghost.current_level = self.current_level
+
+        self.runLevel()
+
+        return 0
+
     def load_new_level(self):
-        if 0 < self.current_level_int <= 10:
+        if 0 < self.current_level_int < self.max_level:
             self.current_level_int += 1
             text = self.FONT.render('Level ' + str(self.current_level_int), False, WHITE)
             for i in range(0, 150):
@@ -946,6 +1001,7 @@ class Game:
             pg.display.update()
 
         g.runLevel()
+        return 0
 
     def loadLives(self):
         x = 950
@@ -1174,6 +1230,7 @@ class Game:
         # Set current selection
         current = 0
         play_color = BLUE
+        player_level_color = WHITE
         leaderboard_color = WHITE
         settings_color = WHITE
         quit_color = WHITE
@@ -1193,14 +1250,17 @@ class Game:
             text = self.FONT.render('PLAY', False, play_color)
             self.disp.blit(text, (590, 250))
 
+            text = self.FONT.render('PLAY YOUR OWN LEVEL', False, player_level_color)
+            self.disp.blit(text, (475, 300))
+
             text = self.FONT.render('LEADERBOARD', False, leaderboard_color)
-            self.disp.blit(text, (540, 300))
+            self.disp.blit(text, (540, 350))
 
             text = self.FONT.render('SETTINGS', False, settings_color)
-            self.disp.blit(text, (560, 350))
+            self.disp.blit(text, (560, 400))
 
             text = self.FONT.render('QUIT', False, quit_color)
-            self.disp.blit(text, (590, 400))
+            self.disp.blit(text, (590, 450))
 
             keys_pressed = pg.key.get_pressed()
             if keys_pressed[pg.K_ESCAPE]:
@@ -1210,39 +1270,53 @@ class Game:
                 if current == 0:
                     play_color = WHITE
                     quit_color = BLUE
-                    current = 3
+                    current = 4
 
                 elif current == 1:
-                    leaderboard_color = WHITE
+                    player_level_color = WHITE
                     play_color = BLUE
                     current = 0
 
                 elif current == 2:
-                    settings_color = WHITE
-                    leaderboard_color = BLUE
+                    leaderboard_color = WHITE
+                    player_level_color = BLUE
                     current = 1
 
                 elif current == 3:
+                    settings_color = WHITE
+                    leaderboard_color = BLUE
+                    current = 2
+
+                elif current == 4:
                     quit_color = WHITE
                     settings_color = BLUE
-                    current = 2
+                    current = 3
+
+
+
 
             elif keys_pressed[pg.K_DOWN]:
                 if current == 0:
                     play_color = WHITE
-                    leaderboard_color = BLUE
+                    player_level_color = BLUE
                     current = 1
+
                 elif current == 1:
-                    leaderboard_color = WHITE
-                    settings_color = BLUE
+                    player_level_color = WHITE
+                    leaderboard_color = BLUE
                     current = 2
 
                 elif current == 2:
-                    settings_color = WHITE
-                    quit_color = BLUE
+                    leaderboard_color = WHITE
+                    settings_color = BLUE
                     current = 3
 
                 elif current == 3:
+                    settings_color = WHITE
+                    quit_color = BLUE
+                    current = 4
+
+                elif current == 4:
                     quit_color = WHITE
                     play_color = BLUE
                     current = 0
@@ -1251,10 +1325,12 @@ class Game:
                 if current == 0:
                     break
                 elif current == 1:
-                    self.loadLeaderboard()
+                    break
                 elif current == 2:
-                    self.loadSettings()
+                    self.loadLeaderboard()
                 elif current == 3:
+                    self.loadSettings()
+                elif current == 4:
                     quit()
 
             self.clock.tick(10)
@@ -1262,6 +1338,9 @@ class Game:
 
         if current == 0:
             g.runLevel()
+
+        elif current == 1:
+            g.load_player_level()
 
 
 if __name__ == '__main__':

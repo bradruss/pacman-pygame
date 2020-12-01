@@ -5,6 +5,7 @@ import corridorH as ch
 import corridorV as cv
 import random
 
+
 #width of the corridors
 WIDTH = 50
 WHITE = (255, 255, 255)
@@ -26,44 +27,57 @@ class Level:
     def file_reader(self):
         f = open(self.filename, "r")
         # loops through file to load in coordinates for either a horizontal or vertical corridor
+        errors = 0
         for x in f:
             curr_line = x
             array = curr_line.split(',')
-            if array[0] == 'H':
-                cor = ch.CorridorH(0,0,0)
-                cor.x_startt = int(array[2])
-                cor.x_startb = int(array[3])
-                cor.y_start = int(array[4])
-                cor.x_endt = int(array[5])
-                cor.x_endb = int(array[6])
-                cor.y_end = int(array[7])
-                cor.update_points()
-                self.c_map[array[1]] = cor
-                for point in cor.points:
-                    key = (point.get_x() + (5 - (point.get_x() % 5)), point.get_y())
-                    dummy_key = (point.get_x(), point.get_y() + (5 - (point.get_y() % 5)))
-                    if key not in self.p_map and dummy_key not in self.p_map:
-                        self.p_map[key] = point
+            try:
+                if array[0] == 'H':
+                    cor = ch.CorridorH(0,0,0)
+                    cor.x_startt = int(array[2])
+                    cor.x_startb = int(array[3])
+                    cor.y_start = int(array[4])
+                    cor.x_endt = int(array[5])
+                    cor.x_endb = int(array[6])
+                    cor.y_end = int(array[7])
+                    cor.update_points()
+                    self.c_map[array[1]] = cor
+                    for point in cor.points:
+                        key = (point.get_x() + (5 - (point.get_x() % 5)), point.get_y())
+                        dummy_key = (point.get_x(), point.get_y() + (5 - (point.get_y() % 5)))
+                        if key not in self.p_map and dummy_key not in self.p_map:
+                            self.p_map[key] = point
 
-            if array[0] == 'V':
-                cor = cv.CorridorV(0, 0, 0)
-                cor.x_start = int(array[2])
-                cor.y_startl = int(array[3])
-                cor.y_startr = int(array[4])
-                cor.x_end = int(array[5])
-                cor.y_endl = int(array[6])
-                cor.y_endr = int(array[7])
-                cor.update_points()
-                self.c_map[array[1]] = cor
-                for point in cor.points:
-                    key = (point.get_x(), point.get_y() + (5 - (point.get_y() % 5)))
-                    dummy_key = (point.get_x() + (5 - (point.get_x() % 5)), point.get_y())
-                    if key not in self.p_map and dummy_key not in self.p_map:
-                        self.p_map[key] = point
+                elif array[0] == 'V':
+                    cor = cv.CorridorV(0, 0, 0)
+                    cor.x_start = int(array[2])
+                    cor.y_startl = int(array[3])
+                    cor.y_startr = int(array[4])
+                    cor.x_end = int(array[5])
+                    cor.y_endl = int(array[6])
+                    cor.y_endr = int(array[7])
+                    cor.update_points()
+                    self.c_map[array[1]] = cor
+                    for point in cor.points:
+                        key = (point.get_x(), point.get_y() + (5 - (point.get_y() % 5)))
+                        dummy_key = (point.get_x() + (5 - (point.get_x() % 5)), point.get_y())
+                        if key not in self.p_map and dummy_key not in self.p_map:
+                            self.p_map[key] = point
 
-        print("Level File Loaded In")
+                else:
+                    errors += 1
+            except:
+                f.close()
+                return -1
+
+
         f.close()
+        if errors > 0:
+            return -1
+
         self.total_points = len(self.p_map)
+        print("Level File Loaded In")
+        return 0
 
 
     # draws the level to display
