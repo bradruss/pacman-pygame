@@ -105,14 +105,14 @@ class Game:
         while not file_exists:
             print("Please Enter a Valid Level File, or type in 'quit' to exit")
             file_path = input(": ")
+            if file_path == "quit":
+                return 0
             file_exists = path.exists(file_path)
             if not file_exists:
                 continue
             curr_level_check = level.Level(file_path)
             if curr_level_check.file_reader() == -1:
                 file_exists = False
-            if file_path == "quit":
-                return 0
 
         self.current_level_int = 5
         text = self.FONT.render('Player Created Level', False, WHITE)
@@ -334,7 +334,7 @@ class Game:
         Run the pacman game
         """
         self.pacman = Pacman(self.icon)
-        self.pacman.numCoins = 0
+        self.pacman.num_coins = 0
         self.remove_power_up_state()
         # Set initial Pacman point
         x = 0
@@ -657,10 +657,10 @@ class Game:
                     self.blue_ghost.reset_ghost()
                     self.orange_ghost.reset_ghost()
                     self.pink_ghost.reset_ghost()
-                    self.red_ghost.notVulnerable()
-                    self.blue_ghost.notVulnerable()
-                    self.orange_ghost.notVulnerable()
-                    self.pink_ghost.notVulnerable()
+                    self.red_ghost.not_vulnerable()
+                    self.blue_ghost.not_vulnerable()
+                    self.orange_ghost.not_vulnerable()
+                    self.pink_ghost.not_vulnerable()
                     self.pacman_respawn()
                     self.num_iterations = 0
                     self.powerup_iterations = 0
@@ -671,28 +671,28 @@ class Game:
             # If a ghost has died, reset it to invulnerable
             if self.check_ghost_death(x, y):
                 for i in range(0, len(self.dead_ghosts)):
-                    self.pacman.numCoins += 30
+                    self.pacman.num_coins += 30
                     curr_ghost = self.dead_ghosts[i]
                     color = curr_ghost.color
                     if color == 'red':
                         curr_ghost.spawn_middle_back()
                         curr_ghost.dead = True
-                        curr_ghost.notVulnerable()
+                        curr_ghost.not_vulnerable()
                         self.dead_ghosts.remove(curr_ghost)
                     if color == 'blue':
                         curr_ghost.spawn_left()
                         curr_ghost.dead = True
-                        curr_ghost.notVulnerable()
+                        curr_ghost.not_vulnerable()
                         self.dead_ghosts.remove(curr_ghost)
                     if color == 'orange':
                         curr_ghost.spawn_right()
                         curr_ghost.dead = True
-                        curr_ghost.notVulnerable()
+                        curr_ghost.not_vulnerable()
                         self.dead_ghosts.remove(curr_ghost)
                     if color == 'pink':
                         curr_ghost.spawn_middle()
                         curr_ghost.dead = True
-                        curr_ghost.notVulnerable()
+                        curr_ghost.not_vulnerable()
                         self.dead_ghosts.remove(curr_ghost)
 
             if len(self.point_map) == 0:
@@ -701,10 +701,10 @@ class Game:
                 self.blue_ghost.reset_ghost()
                 self.orange_ghost.reset_ghost()
                 self.pink_ghost.reset_ghost()
-                self.red_ghost.notVulnerable()
-                self.blue_ghost.notVulnerable()
-                self.orange_ghost.notVulnerable()
-                self.pink_ghost.notVulnerable()
+                self.red_ghost.not_vulnerable()
+                self.blue_ghost.not_vulnerable()
+                self.orange_ghost.not_vulnerable()
+                self.pink_ghost.not_vulnerable()
                 self.pacman_respawn()
                 self.num_iterations = 0
                 self.powerup_iterations = 0
@@ -715,14 +715,14 @@ class Game:
                     break
 
             # check the powerup iterations to time powerup
-            if self.powerup_iterations > 700 and self.pacman.isDangerous:
-                self.red_ghost.notVulnerable()
-                self.blue_ghost.notVulnerable()
-                self.orange_ghost.notVulnerable()
-                self.pink_ghost.notVulnerable()
+            if self.powerup_iterations > 700 and self.pacman.is_dangerous:
+                self.red_ghost.not_vulnerable()
+                self.blue_ghost.not_vulnerable()
+                self.orange_ghost.not_vulnerable()
+                self.pink_ghost.not_vulnerable()
                 self.powerup_iterations = 0
-                self.pacman.isDangerous = False
-            elif self.pacman.isDangerous:
+                self.pacman.is_dangerous = False
+            elif self.pacman.is_dangerous:
                 self.powerup_iterations += 1
 
             self.num_iterations += 1
@@ -804,10 +804,10 @@ class Game:
             self.clock.tick(30)
             pg.display.update()
 
-
     # Sets pacman to invulnerable and ghosts to vulnerable
-    def loadPowerUpState(self):
-        self.pacman.isDangerous = True
+    def load_power_up_state(self):
+        self.pacman.is_dangerous = True
+
         self.red_ghost.vulnerable()
         self.blue_ghost.vulnerable()
         self.pink_ghost.vulnerable()
@@ -815,11 +815,11 @@ class Game:
 
     # Sets pacman to vulnerable state and ghosts to invulnerable
     def remove_power_up_state(self):
-        self.pacman.isDangerous = False
-        self.red_ghost.notVulnerable()
-        self.blue_ghost.notVulnerable()
-        self.pink_ghost.notVulnerable()
-        self.orange_ghost.notVulnerable()
+        self.pacman.is_dangerous = False
+        self.red_ghost.not_vulnerable()
+        self.blue_ghost.not_vulnerable()
+        self.pink_ghost.not_vulnerable()
+        self.orange_ghost.not_vulnerable()
 
     # Checks for pacman point collision
     def check_points(self, x, y):
@@ -828,23 +828,23 @@ class Game:
 
         if (midx, midy) in self.point_map:
 
-            if self.point_map[(midx, midy)].isPowerup == True:
-                self.loadPowerUpState()
+            if self.point_map[(midx, midy)].is_power_up == True:
+                self.load_power_up_state()
             del self.point_map[(midx, midy)]
             # print("point removed")
-            self.pacman.collectCoin()
+            self.pacman.collect_coin()
 
         if (midx + (5 - (midx % 5)), midy) in self.point_map:
-            if self.point_map[(midx + (5 - (midx % 5)), midy)].isPowerup == True:
-                self.loadPowerUpState()
+            if self.point_map[(midx + (5 - (midx % 5)), midy)].is_power_up == True:
+                self.load_power_up_state()
             del self.point_map[(midx + (5 - (midx % 5)), midy)]
-            self.pacman.collectCoin()
+            self.pacman.collect_coin()
 
         if (midx, midy + (5 - (midx % 5))) in self.point_map:
-            if self.point_map[(midx, midy + (5 - (midx % 5)))].isPowerup == True:
-                self.loadPowerUpState()
+            if self.point_map[(midx, midy + (5 - (midx % 5)))].is_power_up == True:
+                self.load_power_up_state()
             del self.point_map[(midx, midy + (5 - (midx % 5)))]
-            self.pacman.collectCoin()
+            self.pacman.collect_coin()
 
     # Loads the submit score menu
     def submit_score(self):
@@ -870,7 +870,7 @@ class Game:
                         text = text.upper()
                         temp1 = []
                         temp1.append(text)
-                        temp1.append(self.pacman.numCoins)
+                        temp1.append(self.pacman.num_coins)
                         self.leaderboard.update_leaderboard(temp1)
                         self.has_loaded_leader_board = True
                         flag = False
@@ -905,7 +905,7 @@ class Game:
             text = self.FONT.render("Total Score:", False, WHITE)
             self.disp.blit(text, (510, 225))
 
-            text = self.FONT.render(str(self.pacman.numCoins), False, WHITE)
+            text = self.FONT.render(str(self.pacman.num_coins), False, WHITE)
             self.disp.blit(text, (560, 260))
 
             text = self.FONT.render('PLAY AGAIN?', False, play_again_color)

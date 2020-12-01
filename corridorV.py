@@ -60,7 +60,7 @@ class CorridorV:
         #     pygame.draw.circle(window, WHITE, (p.get_x(), p.get_y()), 3)
 
     def check_in_corridor(self, x, y):
-        if (x >= self.x_start and x <= self.x_end and y >= self.y_start and y <= self.y_end):
+        if (x >= self.x_start and x <= self.x_end and y >= self.y_startl and y <= self.y_endl):
             return True
         else:
             return False

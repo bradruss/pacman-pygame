@@ -2,9 +2,9 @@ import pygame as pg
 
 class Pacman:
     def __init__(self, icon):
-        self.numLives = 5
-        self.numCoins = 0
-        self.isDangerous = False
+        self.num_lives = 5
+        self.num_coins = 0
+        self.is_dangerous = False
         self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
         if icon == 'biden':
             self.sprite = [pg.image.load('biden/close.png'), pg.image.load('biden/close2.png'), pg.image.load('biden/open.png')]
@@ -27,25 +27,25 @@ class Pacman:
         self.waka = pg.mixer.Sound('Sound/waka.wav')
         self.waka.set_volume(0.5)
 
-    def getNumCoins(self):
-        return self.numCoins
+    def get_num_coins(self):
+        return self.num_coins
 
-    def getIsDangerous(self):
-        return self.isDangerous
+    def get_is_dangerous(self):
+        return self.is_dangerous
 
-    def setNumCoins(self, numCoins):
-        self.numCoins = numCoins
+    def set_num_coins(self, num_coins):
+        self.num_coins = num_coins
 
-    def collectCoin(self):
-        self.numCoins += 10
+    def collect_coin(self):
+        self.num_coins += 10
 
-    def getNumLives(self):
-        return self.numLives
+    def get_num_lives(self):
+        return self.num_lives
 
-    def setNumLives(self, numlives):
-        self.numLives = numlives
+    def set_num_lives(self, num_lives):
+        self.num_lives = num_lives
 
-    def showDeath(self, disp, rotation, x, y):
+    def show_death(self, disp, rotation, x, y):
         clock = pg.time.Clock()
         for i in range(0, 8):
             disp.blit(pg.transform.rotate(self.death[i], rotation), (x, y))
