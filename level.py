@@ -130,6 +130,8 @@ class Level:
         valid = True # Flag that checks if pacman is in a valid position
         test_num = 0
         # This will check if the x and y coordinates inputted puts pacman in a valid position
+        if x < 0 or x > 1150 or y < 50 or y > 600:
+            valid = False
         for key in self.c_map:
             cor = self.c_map[key]
             # The approach to checking is to see if Pacman will pass through any of the lines drawn on screen
