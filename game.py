@@ -843,6 +843,7 @@ class Game:
                         temp1.append(text)
                         temp1.append(self.pacman.numCoins)
                         self.leaderboard.update_leaderboard(temp1)
+                        self.hasLoadedLeaderboard = True
                         flag = False
 
                     elif event.key == pg.K_BACKSPACE:
