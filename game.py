@@ -29,7 +29,7 @@ class Game:
         self.max_level = 5
         self.icon = ""
         self.point_sprite = ""
-        self.hasLoadedLeaderboard = False
+        self.has_loaded_leader_board = False
 
         self.point_map = copy.deepcopy(self.current_level.p_map)
         print(self.point_map)
@@ -131,7 +131,7 @@ class Game:
         self.orange_ghost.current_level = self.current_level
         self.pink_ghost.current_level = self.current_level
 
-        self.runLevel()
+        self.run_level()
 
         return 0
 
@@ -183,18 +183,18 @@ class Game:
             pass
         else:
             if self.red_ghost.weak:
-                self.red_ghost.moveRandomSlow()
+                self.red_ghost.move_random_slow()
 
             else:
                 if self.red_ghost.chase_iterations <= 200 and self.red_ghost.chase_iterations != -1:
-                    self.red_ghost.moveChase(x, y)
+                    self.red_ghost.move_chase(x, y)
                     self.red_ghost.chase_iterations += 1
                     if self.red_ghost.chase_iterations > 200:
                         self.red_ghost.chase_iterations = -1
                         self.red_ghost.random_iterations = 0
 
                 if self.red_ghost.random_iterations <= 150 and self.red_ghost.random_iterations != -1:
-                    self.red_ghost.moveRandom()
+                    self.red_ghost.move_random()
                     self.red_ghost.random_iterations += 1
                     if self.red_ghost.random_iterations > 150:
                         self.red_ghost.random_iterations = -1
@@ -206,21 +206,21 @@ class Game:
             pass
 
         elif num_iterations == 500:
-            self.orange_ghost.spawnOutside()
+            self.orange_ghost.spawn_outside()
 
         else:
             if self.orange_ghost.weak:
-                self.orange_ghost.moveRandomSlow()
+                self.orange_ghost.move_random_slow()
             else:
                 if self.orange_ghost.chase_iterations <= 200 and self.orange_ghost.chase_iterations != -1:
-                    self.orange_ghost.moveChase(x, y)
+                    self.orange_ghost.move_chase(x, y)
                     self.orange_ghost.chase_iterations += 1
                     if self.orange_ghost.chase_iterations > 200:
                         self.orange_ghost.chase_iterations = -1
                         self.orange_ghost.random_iterations = 0
 
                 if self.orange_ghost.random_iterations <= 150 and self.orange_ghost.random_iterations != -1:
-                    self.orange_ghost.moveRandom()
+                    self.orange_ghost.move_random()
                     self.orange_ghost.random_iterations += 1
                     if self.orange_ghost.random_iterations > 150:
                         self.orange_ghost.random_iterations = -1
@@ -231,21 +231,21 @@ class Game:
             pass
 
         elif num_iterations == 1000:
-            self.blue_ghost.spawnOutside()
+            self.blue_ghost.spawn_outside()
 
         else:
             if self.blue_ghost.weak:
-                self.blue_ghost.moveRandomSlow()
+                self.blue_ghost.move_random_slow()
             else:
                 if self.blue_ghost.chase_iterations <= 200 and self.blue_ghost.chase_iterations != -1:
-                    self.blue_ghost.moveChase(x, y)
+                    self.blue_ghost.move_chase(x, y)
                     self.blue_ghost.chase_iterations += 1
                     if self.blue_ghost.chase_iterations > 200:
                         self.blue_ghost.chase_iterations = -1
                         self.blue_ghost.random_iterations = 0
 
                 if self.blue_ghost.random_iterations <= 150 and self.blue_ghost.random_iterations != -1:
-                    self.blue_ghost.moveRandom()
+                    self.blue_ghost.move_random()
                     self.blue_ghost.random_iterations += 1
                     if self.blue_ghost.random_iterations > 150:
                         self.blue_ghost.random_iterations = -1
@@ -256,65 +256,65 @@ class Game:
             pass
 
         elif num_iterations == 1500:
-            self.pink_ghost.spawnOutside()
+            self.pink_ghost.spawn_outside()
 
         else:
             if self.pink_ghost.weak:
-                self.pink_ghost.moveRandomSlow()
+                self.pink_ghost.move_random_slow()
             else:
                 if self.pink_ghost.chase_iterations <= 200 and self.pink_ghost.chase_iterations != -1:
-                    self.pink_ghost.moveChase(x, y)
+                    self.pink_ghost.move_chase(x, y)
                     self.pink_ghost.chase_iterations += 1
                     if self.pink_ghost.chase_iterations > 200:
                         self.pink_ghost.chase_iterations = -1
                         self.pink_ghost.random_iterations = 0
 
                 if self.pink_ghost.random_iterations <= 150 and self.pink_ghost.random_iterations != -1:
-                    self.pink_ghost.moveRandom()
+                    self.pink_ghost.move_random()
                     self.pink_ghost.random_iterations += 1
                     if self.pink_ghost.random_iterations > 150:
                         self.pink_ghost.random_iterations = -1
                         self.pink_ghost.chase_iterations = 0
 
     def check_death(self, x, y):
-        if not self.red_ghost.weak and self.red_ghost.checkDeath(x, y):
+        if not self.red_ghost.weak and self.red_ghost.check_death(x, y):
             return True
-        elif not self.blue_ghost.weak and self.blue_ghost.checkDeath(x, y):
+        elif not self.blue_ghost.weak and self.blue_ghost.check_death(x, y):
             return True
-        elif not self.orange_ghost.weak and self.orange_ghost.checkDeath(x, y):
+        elif not self.orange_ghost.weak and self.orange_ghost.check_death(x, y):
             return True
-        elif not self.pink_ghost.weak and self.pink_ghost.checkDeath(x, y):
+        elif not self.pink_ghost.weak and self.pink_ghost.check_death(x, y):
             return True
         else:
             return False
 
     def check_ghost_death(self, x, y):
         return_val = False
-        if self.red_ghost.weak and self.red_ghost.checkDeath(x, y):
+        if self.red_ghost.weak and self.red_ghost.check_death(x, y):
             return_val = True
             self.dead_ghosts.append(self.red_ghost)
 
-        if self.blue_ghost.weak and self.blue_ghost.checkDeath(x, y):
+        if self.blue_ghost.weak and self.blue_ghost.check_death(x, y):
             return_val = True
             self.dead_ghosts.append(self.blue_ghost)
 
-        if self.orange_ghost.weak and self.orange_ghost.checkDeath(x, y):
+        if self.orange_ghost.weak and self.orange_ghost.check_death(x, y):
             return_val = True
             self.dead_ghosts.append(self.orange_ghost)
 
-        if self.pink_ghost.weak and self.pink_ghost.checkDeath(x, y):
+        if self.pink_ghost.weak and self.pink_ghost.check_death(x, y):
             return_val = True
             self.dead_ghosts.append(self.orange_ghost)
 
         return return_val
 
-    def runLevel(self):
+    def run_level(self):
         """
         Run the pacman game
         """
         self.pacman = Pacman(self.icon)
         self.pacman.numCoins = 0
-        self.removePowerUpState()
+        self.remove_power_up_state()
         # Set initial Pacman point
         x = 0
         y = 50
@@ -329,7 +329,7 @@ class Game:
         previous_pacman_image = pacman_image
 
         # Used for pac man display
-        isLeft = False
+        is_left = False
 
         new_game = True
 
@@ -339,22 +339,22 @@ class Game:
         while True:
             # Display pacman and background
             self.disp.blit(self.background, (0, 0))
-            self.loadLives()
-            self.loadScore()
-            self.loadLevelText()
+            self.load_lives()
+            self.load_score()
+            self.load_level_text()
 
             if new_game:
                 # put ghosts at fixed pos
-                self.red_ghost.spawnOutside()
+                self.red_ghost.spawn_outside()
                 self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
 
-                self.blue_ghost.spawnLeft()
+                self.blue_ghost.spawn_left()
                 self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
 
-                self.pink_ghost.spawnMiddle()
+                self.pink_ghost.spawn_middle()
                 self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
 
-                self.orange_ghost.spawnRight()
+                self.orange_ghost.spawn_right()
                 self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
 
             else:
@@ -412,7 +412,7 @@ class Game:
 
                         # Rotate Pacman 90 degrees
                         rotation = 90
-                        isLeft = False
+                        is_left = False
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
                     else:
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
@@ -433,7 +433,7 @@ class Game:
 
                         # Rotate Pacman -90 degrees
                         rotation = -90
-                        isLeft = False
+                        is_left = False
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
                     else:
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
@@ -451,7 +451,7 @@ class Game:
                             previous_pacman_image = pacman_image
                             pacman_image = 0
 
-                        isLeft = True
+                        is_left = True
 
                         # Flip params = (image, X axis flip bool, Y axis flip bool)
                         temp = pg.transform.flip(pg.transform.rotate(self.pacman.sprite[pacman_image], 0), True, False)
@@ -472,7 +472,7 @@ class Game:
                             previous_pacman_image = pacman_image
                             pacman_image = 0
                         rotation = 0
-                        isLeft = False
+                        is_left = False
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
                     else:
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
@@ -481,9 +481,6 @@ class Game:
                 else:
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
                     self.in_motion = False
-
-
-
             else:
                 channel.stop()
                 # Use the following code for keyboard operations
@@ -502,7 +499,7 @@ class Game:
 
                         # Rotate Pacman 90 degrees
                         rotation = 90
-                        isLeft = False
+                        is_left = False
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
                     else:
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
@@ -523,7 +520,7 @@ class Game:
 
                         # Rotate Pacman -90 degrees
                         rotation = -90
-                        isLeft = False
+                        is_left = False
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
                     else:
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
@@ -540,7 +537,7 @@ class Game:
                             previous_pacman_image = pacman_image
                             pacman_image = 0
 
-                        isLeft = True
+                        is_left = True
 
                         # Flip params = (image, X axis flip bool, Y axis flip bool)
                         temp = pg.transform.flip(pg.transform.rotate(self.pacman.sprite[pacman_image], 0), True, False)
@@ -560,7 +557,7 @@ class Game:
                             previous_pacman_image = pacman_image
                             pacman_image = 0
                         rotation = 0
-                        isLeft = False
+                        is_left = False
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
                     else:
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
@@ -570,7 +567,7 @@ class Game:
 
                 else:
                     # Dont set rotation - occurs when key left
-                    if isLeft:
+                    if is_left:
                         temp = pg.transform.flip(pg.transform.rotate(self.pacman.sprite[pacman_image], 0), True, False)
                         self.disp.blit(temp, (x, y))
 
@@ -588,7 +585,7 @@ class Game:
             if self.red_ghost.death_iterations > 100:
                 self.red_ghost.dead = False
                 self.red_ghost.death_iterations = 0
-                self.red_ghost.spawnOutside()
+                self.red_ghost.spawn_outside()
             elif self.red_ghost.dead:
                 self.red_ghost.death_iterations += 1
             else:
@@ -597,7 +594,7 @@ class Game:
             if self.blue_ghost.death_iterations > 100:
                 self.blue_ghost.dead = False
                 self.blue_ghost.death_iterations = 0
-                self.blue_ghost.spawnOutside()
+                self.blue_ghost.spawn_outside()
             elif self.blue_ghost.dead:
                 self.blue_ghost.death_iterations += 1
             else:
@@ -606,7 +603,7 @@ class Game:
             if self.orange_ghost.death_iterations > 100:
                 self.orange_ghost.dead = False
                 self.orange_ghost.death_iterations = 0
-                self.orange_ghost.spawnOutside()
+                self.orange_ghost.spawn_outside()
             elif self.orange_ghost.dead:
                 self.orange_ghost.death_iterations += 1
             else:
@@ -615,7 +612,7 @@ class Game:
             if self.pink_ghost.death_iterations > 100:
                 self.pink_ghost.dead = False
                 self.pink_ghost.death_iterations = 0
-                self.pink_ghost.spawnOutside()
+                self.pink_ghost.spawn_outside()
             elif self.pink_ghost.dead:
                 self.pink_ghost.death_iterations += 1
             else:
@@ -631,17 +628,17 @@ class Game:
             if self.check_death(x, y):
                 pg.mixer.Sound.play(self.death_sound)
                 self.show_death(rotation, x, y)
-                self.pacman.setNumLives(self.pacman.numLives - 1)
+                self.pacman.set_num_lives(self.pacman.num_lives - 1)
 
-                if self.pacman.numLives == 0:
+                if self.pacman.num_lives == 0:
                     self.game_over()
                     break
 
                 else:
-                    self.red_ghost.resetGhost()
-                    self.blue_ghost.resetGhost()
-                    self.orange_ghost.resetGhost()
-                    self.pink_ghost.resetGhost()
+                    self.red_ghost.reset_ghost()
+                    self.blue_ghost.reset_ghost()
+                    self.orange_ghost.reset_ghost()
+                    self.pink_ghost.reset_ghost()
                     self.red_ghost.notVulnerable()
                     self.blue_ghost.notVulnerable()
                     self.orange_ghost.notVulnerable()
@@ -659,32 +656,32 @@ class Game:
                     curr_ghost = self.dead_ghosts[i]
                     color = curr_ghost.color
                     if color == 'red':
-                        curr_ghost.spawnMiddleBack()
+                        curr_ghost.spawn_middle_back()
                         curr_ghost.dead = True
                         curr_ghost.notVulnerable()
                         self.dead_ghosts.remove(curr_ghost)
                     if color == 'blue':
-                        curr_ghost.spawnLeft()
+                        curr_ghost.spawn_left()
                         curr_ghost.dead = True
                         curr_ghost.notVulnerable()
                         self.dead_ghosts.remove(curr_ghost)
                     if color == 'orange':
-                        curr_ghost.spawnRight()
+                        curr_ghost.spawn_right()
                         curr_ghost.dead = True
                         curr_ghost.notVulnerable()
                         self.dead_ghosts.remove(curr_ghost)
                     if color == 'pink':
-                        curr_ghost.spawnMiddle()
+                        curr_ghost.spawn_middle()
                         curr_ghost.dead = True
                         curr_ghost.notVulnerable()
                         self.dead_ghosts.remove(curr_ghost)
 
             if len(self.point_map) == 0:
                 return_val = self.load_new_level()
-                self.red_ghost.resetGhost()
-                self.blue_ghost.resetGhost()
-                self.orange_ghost.resetGhost()
-                self.pink_ghost.resetGhost()
+                self.red_ghost.reset_ghost()
+                self.blue_ghost.reset_ghost()
+                self.orange_ghost.reset_ghost()
+                self.pink_ghost.reset_ghost()
                 self.red_ghost.notVulnerable()
                 self.blue_ghost.notVulnerable()
                 self.orange_ghost.notVulnerable()
@@ -731,9 +728,9 @@ class Game:
         for i in range(0, 64):
             # Display pacman and background
             self.disp.blit(self.background, (0, 0))
-            self.loadLives()
-            self.loadScore()
-            self.loadLevelText()
+            self.load_lives()
+            self.load_score()
+            self.load_level_text()
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -744,16 +741,16 @@ class Game:
             self.current_level.draw_level(self.disp, self.point_map, self.point_sprite, self.current_level_int)
 
             # put ghosts at fixed pos
-            self.red_ghost.spawnOutside()
+            self.red_ghost.spawn_outside()
             self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
 
-            self.blue_ghost.spawnLeft()
+            self.blue_ghost.spawn_left()
             self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
 
-            self.pink_ghost.spawnMiddle()
+            self.pink_ghost.spawn_middle()
             self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
 
-            self.orange_ghost.spawnRight()
+            self.orange_ghost.spawn_right()
             self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
 
             self.clock.tick(30)
@@ -766,9 +763,9 @@ class Game:
         for i in range(0, 64):
             # Display pacman and background
             self.disp.blit(self.background, (0, 0))
-            self.loadLives()
-            self.loadScore()
-            self.loadLevelText()
+            self.load_lives()
+            self.load_score()
+            self.load_level_text()
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -790,9 +787,9 @@ class Game:
     #     print("point is powerup")
     #     for i in range(0, 500):
     #         self.disp.blit(self.background, (0, 0))
-    #         self.loadLives()
-    #         self.loadScore()
-    #         self.loadLevelText()
+    #         self.load_lives()
+    #         self.load_score()
+    #         self.load_level_text()
     #
     #
     #
@@ -819,7 +816,7 @@ class Game:
         self.pink_ghost.vulnerable()
         self.orange_ghost.vulnerable()
 
-    def removePowerUpState(self):
+    def remove_power_up_state(self):
         self.pacman.isDangerous = False
         self.red_ghost.notVulnerable()
         self.blue_ghost.notVulnerable()
@@ -903,7 +900,7 @@ class Game:
                         temp1.append(text)
                         temp1.append(self.pacman.numCoins)
                         self.leaderboard.update_leaderboard(temp1)
-                        self.hasLoadedLeaderboard = True
+                        self.has_loaded_leader_board = True
                         flag = False
 
                     elif event.key == pg.K_BACKSPACE:
@@ -918,7 +915,7 @@ class Game:
             self.clock.tick(10)
             pg.display.update()
 
-        g.loadMenu()
+        g.load_menu()
 
     def game_over(self):
         current = 0
@@ -1000,10 +997,10 @@ class Game:
             self.clock.tick(10)
             pg.display.update()
 
-        g.runLevel()
+        g.run_level()
         return 0
 
-    def loadLives(self):
+    def load_lives(self):
         x = 950
         y = 0
 
@@ -1013,13 +1010,13 @@ class Game:
         semi_colon = self.FONT.render(':', False, WHITE)
         self.disp.blit(semi_colon, (930, 7))
 
-        for i in range(self.pacman.numLives):
+        for i in range(self.pacman.num_lives):
             temp = pg.transform.scale(self.heart_sprite, (30, 30))
             self.disp.blit(temp, (x, y))
             x += 30
 
-    def loadScore(self):
-        coins = self.pacman.getNumCoins()
+    def load_score(self):
+        coins = self.pacman.get_num_coins()
 
         text = self.FONT.render('SCORE', False, WHITE)
         self.disp.blit(text, (500, 5))
@@ -1032,7 +1029,7 @@ class Game:
         text_score = self.FONT.render(text3, False, WHITE)
         self.disp.blit(text_score, (600, 5))
 
-    def loadLevelText(self):
+    def load_level_text(self):
         # Updates game with current level rendered
         text = self.FONT.render('LEVEL', False, WHITE)
         self.disp.blit(text, (350, 5))
@@ -1043,7 +1040,7 @@ class Game:
         text2 = self.FONT.render(str(self.current_level_int), False, WHITE)
         self.disp.blit(text2, (450, 5))
 
-    def loadSettings(self):
+    def load_settings(self):
         # Load previous setting
         current = 0
         if self.icon == "biden":
@@ -1146,20 +1143,20 @@ class Game:
                     self.icon = "biden"
                     self.point_sprite = "biden"
                     print("biden selected")
-                    self.red_ghost.loadTrumpGhosts("red")
-                    self.blue_ghost.loadTrumpGhosts("blue")
-                    self.orange_ghost.loadTrumpGhosts("orange")
-                    self.pink_ghost.loadTrumpGhosts("pink")
+                    self.red_ghost.load_trump_ghosts("red")
+                    self.blue_ghost.load_trump_ghosts("blue")
+                    self.orange_ghost.load_trump_ghosts("orange")
+                    self.pink_ghost.load_trump_ghosts("pink")
                     break
 
                 elif current == 2:
                     self.icon = "trump"
                     self.point_sprite = "trump"
                     print("trump selected")
-                    self.red_ghost.loadBidenGhosts("red")
-                    self.blue_ghost.loadBidenGhosts("blue")
-                    self.orange_ghost.loadBidenGhosts("orange")
-                    self.pink_ghost.loadBidenGhosts("pink")
+                    self.red_ghost.load_biden_ghosts("red")
+                    self.blue_ghost.load_biden_ghosts("blue")
+                    self.orange_ghost.load_biden_ghosts("orange")
+                    self.pink_ghost.load_biden_ghosts("pink")
                     break
 
                 elif current == 3:
@@ -1168,10 +1165,10 @@ class Game:
             self.clock.tick(10)
             pg.display.update()
 
-    def loadLeaderboard(self):
-        if self.hasLoadedLeaderboard == False:
+    def load_leader_board(self):
+        if self.has_loaded_leader_board == False:
             self.leaderboard.update_top_scores()
-            self.hasLoadedLeaderboard = True
+            self.has_loaded_leader_board = True
         flag = True
         while flag:
 
@@ -1224,9 +1221,9 @@ class Game:
             self.clock.tick(10)
             pg.display.update()
 
-        g.loadMenu()
+        g.load_menu()
 
-    def loadMenu(self):
+    def load_menu(self):
         # Set current selection
         current = 0
         play_color = BLUE
@@ -1327,9 +1324,9 @@ class Game:
                 elif current == 1:
                     break
                 elif current == 2:
-                    self.loadLeaderboard()
+                    self.load_leader_board()
                 elif current == 3:
-                    self.loadSettings()
+                    self.load_settings()
                 elif current == 4:
                     quit()
 
@@ -1337,7 +1334,7 @@ class Game:
             pg.display.update()
 
         if current == 0:
-            g.runLevel()
+            g.run_level()
 
         elif current == 1:
             g.load_player_level()
@@ -1345,4 +1342,4 @@ class Game:
 
 if __name__ == '__main__':
     g = Game()
-    g.loadMenu()
+    g.load_menu()
