@@ -34,7 +34,13 @@ class CorridorH:
             xposend = self.x_endb
         numpoints = longestside // 50
 
-        scalingfactor = (shortestside) / (numpoints - 3)
+        denom = (numpoints - 3)
+
+        #to avoid dividing by zero
+        if denom == 0:
+            denom = 3
+
+        scalingfactor = (shortestside) / denom
 
         #populate points array
         ypos = self.y_start + 25

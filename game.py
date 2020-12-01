@@ -591,6 +591,7 @@ class Game:
                     self.pink_ghost.notVulnerable()
                     self.pacman_respawn()
                     self.num_iterations = 0
+                    self.powerup_iterations = 0
                     rotation = 0
                     x = 0
                     y = 50
@@ -633,6 +634,7 @@ class Game:
                 self.pink_ghost.notVulnerable()
                 self.pacman_respawn()
                 self.num_iterations = 0
+                self.powerup_iterations = 0
                 rotation = 0
                 x = 0
                 y = 50
