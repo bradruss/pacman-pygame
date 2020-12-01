@@ -21,7 +21,7 @@ class Game:
     def __init__(self):
         self.num_iterations = 0
         # Set Game Level
-        self.level = 'levels/level1'
+        self.level = 'levels/level3'
         self.current_level = level.Level(self.level)
         self.current_level_int = 1
         self.max_level = 5
