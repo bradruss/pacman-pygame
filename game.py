@@ -639,10 +639,10 @@ class Game:
                     self.blue_ghost.reset_ghost()
                     self.orange_ghost.reset_ghost()
                     self.pink_ghost.reset_ghost()
-                    self.red_ghost.notVulnerable()
-                    self.blue_ghost.notVulnerable()
-                    self.orange_ghost.notVulnerable()
-                    self.pink_ghost.notVulnerable()
+                    self.red_ghost.not_vulnerable()
+                    self.blue_ghost.not_vulnerable()
+                    self.orange_ghost.not_vulnerable()
+                    self.pink_ghost.not_vulnerable()
                     self.pacman_respawn()
                     self.num_iterations = 0
                     self.powerup_iterations = 0
@@ -658,22 +658,22 @@ class Game:
                     if color == 'red':
                         curr_ghost.spawn_middle_back()
                         curr_ghost.dead = True
-                        curr_ghost.notVulnerable()
+                        curr_ghost.not_vulnerable()
                         self.dead_ghosts.remove(curr_ghost)
                     if color == 'blue':
                         curr_ghost.spawn_left()
                         curr_ghost.dead = True
-                        curr_ghost.notVulnerable()
+                        curr_ghost.not_vulnerable()
                         self.dead_ghosts.remove(curr_ghost)
                     if color == 'orange':
                         curr_ghost.spawn_right()
                         curr_ghost.dead = True
-                        curr_ghost.notVulnerable()
+                        curr_ghost.not_vulnerable()
                         self.dead_ghosts.remove(curr_ghost)
                     if color == 'pink':
                         curr_ghost.spawn_middle()
                         curr_ghost.dead = True
-                        curr_ghost.notVulnerable()
+                        curr_ghost.not_vulnerable()
                         self.dead_ghosts.remove(curr_ghost)
 
             if len(self.point_map) == 0:
@@ -682,10 +682,10 @@ class Game:
                 self.blue_ghost.reset_ghost()
                 self.orange_ghost.reset_ghost()
                 self.pink_ghost.reset_ghost()
-                self.red_ghost.notVulnerable()
-                self.blue_ghost.notVulnerable()
-                self.orange_ghost.notVulnerable()
-                self.pink_ghost.notVulnerable()
+                self.red_ghost.not_vulnerable()
+                self.blue_ghost.not_vulnerable()
+                self.orange_ghost.not_vulnerable()
+                self.pink_ghost.not_vulnerable()
                 self.pacman_respawn()
                 self.num_iterations = 0
                 self.powerup_iterations = 0
@@ -697,10 +697,10 @@ class Game:
 
             # check the powerup iterations to time powerup
             if self.powerup_iterations > 700 and self.pacman.is_dangerous:
-                self.red_ghost.notVulnerable()
-                self.blue_ghost.notVulnerable()
-                self.orange_ghost.notVulnerable()
-                self.pink_ghost.notVulnerable()
+                self.red_ghost.not_vulnerable()
+                self.blue_ghost.not_vulnerable()
+                self.orange_ghost.not_vulnerable()
+                self.pink_ghost.not_vulnerable()
                 self.powerup_iterations = 0
                 self.pacman.is_dangerous = False
             elif self.pacman.is_dangerous:
@@ -783,7 +783,7 @@ class Game:
             self.clock.tick(30)
             pg.display.update()
 
-    # def loadPowerUpState(self):
+    # def load_power_up_state(self):
     #     print("point is powerup")
     #     for i in range(0, 500):
     #         self.disp.blit(self.background, (0, 0))
@@ -809,7 +809,7 @@ class Game:
     #         pg.display.update()
 
     # TODO: change it out of state
-    def loadPowerUpState(self):
+    def load_power_up_state(self):
         self.pacman.is_dangerous = True
         self.red_ghost.vulnerable()
         self.blue_ghost.vulnerable()
@@ -818,10 +818,10 @@ class Game:
 
     def remove_power_up_state(self):
         self.pacman.is_dangerous = False
-        self.red_ghost.notVulnerable()
-        self.blue_ghost.notVulnerable()
-        self.pink_ghost.notVulnerable()
-        self.orange_ghost.notVulnerable()
+        self.red_ghost.not_vulnerable()
+        self.blue_ghost.not_vulnerable()
+        self.pink_ghost.not_vulnerable()
+        self.orange_ghost.not_vulnerable()
 
     def check_points(self, x, y):
         midx = x + WIDTH / 2
@@ -857,21 +857,21 @@ class Game:
         # print(midy)
         if (midx, midy) in self.point_map:
 
-            if self.point_map[(midx, midy)].isPowerup == True:
-                self.loadPowerUpState()
+            if self.point_map[(midx, midy)].is_power_up == True:
+                self.load_power_up_state()
             del self.point_map[(midx, midy)]
             # print("point removed")
             self.pacman.collect_coin()
 
         if (midx + (5 - (midx % 5)), midy) in self.point_map:
-            if self.point_map[(midx + (5 - (midx % 5)), midy)].isPowerup == True:
-                self.loadPowerUpState()
+            if self.point_map[(midx + (5 - (midx % 5)), midy)].is_power_up == True:
+                self.load_power_up_state()
             del self.point_map[(midx + (5 - (midx % 5)), midy)]
             self.pacman.collect_coin()
 
         if (midx, midy + (5 - (midx % 5))) in self.point_map:
-            if self.point_map[(midx, midy + (5 - (midx % 5)))].isPowerup == True:
-                self.loadPowerUpState()
+            if self.point_map[(midx, midy + (5 - (midx % 5)))].is_power_up == True:
+                self.load_power_up_state()
             del self.point_map[(midx, midy + (5 - (midx % 5)))]
             self.pacman.collect_coin()
 
