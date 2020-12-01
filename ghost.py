@@ -134,6 +134,26 @@ class Ghost():
             self.sprite = self.loadGhost(self.color)
         self.weak = False
 
+        if self.x_pos % 5 != 0:
+
+            possible_right = self.x_pos + (5 - (self.x_pos % 5))
+            possible_left = self.x_pos - (self.x_pos % 5)
+
+            if possible_right > 1150 or possible_right < 0:
+                self.x_pos = possible_left
+            else:
+                self.x_pos = possible_right
+
+        if self.y_pos % 5 != 0:
+            possible_down = self.y_pos + (5 - (self.y_pos % 5))
+            possible_up = self.y_pos - (self.y_pos % 5)
+
+            if possible_down > 550 or possible_down < 0:
+                self.y_pos = possible_up
+            else:
+                self.y_pos = possible_down
+
+
     def vulnerable(self):
         if self.type == "biden":
             self.loadBidenWeakGhosts(self.color)
