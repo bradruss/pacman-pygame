@@ -158,6 +158,33 @@ class Ghost():
             elif r == 4 and self.current_level.check_valid(self.x_pos - 5, self.y_pos):
                 self.current_direction = "left"
                 self.x_pos -= 5
+    
+    def moveRandomSlow(self):
+        print(self.current_direction)
+        if self.current_direction == "up" and self.current_level.check_valid(self.x_pos, self.y_pos - 3):
+            self.y_pos -= 3
+        elif self.current_direction == "down" and self.current_level.check_valid(self.x_pos, self.y_pos + 3):
+            self.y_pos += 3
+        elif self.current_direction == "right" and self.current_level.check_valid(self.x_pos + 3, self.y_pos):
+            self.x_pos += 3
+        elif self.current_direction == "left" and self.current_level.check_valid(self.x_pos - 3, self.y_pos):
+            self.x_pos -= 3
+
+        else:
+            r = random.randint(1, 4)
+            # test if up is good
+            if r == 1 and self.current_level.check_valid(self.x_pos, self.y_pos - 3):
+                self.current_direction = "up"
+                self.y_pos -= 3
+            elif r == 2 and self.current_level.check_valid(self.x_pos, self.y_pos + 3):
+                self.current_direction = "down"
+                self.y_pos += 3
+            elif r == 3 and self.current_level.check_valid(self.x_pos + 3, self.y_pos):
+                self.current_direction = "right"
+                self.x_pos += 3
+            elif r == 4 and self.current_level.check_valid(self.x_pos - 3, self.y_pos):
+                self.current_direction = "left"
+                self.x_pos -= 3
 
     def checkDeath(self,x,y):
         if (self.x_pos <= (x + 25) <= self.x_pos + 50) and (self.y_pos <= (y + 25) <= self.y_pos + 50):
