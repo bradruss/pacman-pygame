@@ -12,6 +12,14 @@ class Ghost():
               pygame.image.load("orangeGhost.png"), pygame.image.load("pinkGhost.png")]
     trump = [pygame.image.load("TrumpGhosts/TrumpGhost.png"), pygame.image.load("TrumpGhosts/GuilianiGhost.png"),
               pygame.image.load("TrumpGhosts/PenceGhost.png"), pygame.image.load("TrumpGhosts/SessionsGhost.png")]
+    weakTrump = [pygame.image.load("TrumpGhosts/TrumpGhost.png"), pygame.image.load("TrumpGhosts/GuilianiGhost.png"),
+                 pygame.image.load("TrumpGhosts/PenceGhost.png"), pygame.image.load("TrumpGhosts/SessionsGhost.png")]
+    biden = [pygame.image.load("BidenGhosts/BidenGhost.png"), pygame.image.load("BidenGhosts/HarrisGhost.png"),
+             pygame.image.load("ObamaGhosts/PenceGhost.png"), pygame.image.load("SandersGhosts/SessionsGhost.png")]
+    weakBiden = [pygame.image.load("BidenGhosts/BidenGhostWeak.png"),
+                 pygame.image.load("BidenGhosts/HarrisGhostWeak.png"),
+                 pygame.image.load("BidenGhosts/ObamaGhostWeak.png"),
+                 pygame.image.load("BidenGhosts/SandersGhostWeak.png")]
 
     def __init__(self, color, level_num):
         self.color = color
@@ -27,6 +35,7 @@ class Ghost():
         self.random_iterations = -1
         self.death_iterations = 0
         self.dead = False
+        self.type = "pacman"
         r = random.randint(1, 4)
         if r == 1:
             self.current_direction = "up"
@@ -67,6 +76,7 @@ class Ghost():
         return temp
 
     def loadTrumpGhosts(self, color):
+        self.type = "trump"
         if color == "red":
             self.sprite = self.trump[0]
         elif color == "blue":
@@ -77,13 +87,60 @@ class Ghost():
             self.sprite = self.trump[3]
         else:
             self.sprite = self.trump[3]
+            
+    def loadTrumpWeakGhosts(self, color):
+        if color == "red":
+            self.sprite = self.weakTrump[0]
+        elif color == "blue":
+            self.sprite = self.weakTrump[1]
+        elif color == "orange":
+            self.sprite = self.weakTrump[2]
+        elif color == "pink":
+            self.sprite = self.weakTrump[3]
+        else:
+            self.sprite = self.weakTrump[3]
 
-    def notVulnerable(self):
-        self.sprite = self.loadGhost(self.color)
+    def loadBidenGhosts(self, color):
+        self.type = "biden"
+        if color == "red":
+            self.sprite = self.biden[0]
+        elif color == "blue":
+            self.sprite = self.biden[1]
+        elif color == "orange":
+            self.sprite = self.biden[2]
+        elif color == "pink":
+            self.sprite = self.biden[3]
+        else:
+            self.sprite = self.biden[3]
+    
+    def loadBidenWeakGhosts(self, color):
+        if color == "red":
+            self.sprite = self.weakBiden[0]
+        elif color == "blue":
+            self.sprite = self.weakBiden[1]
+        elif color == "orange":
+            self.sprite = self.weakBiden[2]
+        elif color == "pink":
+            self.sprite = self.weakBiden[3]
+        else:
+            self.sprite = self.weakBiden[3]
+
+    def notVulnerable(self):          
+        if self.type == "biden":
+            self.loadBidenGhosts(self.color)
+        elif self.type == "trump":
+            self.loadTrumpGhosts(self.color)
+        else:
+            self.sprite = self.loadGhost(self.color)
         self.weak = False
 
     def vulnerable(self):
-        self.sprite = self.weakGhost
+        if self.type == "biden":
+            self.loadBidenWeakGhosts(self.color)
+        elif self.type == "trump":
+            self.loadTrumpWeakGhosts(self.color)
+        else:
+            self.sprite = self.weakGhost
         self.weak = True
 
     # inside width = 170px
