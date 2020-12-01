@@ -82,11 +82,9 @@ class Level:
                 pwrup_locations.append(random.randrange(0, len(self.p_map)))
 
             for p in range(num_powerups):
-                print(num_powerups)
                 index = 0
                 for i in self.p_map:
                     if pwrup_locations[p] == index:
-                        print(i)
                         p_map[i].isPowerup = True
                     index += 1
             self.PowerUpsDrawn = True
@@ -132,7 +130,8 @@ class Level:
         valid = True # Flag that checks if pacman is in a valid position
         test_num = 0
         # This will check if the x and y coordinates inputted puts pacman in a valid position
-
+        if x < 50 or x > 1150 or y < 50 or y > 600:
+            valid = False
         for key in self.c_map:
             cor = self.c_map[key]
             # The approach to checking is to see if Pacman will pass through any of the lines drawn on screen
