@@ -15,6 +15,7 @@ YELLOW = (248, 252, 13)
 BLUE = (13, 45, 252)
 WIDTH = 50
 
+
 class Game:
     # Setup window
     def __init__(self):
@@ -64,7 +65,6 @@ class Game:
 
         self.powerup_iterations = 0
 
-
         # Load background
         self.background = pg.image.load('background.jpg')
 
@@ -100,7 +100,7 @@ class Game:
             self.current_level = level.Level(self.level)
             self.point_map = copy.deepcopy(self.current_level.p_map)
 
-            #update ghosts' levels
+            # update ghosts' levels
             self.red_ghost.current_level = self.current_level
             self.blue_ghost.current_level = self.current_level
             self.orange_ghost.current_level = self.current_level
@@ -120,12 +120,11 @@ class Game:
                 pg.display.update()
             return -1
 
-
     # TODO: implement powerup movement -> num of iterattions has to be greater than 500 for it to move
     # reset iterations when resetting ghosts
     def red_ghost_move(self, num_iterations, x, y):
 
-        if num_iterations < 0 :
+        if num_iterations < 0:
             pass
         else:
             if self.red_ghost.weak:
@@ -148,7 +147,7 @@ class Game:
 
     def orange_ghost_move(self, num_iterations, x, y):
 
-        if num_iterations < 500 :
+        if num_iterations < 500:
             pass
 
         elif num_iterations == 500:
@@ -234,7 +233,7 @@ class Game:
         else:
             return False
 
-    def check_ghost_death(self,x,y):
+    def check_ghost_death(self, x, y):
         return_val = False
         if self.red_ghost.weak and self.red_ghost.checkDeath(x, y):
             return_val = True
@@ -282,14 +281,12 @@ class Game:
         # music stuff
         channel = pg.mixer.Channel(1)
 
-
         while True:
             # Display pacman and background
             self.disp.blit(self.background, (0, 0))
             self.loadLives()
             self.loadScore()
             self.loadLevelText()
-
 
             if new_game:
                 # put ghosts at fixed pos
@@ -331,15 +328,18 @@ class Game:
                     self.motion_type = "up"
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
-                elif keys_pressed[pg.K_DOWN] and self.current_level.check_valid(x, y + 5) and self.motion_type != "down":
+                elif keys_pressed[pg.K_DOWN] and self.current_level.check_valid(x,
+                                                                                y + 5) and self.motion_type != "down":
                     self.motion_type = "down"
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
-                elif keys_pressed[pg.K_RIGHT] and self.current_level.check_valid(x + 5, y) and self.motion_type != "right":
+                elif keys_pressed[pg.K_RIGHT] and self.current_level.check_valid(x + 5,
+                                                                                 y) and self.motion_type != "right":
                     self.motion_type = "right"
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
-                elif keys_pressed[pg.K_LEFT] and self.current_level.check_valid(x - 5, y) and self.motion_type != "left":
+                elif keys_pressed[pg.K_LEFT] and self.current_level.check_valid(x - 5,
+                                                                                y) and self.motion_type != "left":
                     self.motion_type = "left"
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
 
@@ -525,8 +525,7 @@ class Game:
 
             self.check_points(x, y)
             # if pacman isDangerous = true
-                # create timer for 500 iterations
-
+            # create timer for 500 iterations
 
             self.current_level.draw_level(self.disp, self.point_map, self.point_sprite, self.current_level_int)
 
@@ -539,7 +538,7 @@ class Game:
                 self.red_ghost.death_iterations += 1
             else:
                 self.red_ghost_move(self.num_iterations, x, y)
-                
+
             if self.blue_ghost.death_iterations > 100:
                 self.blue_ghost.dead = False
                 self.blue_ghost.death_iterations = 0
@@ -548,7 +547,7 @@ class Game:
                 self.blue_ghost.death_iterations += 1
             else:
                 self.blue_ghost_move(self.num_iterations, x, y)
-                
+
             if self.orange_ghost.death_iterations > 100:
                 self.orange_ghost.dead = False
                 self.orange_ghost.death_iterations = 0
@@ -557,7 +556,7 @@ class Game:
                 self.orange_ghost.death_iterations += 1
             else:
                 self.orange_ghost_move(self.num_iterations, x, y)
-                
+
             if self.pink_ghost.death_iterations > 100:
                 self.pink_ghost.dead = False
                 self.pink_ghost.death_iterations = 0
@@ -567,12 +566,10 @@ class Game:
             else:
                 self.pink_ghost_move(self.num_iterations, x, y)
 
-
             # 30 fps
             self.clock.tick(30)
 
             pg.display.update()
-
 
             if self.check_death(x, y):
                 pg.mixer.Sound.play(self.death_sound)
@@ -598,7 +595,7 @@ class Game:
                     x = 0
                     y = 50
 
-            if self.check_ghost_death(x,y):
+            if self.check_ghost_death(x, y):
                 for i in range(0, len(self.dead_ghosts)):
                     self.pacman.numCoins += 30
                     curr_ghost = self.dead_ghosts[i]
@@ -624,7 +621,6 @@ class Game:
                         curr_ghost.notVulnerable()
                         self.dead_ghosts.remove(curr_ghost)
 
-
             if len(self.point_map) == 0:
                 return_val = self.load_new_level()
                 self.red_ghost.resetGhost()
@@ -643,7 +639,7 @@ class Game:
                 if return_val == -1:
                     break
 
-            #check the powerup iterations to time powerup
+            # check the powerup iterations to time powerup
             if self.powerup_iterations > 700:
                 self.red_ghost.notVulnerable()
                 self.blue_ghost.notVulnerable()
@@ -656,7 +652,7 @@ class Game:
             self.num_iterations += 1
 
             # Pacman pos debugging
-            #print("x is " + str(x) + " and y is " + str(y))
+            # print("x is " + str(x) + " and y is " + str(y))
 
         if self.leaderboard.file is not None:
             self.leaderboard.file.close()
@@ -700,10 +696,8 @@ class Game:
             self.orange_ghost.spawnRight()
             self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
 
-
             self.clock.tick(30)
             pg.display.update()
-
 
     def show_death(self, rotation, x, y):
 
@@ -721,7 +715,6 @@ class Game:
                     quit()
                     break
 
-
             self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
             self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
             self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
@@ -732,7 +725,6 @@ class Game:
 
             self.clock.tick(30)
             pg.display.update()
-
 
     # def loadPowerUpState(self):
     #     print("point is powerup")
@@ -774,7 +766,6 @@ class Game:
         self.pink_ghost.notVulnerable()
         self.orange_ghost.notVulnerable()
 
-
     def check_points(self, x, y):
         midx = x + WIDTH / 2
         midy = y + WIDTH / 2
@@ -791,7 +782,7 @@ class Game:
         # locationv1 = str(midx) + "," + str(top_edge)
         # locationv2 = str(midx) + "," + str(bottom_edge)
 
-        location = str(midx) + ","  +str(midy)
+        location = str(midx) + "," + str(midy)
 
         # if locationh1 in self.point_map:
         #     del self.point_map[locationh1]
@@ -885,7 +876,6 @@ class Game:
             text = self.FONT.render(str(self.pacman.numCoins), False, WHITE)
             self.disp.blit(text, (560, 260))
 
-
             text = self.FONT.render('PLAY AGAIN?', False, play_again_color)
             self.disp.blit(text, (510, 310))
 
@@ -951,7 +941,6 @@ class Game:
 
         g.runLevel()
 
-
     def loadLives(self):
         x = 950
         y = 0
@@ -966,7 +955,6 @@ class Game:
             temp = pg.transform.scale(self.heart_sprite, (30, 30))
             self.disp.blit(temp, (x, y))
             x += 30
-
 
     def loadScore(self):
         coins = self.pacman.getNumCoins()
@@ -992,7 +980,6 @@ class Game:
 
         text2 = self.FONT.render(str(self.current_level_int), False, WHITE)
         self.disp.blit(text2, (450, 5))
-
 
     def loadSettings(self):
         # Load previous setting
@@ -1097,10 +1084,10 @@ class Game:
                     self.icon = "biden"
                     self.point_sprite = "biden"
                     print("biden selected")
-                    self.red_ghost.loadBidenGhosts("red")
-                    self.blue_ghost.loadBidenGhosts("blue")
-                    self.orange_ghost.loadBidenGhosts("orange")
-                    self.pink_ghost.loadBidenGhosts("pink")
+                    self.red_ghost.loadTrumpGhosts("red")
+                    self.blue_ghost.loadTrumpGhosts("blue")
+                    self.orange_ghost.loadTrumpGhosts("orange")
+                    self.pink_ghost.loadTrumpGhosts("pink")
                     break
 
                 elif current == 2:
@@ -1116,10 +1103,8 @@ class Game:
                 elif current == 3:
                     break
 
-
             self.clock.tick(10)
             pg.display.update()
-
 
     def loadLeaderboard(self):
         if self.hasLoadedLeaderboard == False:
@@ -1155,7 +1140,7 @@ class Game:
                     k += 1
                 text = self.FONT.render(str(index) + ". ", False, YELLOW)
                 if index >= 10:
-                    self.disp.blit(text, (x-20, y))
+                    self.disp.blit(text, (x - 20, y))
                 else:
                     self.disp.blit(text, (x, y))
                 text = self.FONT.render(name, False, YELLOW)
@@ -1178,7 +1163,6 @@ class Game:
             pg.display.update()
 
         g.loadMenu()
-
 
     def loadMenu(self):
         # Set current selection
@@ -1267,7 +1251,6 @@ class Game:
                 elif current == 3:
                     quit()
 
-
             self.clock.tick(10)
             pg.display.update()
 
@@ -1278,5 +1261,3 @@ class Game:
 if __name__ == '__main__':
     g = Game()
     g.loadMenu()
-
-
