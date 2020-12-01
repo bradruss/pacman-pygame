@@ -3,9 +3,14 @@ import pygame as pg
 class Pacman:
     def __init__(self, icon):
         self.num_lives = 5
+        # Total score
         self.num_coins = 0
         self.is_dangerous = False
+
+        # Set pacman sprite to pacman by default
         self.sprite = [pg.image.load('pacman/Pacman.png'), pg.image.load('pacman/Pacman2.png'), pg.image.load('pacman/Pacman3.png')]
+
+        # Takes parameter when creating ghost and sets it to whatever is selected by the user
         if icon == 'biden':
             self.sprite = [pg.image.load('biden/close.png'), pg.image.load('biden/close2.png'), pg.image.load('biden/open.png')]
             self.death = [pg.image.load('pacman/pacman-death-1.png'), pg.image.load('pacman/pacman-death-2.png'), pg.image.load('pacman/pacman-death-3.png'), pg.image.load('pacman/pacman-death-4.png'),
@@ -45,28 +50,10 @@ class Pacman:
     def set_num_lives(self, num_lives):
         self.num_lives = num_lives
 
+    # Load pacman death animation
     def show_death(self, disp, rotation, x, y):
         clock = pg.time.Clock()
         for i in range(0, 8):
             disp.blit(pg.transform.rotate(self.death[i], rotation), (x, y))
             clock.tick(100000)
             pg.display.update()
-
-
-
-
-    #def endLife(self):
-    #
-
-
-    #add array of string of picture name/Line 24 in game.py
-    #needs to be able to die
-
-
-
-
-
-
-
-
-

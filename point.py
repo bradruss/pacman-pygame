@@ -5,7 +5,6 @@ class Point:
         self.touched = False
         self.is_power_up = False
 
-    # Getters
 
     def get_touched(self):
         return self.touched
@@ -15,8 +14,6 @@ class Point:
 
     def get_y(self):
         return self.positiony
-
-    #Setters
 
     def touched(self):
         self.touched = True
