@@ -31,6 +31,7 @@ class Game:
         self.point_sprite = ""
         self.has_loaded_leader_board = False
 
+        # Load points/coins map
         self.point_map = copy.deepcopy(self.current_level.p_map)
         print(self.point_map)
 
@@ -38,7 +39,7 @@ class Game:
         pg.init()
         self.disp = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-        # Static Font Family
+        # Fonts
         self.FONT = pg.font.Font('joystix.monospace.ttf', 20)
         self.FONT_LARGE = pg.font.Font('joystix.monospace.ttf', 30)
 
@@ -51,7 +52,10 @@ class Game:
         # Hearts
         self.heart_sprite = pg.image.load('heart.png')
 
+        # Window icon
         pg.display.set_icon(pg.image.load('pacman/Pacman3.png'))
+
+        # Is the sprite in motion?
         self.in_motion = False
         self.play_waka = False
         self.motion_type = None
@@ -73,15 +77,17 @@ class Game:
         # Display the background image
         self.disp.blit(self.background, (0, 0))
 
+        # Sounds
         self.intro_sound = pg.mixer.Sound("Sound/intro.wav")
         self.intro_sound.set_volume(0.2)
-
         self.death_sound = pg.mixer.Sound("Sound/death.wav")
         self.death_sound.set_volume(0.2)
 
+        # Load leaderboard and intro sound
         self.leaderboard = Leaderboard()
         pg.mixer.Sound.play(self.intro_sound)
 
+    # Lets users load in custom level to play
     def load_player_level(self):
         text = self.FONT.render('Please Type Valid File Name In Terminal', False, WHITE)
         for i in range(0, 3):
@@ -135,7 +141,9 @@ class Game:
 
         return 0
 
+    # Loads the next level
     def load_new_level(self):
+        # If there is another level to load in
         if 0 < self.current_level_int < self.max_level:
             self.current_level_int += 1
             text = self.FONT.render('Level ' + str(self.current_level_int), False, WHITE)
@@ -162,6 +170,7 @@ class Game:
             self.pink_ghost.current_level = self.current_level
 
             return 0
+        # If its the last level
         else:
             text = self.FONT.render('YOU BEAT THE GAME! ', False, WHITE)
             for i in range(0, 500):
@@ -173,18 +182,20 @@ class Game:
                 self.disp.blit(text, (500, 300))
                 self.clock.tick(30)
                 pg.display.update()
+            self.submit_score()
             return -1
 
-    # TODO: implement powerup movement -> num of iterattions has to be greater than 500 for it to move
-    # reset iterations when resetting ghosts
+    # Method for red ghost movement
     def red_ghost_move(self, num_iterations, x, y):
-
+        # If just reset
         if num_iterations < 0:
             pass
         else:
+            # If ghost is vulnerable
             if self.red_ghost.weak:
                 self.red_ghost.move_random_slow()
 
+            # If invulnerable
             else:
                 if self.red_ghost.chase_iterations <= 200 and self.red_ghost.chase_iterations != -1:
                     self.red_ghost.move_chase(x, y)
@@ -200,11 +211,13 @@ class Game:
                         self.red_ghost.random_iterations = -1
                         self.red_ghost.chase_iterations = 0
 
+    # Orange ghost movement method
     def orange_ghost_move(self, num_iterations, x, y):
-
+        # Do nothing
         if num_iterations < 500:
             pass
 
+        # After 500 iterations, spawn
         elif num_iterations == 500:
             self.orange_ghost.spawn_outside()
 
@@ -226,10 +239,13 @@ class Game:
                         self.orange_ghost.random_iterations = -1
                         self.orange_ghost.chase_iterations = 0
 
+    # Blue ghost movement method
     def blue_ghost_move(self, num_iterations, x, y):
+        # Do nothing for 999 iterations
         if num_iterations < 1000:
             pass
 
+        # After 1000 iterations, spawn
         elif num_iterations == 1000:
             self.blue_ghost.spawn_outside()
 
@@ -251,10 +267,12 @@ class Game:
                         self.blue_ghost.random_iterations = -1
                         self.blue_ghost.chase_iterations = 0
 
+    # Pink ghost movement method
     def pink_ghost_move(self, num_iterations, x, y):
         if num_iterations < 1500:
             pass
 
+        # Spawn after 1500 iterations
         elif num_iterations == 1500:
             self.pink_ghost.spawn_outside()
 
@@ -276,6 +294,7 @@ class Game:
                         self.pink_ghost.random_iterations = -1
                         self.pink_ghost.chase_iterations = 0
 
+    # Checks for pac man death based on x and y positions
     def check_death(self, x, y):
         if not self.red_ghost.weak and self.red_ghost.check_death(x, y):
             return True
@@ -288,6 +307,7 @@ class Game:
         else:
             return False
 
+    # Checks for ghost death based on x and y positions
     def check_ghost_death(self, x, y):
         return_val = False
         if self.red_ghost.weak and self.red_ghost.check_death(x, y):
@@ -308,6 +328,7 @@ class Game:
 
         return return_val
 
+    # Loads the game
     def run_level(self):
         """
         Run the pacman game
@@ -331,6 +352,7 @@ class Game:
         # Used for pac man display
         is_left = False
 
+        # Used for displaying ghosts
         new_game = True
 
         # music stuff
@@ -366,19 +388,17 @@ class Game:
 
             new_game = False
 
-            '''
-            Below loop doesnt work for input but
-            is required for keys_pressed
-            '''
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     quit()
                     break
+            # Plays waka sound if pacman is moving
             if self.in_motion:
                 keys_pressed = pg.key.get_pressed()
                 if not channel.get_busy():
                     channel.play(self.pacman.waka)
 
+                # Displays pacman movement with rotations
                 if keys_pressed[pg.K_UP] and self.current_level.check_valid(x, y - 5) and self.motion_type != "up":
                     self.motion_type = "up"
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
@@ -482,8 +502,8 @@ class Game:
                     self.disp.blit(pg.transform.rotate(self.pacman.sprite[previous_pacman_image], rotation), (x, y))
                     self.in_motion = False
             else:
+                # If pacman isnt in motion
                 channel.stop()
-                # Use the following code for keyboard operations
                 keys_pressed = pg.key.get_pressed()
                 if keys_pressed[pg.K_UP]:
                     if y >= 0 and self.current_level.check_valid(x, y - 5):
@@ -576,9 +596,6 @@ class Game:
                         self.disp.blit(pg.transform.rotate(self.pacman.sprite[pacman_image], rotation), (x, y))
 
             self.check_points(x, y)
-            # if pacman isDangerous = true
-            # create timer for 500 iterations
-
             self.current_level.draw_level(self.disp, self.point_map, self.point_sprite, self.current_level_int)
 
             # Movement For the Ghosts
@@ -625,6 +642,7 @@ class Game:
 
             print(self.powerup_iterations)
 
+            # If pac man dies
             if self.check_death(x, y):
                 pg.mixer.Sound.play(self.death_sound)
                 self.show_death(rotation, x, y)
@@ -650,6 +668,7 @@ class Game:
                     x = 0
                     y = 50
 
+            # If a ghost has died, reset it to invulnerable
             if self.check_ghost_death(x, y):
                 for i in range(0, len(self.dead_ghosts)):
                     self.pacman.numCoins += 30
@@ -711,9 +730,11 @@ class Game:
             # Pacman pos debugging
             # print("x is " + str(x) + " and y is " + str(y))
 
+        # Close leaderboard file
         if self.leaderboard.file is not None:
             self.leaderboard.file.close()
 
+    # Respawn pacman to the top left of the map and ghosts
     def pacman_respawn(self):
         # Set initial Pacman point
         x = 0
@@ -726,7 +747,6 @@ class Game:
         rotation = 0
 
         for i in range(0, 64):
-            # Display pacman and background
             self.disp.blit(self.background, (0, 0))
             self.load_lives()
             self.load_score()
@@ -756,6 +776,7 @@ class Game:
             self.clock.tick(30)
             pg.display.update()
 
+    # Plays the death animation
     def show_death(self, rotation, x, y):
 
         self.disp.blit(pg.transform.rotate(self.pacman.death[0 // 10], rotation), (x, y))
@@ -783,32 +804,8 @@ class Game:
             self.clock.tick(30)
             pg.display.update()
 
-    # def loadPowerUpState(self):
-    #     print("point is powerup")
-    #     for i in range(0, 500):
-    #         self.disp.blit(self.background, (0, 0))
-    #         self.load_lives()
-    #         self.load_score()
-    #         self.load_level_text()
-    #
-    #
-    #
-    #         for event in pg.event.get():
-    #             if event.type == pg.QUIT:
-    #                 quit()
-    #                 break
-    #
-    #         self.disp.blit(self.red_ghost.sprite, (self.red_ghost.x_pos, self.red_ghost.y_pos))
-    #         self.disp.blit(self.blue_ghost.sprite, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
-    #         self.disp.blit(self.pink_ghost.sprite, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
-    #         self.disp.blit(self.orange_ghost.sprite, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
-    #
-    #         self.current_level.draw_level(self.disp, self.point_map, self.point_sprite, self.current_level_int)
-    #
-    #         self.clock.tick(30)
-    #         pg.display.update()
 
-    # TODO: change it out of state
+    # Sets pacman to invulnerable and ghosts to vulnerable
     def loadPowerUpState(self):
         self.pacman.isDangerous = True
         self.red_ghost.vulnerable()
@@ -816,6 +813,7 @@ class Game:
         self.pink_ghost.vulnerable()
         self.orange_ghost.vulnerable()
 
+    # Sets pacman to vulnerable state and ghosts to invulnerable
     def remove_power_up_state(self):
         self.pacman.isDangerous = False
         self.red_ghost.notVulnerable()
@@ -823,38 +821,11 @@ class Game:
         self.pink_ghost.notVulnerable()
         self.orange_ghost.notVulnerable()
 
+    # Checks for pacman point collision
     def check_points(self, x, y):
         midx = x + WIDTH / 2
         midy = y + WIDTH / 2
 
-        left_edge = x  # This is the left edge of pacman
-        right_edge = x + WIDTH  # This is the right edge of pacman
-
-        top_edge = y  # This is the top edge of pacman
-        bottom_edge = y + WIDTH  # This is the bottom edge of pacman
-
-        # locationh1 = str(right_edge) + "," + str(midy)
-        # locationh2 = str(left_edge) + "," + str(midy)
-        #
-        # locationv1 = str(midx) + "," + str(top_edge)
-        # locationv2 = str(midx) + "," + str(bottom_edge)
-
-        location = str(midx) + "," + str(midy)
-
-        # if locationh1 in self.point_map:
-        #     del self.point_map[locationh1]
-        #
-        # if locationh2 in self.point_map:
-        #     del self.point_map[locationh2]
-        #
-        # if locationv1 in self.point_map:
-        #     del self.point_map[locationv1]
-        #
-        # if locationv2 in self.point_map:
-        #     del self.point_map[locationv2]
-
-        # print(midx)
-        # print(midy)
         if (midx, midy) in self.point_map:
 
             if self.point_map[(midx, midy)].isPowerup == True:
@@ -875,6 +846,7 @@ class Game:
             del self.point_map[(midx, midy + (5 - (midx % 5)))]
             self.pacman.collectCoin()
 
+    # Loads the submit score menu
     def submit_score(self):
         text = ""
         flag = True
@@ -906,6 +878,7 @@ class Game:
                     elif event.key == pg.K_BACKSPACE:
                         text = text[:-1]
                     else:
+                        # Prevents users from submitting more than 3 letters/symbols
                         if len(text) < 3:
                             text += event.unicode
 
@@ -917,6 +890,7 @@ class Game:
 
         g.load_menu()
 
+    # Loads the game over screen
     def game_over(self):
         current = 0
         play_again_color = BLUE
@@ -952,6 +926,7 @@ class Game:
             if keys_pressed[pg.K_ESCAPE]:
                 quit()
 
+            # Changes the text to blue when selected
             elif keys_pressed[pg.K_UP]:
                 if current == 0:
                     play_again_color = WHITE
@@ -984,13 +959,17 @@ class Game:
                     play_again_color = BLUE
                     current = 0
 
+            # Processes selection
             elif keys_pressed[pg.K_RETURN]:
+                # Play again
                 if current == 0:
                     break
 
+                # Submit score
                 elif current == 1:
                     self.submit_score()
 
+                # Quit
                 elif current == 2:
                     quit()
 
@@ -1000,6 +979,7 @@ class Game:
         g.run_level()
         return 0
 
+    # Loads the lives on screen
     def load_lives(self):
         x = 950
         y = 0
@@ -1015,6 +995,7 @@ class Game:
             self.disp.blit(temp, (x, y))
             x += 30
 
+    # Loads the total score number visually
     def load_score(self):
         coins = self.pacman.get_num_coins()
 
@@ -1029,6 +1010,7 @@ class Game:
         text_score = self.FONT.render(text3, False, WHITE)
         self.disp.blit(text_score, (600, 5))
 
+    # Loads the level number visually
     def load_level_text(self):
         # Updates game with current level rendered
         text = self.FONT.render('LEVEL', False, WHITE)
@@ -1040,9 +1022,10 @@ class Game:
         text2 = self.FONT.render(str(self.current_level_int), False, WHITE)
         self.disp.blit(text2, (450, 5))
 
+    # Loads the settings page
     def load_settings(self):
-        # Load previous setting
         current = 0
+        # Load previous setting
         if self.icon == "biden":
             default_color = WHITE
             biden_color = BLUE
@@ -1091,6 +1074,7 @@ class Game:
             if keys_pressed[pg.K_ESCAPE]:
                 quit()
 
+            # Highlights current selection in blue
             elif keys_pressed[pg.K_UP]:
                 if current == 0:
                     default_color = WHITE
@@ -1132,7 +1116,7 @@ class Game:
                     default_color = BLUE
                     current = 0
 
-
+            # Change pacman sprites, ghost sprites and points sprites
             elif keys_pressed[pg.K_RETURN]:
                 if current == 0:
                     self.icon = "pacman"
@@ -1165,6 +1149,7 @@ class Game:
             self.clock.tick(10)
             pg.display.update()
 
+    # Loads the leaderboard visually
     def load_leader_board(self):
         if self.has_loaded_leader_board == False:
             self.leaderboard.update_top_scores()
@@ -1223,6 +1208,7 @@ class Game:
 
         g.load_menu()
 
+    # Loads the main menu
     def load_menu(self):
         # Set current selection
         current = 0
@@ -1288,9 +1274,6 @@ class Game:
                     quit_color = WHITE
                     settings_color = BLUE
                     current = 3
-
-
-
 
             elif keys_pressed[pg.K_DOWN]:
                 if current == 0:
