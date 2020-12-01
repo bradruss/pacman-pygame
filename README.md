@@ -6,9 +6,9 @@ Run the game.py to start a new game.
 Hitting enter for the play button to play the normal mode.
 
 # Rule
-Player needs to control the pacman and get coins as much as possible, each coin worth 10 points. 
-Player also needs to avoid the ghost which will chase you in a certain time.
-The ghost will jump to maze one by one after a certain time.
+Player needs to control the pacman and get coins as much as possible, each coin worth 10 points.     
+Player also needs to avoid the ghost which will chase you in a certain time.   
+The ghost will jump to maze one by one after a certain time.    
 Player will have five lives, if ghosts touch the player with invulnerable mode, the player will lose 1 live and the position of player/ghost will be reset.
 Eat a big coin will make ghosts vulnerable for a certain time and player can eats ghosts to get extra points. Ghost will be respawn after 5 seconds.
 Collect all coins to go to the next level.
