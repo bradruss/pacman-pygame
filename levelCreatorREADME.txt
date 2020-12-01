@@ -19,6 +19,7 @@ To create a vertical corridor the second argument must be “V”. When creating
 Example: a,V,350,350,250,550
 
 
+
 *****JOINING CORRIDORS ****
 Before joining a two corridors, be sure they intersect and form a square at the intersection at the end of both corridors. The format for joining corridors is (join, name of horiz corridor,name of vertical corridor, type of join)
 The types of join calls or bl,tl,br,and tr. These correspond to a bottom left join, top left join, bottom right join and top right join.
