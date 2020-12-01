@@ -34,7 +34,11 @@ class CorridorV:
             yposend = self.y_endr
         numpoints = longestside // 50
 
-        scalingfactor = (shortestside) / (numpoints - 3)
+        denom = numpoints - 3
+        if denom <=0:
+            denom = 3
+
+        scalingfactor = (shortestside) / denom
 
         # populate points array
         xpos = self.x_start + 25
