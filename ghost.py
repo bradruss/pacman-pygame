@@ -4,22 +4,23 @@ import level
 import copy
 import time
 
+
 class Ghost():
     # Regular Pac-Man ghost sprites
-    weakGhost = pygame.image.load("weakGhost.png")
+    weak_ghost = pygame.image.load("weakGhost.png")
     images = [pygame.image.load("redGhost.png"), pygame.image.load("blueGhost.png"),
               pygame.image.load("orangeGhost.png"), pygame.image.load("pinkGhost.png")]
 
     # Trump Sprites
     trump = [pygame.image.load("TrumpGhosts/TrumpGhost.png"), pygame.image.load("TrumpGhosts/GuilianiGhost.png"),
               pygame.image.load("TrumpGhosts/PenceGhost.png"), pygame.image.load("TrumpGhosts/SessionsGhost.png")]
-    weakTrump = [pygame.image.load("TrumpGhosts/TrumpGhostWeak.png"), pygame.image.load("TrumpGhosts/GuilianiGhostWeak.png"),
+    weak_trump = [pygame.image.load("TrumpGhosts/TrumpGhostWeak.png"), pygame.image.load("TrumpGhosts/GuilianiGhostWeak.png"),
                  pygame.image.load("TrumpGhosts/PenceGhostWeak.png"), pygame.image.load("TrumpGhosts/SessionsGhostWeak.png")]
 
     # Biden sprites
     biden = [pygame.image.load("BidenGhosts/BidenGhost.png"), pygame.image.load("BidenGhosts/HarrisGhost.png"),
              pygame.image.load("BidenGhosts/ObamaGhost.png"), pygame.image.load("BidenGhosts/SandersGhost.png")]
-    weakBiden = [pygame.image.load("BidenGhosts/BidenGhostWeak.png"),
+    weak_biden = [pygame.image.load("BidenGhosts/BidenGhostWeak.png"),
                  pygame.image.load("BidenGhosts/HarrisGhostWeak.png"),
                  pygame.image.load("BidenGhosts/ObamaGhostWeak.png"),
                  pygame.image.load("BidenGhosts/SandersGhostWeak.png")]
@@ -30,7 +31,7 @@ class Ghost():
 
         # Used initially for pac-man ghost creation then altered later if
         # biden or trump is selected
-        self.sprite = self.loadGhost(color)
+        self.sprite = self.load_ghost(color)
         self.weak = False
         self.x_pos = 0
         self.y_pos = 0
@@ -62,7 +63,7 @@ class Ghost():
         loop = 0
 
     # Resets direction
-    def resetGhost(self):
+    def reset_ghost(self):
         self.current_direction = None
         self.chase_iterations = 0
         self.random_iterations = -1
@@ -77,7 +78,7 @@ class Ghost():
             self.current_direction = "left"
 
     # Loads regular Pacman ghost sprites
-    def loadGhost(self, color):
+    def load_ghost(self, color):
         temp = None
         if color == "red":
             temp = self.images[0]
@@ -92,7 +93,7 @@ class Ghost():
         return temp
 
     # Loads Trump ghost sprites
-    def loadTrumpGhosts(self, color):
+    def load_trump_ghosts(self, color):
         self.type = "trump"
         if color == "red":
             self.sprite = self.trump[0]
@@ -106,20 +107,20 @@ class Ghost():
             self.sprite = self.trump[3]
 
     # Loads weak Trump ghost sprites
-    def loadTrumpWeakGhosts(self, color):
+    def load_trump_weak_ghosts(self, color):
         if color == "red":
-            self.sprite = self.weakTrump[0]
+            self.sprite = self.weak_trump[0]
         elif color == "blue":
-            self.sprite = self.weakTrump[1]
+            self.sprite = self.weak_trump[1]
         elif color == "orange":
-            self.sprite = self.weakTrump[2]
+            self.sprite = self.weak_trump[2]
         elif color == "pink":
-            self.sprite = self.weakTrump[3]
+            self.sprite = self.weak_trump[3]
         else:
-            self.sprite = self.weakTrump[3]
+            self.sprite = self.weak_trump[3]
 
     # Loads Biden ghost sprites
-    def loadBidenGhosts(self, color):
+    def load_biden_ghosts(self, color):
         self.type = "biden"
         if color == "red":
             self.sprite = self.biden[0]
@@ -133,26 +134,26 @@ class Ghost():
             self.sprite = self.biden[3]
 
     # Loads weak Biden ghost sprites
-    def loadBidenWeakGhosts(self, color):
+    def load_biden_weak_ghosts(self, color):
         if color == "red":
-            self.sprite = self.weakBiden[0]
+            self.sprite = self.weak_biden[0]
         elif color == "blue":
-            self.sprite = self.weakBiden[1]
+            self.sprite = self.weak_biden[1]
         elif color == "orange":
-            self.sprite = self.weakBiden[2]
+            self.sprite = self.weak_biden[2]
         elif color == "pink":
-            self.sprite = self.weakBiden[3]
+            self.sprite = self.weak_biden[3]
         else:
-            self.sprite = self.weakBiden[3]
+            self.sprite = self.weak_biden[3]
 
     # Resets the ghost back to its invulnerable state
-    def notVulnerable(self):          
+    def not_vulnerable(self):
         if self.type == "biden":
-            self.loadBidenGhosts(self.color)
+            self.load_biden_ghosts(self.color)
         elif self.type == "trump":
-            self.loadTrumpGhosts(self.color)
+            self.load_trump_ghosts(self.color)
         else:
-            self.sprite = self.loadGhost(self.color)
+            self.sprite = self.load_ghost(self.color)
         self.weak = False
 
         # Resets ghosts from 3 pixel interval (vulnerable) to 5 pixel
@@ -179,41 +180,41 @@ class Ghost():
     # Sets ghosts to vulnerable state
     def vulnerable(self):
         if self.type == "biden":
-            self.loadBidenWeakGhosts(self.color)
+            self.load_biden_weak_ghosts(self.color)
         elif self.type == "trump":
-            self.loadTrumpWeakGhosts(self.color)
+            self.load_trump_weak_ghosts(self.color)
         else:
-            self.sprite = self.weakGhost
+            self.sprite = self.weak_ghost
         self.weak = True
 
     # Spawns ghost right outside of the box
-    def spawnOutside(self):
+    def spawn_outside(self):
         # Red ghost uses this when a new level is loaded
         self.x_pos = 600
         self.y_pos = 300
 
     # Spawns ghost in the left "slot" of the ghost box
-    def spawnLeft(self):
+    def spawn_left(self):
         self.x_pos = 550
         self.y_pos = 400
 
     # Spawns ghost in the middle "slot" of the ghost box
-    def spawnMiddle(self):
+    def spawn_middle(self):
         self.x_pos = 600
         self.y_pos = 400
 
     # Spawns ghost in the right "slot" of the ghost box
-    def spawnRight(self):
+    def spawn_right(self):
         self.x_pos = 650
         self.y_pos = 400
 
     # Spawns ghost in the furthest back "slot"
-    def spawnMiddleBack(self):
+    def spawn_middle_back(self):
         self.x_pos = 600
         self.y_pos = 450
 
     # Function to chase pac-man
-    def moveChase(self, x, y):
+    def move_chase(self, x, y):
         ver = x - self.x_pos
         hor = y - self.y_pos
         if hor > 0 and self.current_level.check_valid(self.x_pos, self.y_pos + 5):
@@ -226,7 +227,7 @@ class Ghost():
             self.x_pos -= 5
 
     # Ghost randomly moves around the level
-    def moveRandom(self):
+    def move_random(self):
         # print(self.current_direction)
         if self.current_direction == "up" and self.current_level.check_valid(self.x_pos, self.y_pos - 5):
             self.y_pos -= 5
@@ -254,7 +255,7 @@ class Ghost():
                 self.x_pos -= 5
 
     # Used for when the ghost is in its vulnerable state -> random movement
-    def moveRandomSlow(self):
+    def move_random_slow(self):
         # Check to see if it is currently moving
         if self.current_direction == "up" and self.current_level.check_valid(self.x_pos, self.y_pos - 3):
             self.y_pos -= 3
@@ -282,7 +283,7 @@ class Ghost():
                 self.x_pos -= 3
 
     # Checks collision for death
-    def checkDeath(self, x, y):
+    def check_death(self, x, y):
         if (self.x_pos <= (x + 25) <= self.x_pos + 50) and (self.y_pos <= (y + 25) <= self.y_pos + 50):
             return True
 
