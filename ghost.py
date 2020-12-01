@@ -12,10 +12,10 @@ class Ghost():
               pygame.image.load("orangeGhost.png"), pygame.image.load("pinkGhost.png")]
     trump = [pygame.image.load("TrumpGhosts/TrumpGhost.png"), pygame.image.load("TrumpGhosts/GuilianiGhost.png"),
               pygame.image.load("TrumpGhosts/PenceGhost.png"), pygame.image.load("TrumpGhosts/SessionsGhost.png")]
-    weakTrump = [pygame.image.load("TrumpGhosts/TrumpGhost.png"), pygame.image.load("TrumpGhosts/GuilianiGhost.png"),
-                 pygame.image.load("TrumpGhosts/PenceGhost.png"), pygame.image.load("TrumpGhosts/SessionsGhost.png")]
+    weakTrump = [pygame.image.load("TrumpGhosts/TrumpGhostWeak.png"), pygame.image.load("TrumpGhosts/GuilianiGhostWeak.png"),
+                 pygame.image.load("TrumpGhosts/PenceGhostWeak.png"), pygame.image.load("TrumpGhosts/SessionsGhostWeak.png")]
     biden = [pygame.image.load("BidenGhosts/BidenGhost.png"), pygame.image.load("BidenGhosts/HarrisGhost.png"),
-             pygame.image.load("ObamaGhosts/PenceGhost.png"), pygame.image.load("SandersGhosts/SessionsGhost.png")]
+             pygame.image.load("BidenGhosts/ObamaGhost.png"), pygame.image.load("BidenGhosts/SandersGhostWeak.png")]
     weakBiden = [pygame.image.load("BidenGhosts/BidenGhostWeak.png"),
                  pygame.image.load("BidenGhosts/HarrisGhostWeak.png"),
                  pygame.image.load("BidenGhosts/ObamaGhostWeak.png"),
