@@ -1,4 +1,4 @@
-# Pac-Man pygame implementation
+# Pac-Man pygame
 # Requirement
 Pac-Man depends entirely on pygame so pygame needs to be installed first before running.
 If you use PyCharm, pygame can be installed directly via the terminal using "pip install pygame" or by
