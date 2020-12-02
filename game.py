@@ -339,6 +339,7 @@ class Game:
         # Set initial Pacman point
         x = 0
         y = 50
+        self.num_iterations = 0
 
         # Pacman sprite array index
         pacman_image = 0
@@ -708,6 +709,7 @@ class Game:
                 self.pacman_respawn()
                 self.num_iterations = 0
                 self.powerup_iterations = 0
+                self.pacman.is_dangerous = False
                 rotation = 0
                 x = 0
                 y = 50
